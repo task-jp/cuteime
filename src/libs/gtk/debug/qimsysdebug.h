@@ -32,9 +32,9 @@ extern "C"
 {
 #endif
 
-QIMSYS_EXPORT int QimsysLogLevelCounter;
-QIMSYS_EXPORT int QimsysLogEnabled;
-QIMSYS_EXPORT int QimsysLogLevel;
+extern int QimsysLogLevelCounter;
+extern int QimsysLogEnabled;
+extern int QimsysLogLevel;
 
 #define qimsys_debug_on() QimsysLogEnabled++;
 #define qimsys_debug_off() QimsysLogEnabled--
