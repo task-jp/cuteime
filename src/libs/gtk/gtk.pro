@@ -3,8 +3,6 @@ TARGET = qimsys_gtk
 
 CONFIG += gtk
 CONFIG -= qt
-QT -= core gui
-# CONFIG += warn_off
 
 include(../../../qimsyslibrary.pri)
 
