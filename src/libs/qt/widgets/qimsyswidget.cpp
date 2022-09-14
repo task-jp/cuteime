@@ -20,6 +20,7 @@
 
 #include "qimsyswidget.h"
 #include <QPainter>
+#include <QPainterPath>
 #include <QTimer>
 #include <math.h>
 
