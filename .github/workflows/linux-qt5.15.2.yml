@@ -25,6 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Install prerequisite
+        uses: ConorMacBride/install-package@v1
+        with:
+          apt: libdbus-glib-1-dev
+
       # Install Qt action
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.0.0
