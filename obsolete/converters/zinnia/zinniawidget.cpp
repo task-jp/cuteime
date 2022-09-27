@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "zinniawidget.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -54,55 +54,55 @@ ZinniaWidget::Private::Private(ZinniaWidget *parent)
     : q(parent)
     , started(false)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     q->setFocusPolicy(Qt::NoFocus);
     QPalette palette = q->palette();
     palette.setColor(QPalette::Window, palette.color(QPalette::Base));
     q->setPalette(palette);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 ZinniaWidget::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void ZinniaWidget::Private::start()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     started = true;
     data.append(QPolygon());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaWidget::Private::append(const QPoint &pos)
 {
     if (!started) return;
-    qimsysDebugIn() << pos;
+    cuteimeDebugIn() << pos;
     data[data.size() - 1] << pos;
     q->update();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaWidget::Private::end()
 {
     if (!started) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     emit q->dataChanged(data);
     started = false;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaWidget::Private::clear()
 {
     started = false;
     if (data.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     data.clear();
     emit q->dataChanged(data);
     q->update();
-    qimsysDebug();
+    cuteimeDebug();
 }
 
 ZinniaWidget::ZinniaWidget(QWidget *parent)
@@ -214,20 +214,20 @@ void ZinniaWidget::mouseDoubleClickEvent(QMouseEvent *e)
 
 void ZinniaWidget::showEvent(QShowEvent *e)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup(metaObject()->className());
     restoreGeometry(settings.value(QLatin1String("Geometry")).toByteArray());
     QWidget::showEvent(e);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaWidget::hideEvent(QHideEvent *e)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup(metaObject()->className());
     settings.setValue(QLatin1String("Geometry"), saveGeometry());
     QWidget::hideEvent(e);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }

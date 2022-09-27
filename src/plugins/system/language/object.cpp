@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,8 +21,8 @@
 #include "object.h"
 #include "settings.h"
 
-#include <qimsysdebug.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimedynamictranslator.h>
 
 namespace System {
     namespace Language {
@@ -50,7 +50,7 @@ Object::Private::Private(Object *parent)
     q->setGroups(QStringList() << QLatin1String("X11 Classic"));
     q->setCategoryType(All);
     trConnect(this, QT_TR_NOOP("Settings/Display Language"), q, "categoryName");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/language.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Display Language"), q, "name");
@@ -64,7 +64,7 @@ Object::Private::~Private()
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }
@@ -74,8 +74,8 @@ Object::~Object()
     delete d;
 }
 
-#ifndef QIMSYS_NO_GUI
-QimsysSettingsWidget *Object::settings(const QString &hint, QWidget *parent)
+#ifndef CUTEIME_NO_GUI
+CuteimeSettingsWidget *Object::settings(const QString &hint, QWidget *parent)
 {
     return new Settings(this, parent);
 }

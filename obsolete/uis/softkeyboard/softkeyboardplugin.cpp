@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -24,11 +24,11 @@
 #include <QtPlugin>
 
 SoftKeyboardPlugin::SoftKeyboardPlugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
 }
 
-QimsysAbstractPluginObject *SoftKeyboardPlugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *SoftKeyboardPlugin::createObject(QObject *parent)
 {
     return new SoftKeyboardObject(parent);
 }

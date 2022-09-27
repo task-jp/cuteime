@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,17 +21,17 @@
 #ifndef SOFTKEYBOARDPLUGIN_H
 #define SOFTKEYBOARDPLUGIN_H
 
-#include "qimsysplugin.h"
+#include "cuteimeplugin.h"
 
-class SoftKeyboardPlugin : public QimsysPlugin
+class SoftKeyboardPlugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_INTERFACES(QimsysPlugin)
+    Q_INTERFACES(CuteimePlugin)
 public:
     SoftKeyboardPlugin();
 
 protected:
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 #endif//SOFTKEYBOARDPLUGIN_H

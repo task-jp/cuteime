@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,19 +21,19 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include "qimsysplugin.h"
+#include "cuteimeplugin.h"
 
 namespace InputMethodManager {
 
-class Plugin : public QimsysPlugin
+class Plugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "me.qtquick.qimsys.QimsysPlugin/0.1" FILE "inputmethodmanager.json")
-    Q_INTERFACES(QimsysPlugin)
+    Q_PLUGIN_METADATA(IID "me.qtquick.cuteime.CuteimePlugin/0.1" FILE "inputmethodmanager.json")
+    Q_INTERFACES(CuteimePlugin)
 public:
     Plugin();
 
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 }

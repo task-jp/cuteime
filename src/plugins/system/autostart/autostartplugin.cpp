@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -24,11 +24,11 @@
 #include <QtPlugin>
 
 AutoStartPlugin::AutoStartPlugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
 }
 
-QimsysAbstractPluginObject *AutoStartPlugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *AutoStartPlugin::createObject(QObject *parent)
 {
     return new AutoStartObject(parent);
 }

@@ -1,5 +1,5 @@
 TARGET = tst_japanese_alphabet_full
-include(../../../../../../../qimsystest.pri)
+include(../../../../../../../cuteimetest.pri)
 
 SOURCES += tst_full.cpp
 

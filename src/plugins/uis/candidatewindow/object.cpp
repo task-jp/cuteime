@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,7 +21,7 @@
 #include "object.h"
 #include "list.h"
 
-#include <qimsysdynamictranslator.h>
+#include <cuteimedynamictranslator.h>
 
 namespace CandidateWindow {
 
@@ -80,7 +80,7 @@ void Object::Private::enabledChanged(bool enabled)
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }

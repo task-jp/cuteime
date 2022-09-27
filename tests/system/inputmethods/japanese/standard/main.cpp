@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,12 +22,12 @@
 #include <QtGui>
 #include <QtWidgets>
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
 
 class JapaneseStandardTest : public QObject
 {
@@ -81,11 +81,11 @@ private:
     }
 private:
     QPlainTextEdit* widget;
-    QimsysApplicationManager applicationManager;
-    QimsysInputMethodManager inputMethodManager;
-    QimsysKeyManager keyManager;
-    QimsysPreeditManager preeditManager;
-    QimsysCandidateManager candidateManager;
+    CuteimeApplicationManager applicationManager;
+    CuteimeInputMethodManager inputMethodManager;
+    CuteimeKeyManager keyManager;
+    CuteimePreeditManager preeditManager;
+    CuteimeCandidateManager candidateManager;
     bool waiting;
     QVariant expected;
 };
@@ -93,7 +93,7 @@ private:
 void JapaneseStandardTest::initTestCase() {
     keyManager.init();
     if (keyManager.hasError()) {
-        QFAIL("Run qimsys by yourself first.");
+        QFAIL("Run cuteime by yourself first.");
     }
     applicationManager.init();
     inputMethodManager.init();
@@ -109,7 +109,7 @@ void JapaneseStandardTest::initTestCase() {
 
 void JapaneseStandardTest::init()
 {
-    QimsysPreeditItem item;
+    CuteimePreeditItem item;
     item.cursor = 0;
     item.selection = 0;
     item.modified = 0;
@@ -260,7 +260,7 @@ void JapaneseStandardTest::functionality()
             break;
         }
         case 'r': { // resize segment
-            QimsysPreeditItem item = preeditManager.item();
+            CuteimePreeditItem item = preeditManager.item();
             int pos = 0;
             for (int i = 0; i < item.to.length(); i++) {
                 if (pos == item.cursor) {
@@ -281,13 +281,13 @@ void JapaneseStandardTest::functionality()
             break;
         }
         case 's': { // select candidate
-            QimsysPreeditItem item = preeditManager.item();
+            CuteimePreeditItem item = preeditManager.item();
             int pos = 0;
             for (int i = 0; i < item.to.length(); i++) {
                 if (pos == item.cursor) {
                     if (item.to.at(i) != data) {
                         inputMethodManager.execute(QLatin1String("Select next candidate"));
-                        QimsysConversionItemList candidateItems = candidateManager.items();
+                        CuteimeConversionItemList candidateItems = candidateManager.items();
                         for (int j = 0; j < candidateItems.length(); j++) {
                             if (candidateItems.at(j).to == data) {
                                 candidateManager.setCurrentIndex(j);
@@ -304,7 +304,7 @@ void JapaneseStandardTest::functionality()
             break;
         }
         default:
-            qimsysWarning() << ch << data;
+            cuteimeWarning() << ch << data;
             break;
         }
     }
@@ -331,7 +331,7 @@ int main(int argc, char *argv[])
     QByteArray qtPluginPath = qgetenv("QT_PLUGIN_PATH");
     qtPluginPath.prepend(QStringLiteral("%1:").arg(dir.absolutePath()).toUtf8());
     qputenv("QT_PLUGIN_PATH", qtPluginPath);
-    qputenv("QT_IM_MODULE", QByteArrayLiteral("qimsys"));
+    qputenv("QT_IM_MODULE", QByteArrayLiteral("cuteime"));
 
     QApplication app(argc, argv);
     JapaneseStandardTest tc;

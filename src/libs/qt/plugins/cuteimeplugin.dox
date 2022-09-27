@@ -1,0 +1,28 @@
+/*!
+    \class CuteimePlugin
+    \brief CuteimePlugin is the base class for all cuteime plugins.
+ */
+
+/*!
+    \fn CuteimePlugin::CuteimePlugin(QObject *parent = 0)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimePlugin::~CuteimePlugin()
+    \brief Destructor
+ */
+
+/*!
+    \fn CuteimeAbstractPluginObject *CuteimePlugin::object(QObject *parent = 0)
+    \brief to get cuteime plugin object from plugin
+
+    This method will call createObject(QObject *parent) if it doesn't create the object yet.
+ */
+
+/*!
+    \fn CuteimeAbstractPluginObject *CuteimePlugin::createObject(QObject *parent)
+    \brief create the object
+
+    This method creates plugin object in subclass
+ */

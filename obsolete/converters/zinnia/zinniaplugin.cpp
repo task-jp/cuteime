@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,21 +21,21 @@
 #include "zinniaplugin.h"
 #include "zinniaobject.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include <QtPlugin>
 
 ZinniaPlugin::ZinniaPlugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
-QimsysAbstractPluginObject *ZinniaPlugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *ZinniaPlugin::createObject(QObject *parent)
 {
-    qimsysDebugIn() << parent;
-    QimsysAbstractPluginObject *ret = new zinnia::ZinniaObject(parent);
-    qimsysDebugOut() << ret;
+    cuteimeDebugIn() << parent;
+    CuteimeAbstractPluginObject *ret = new zinnia::ZinniaObject(parent);
+    cuteimeDebugOut() << ret;
     return ret;
 }
 

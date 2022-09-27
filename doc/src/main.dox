@@ -1,7 +1,7 @@
 /*!
     \mainpage
 
-    qimsys - Qt Input Method System for Linux
+    cuteime - Qt Input Method System for Linux
 
     \section Requierements
 
@@ -13,8 +13,8 @@
 
     \section install Install
 
-    <pre>$ git clone git@gitorious.org:qimsys/qimsys.git
-$ cd qimsys</pre>
+    <pre>$ git clone git@gitorious.org:cuteime/cuteime.git
+$ cd cuteime</pre>
     - In case you have <a href="http://ruby-lang.org/">Ruby</a>, just type:
         <pre>$ ./configure.rb</pre>
         - pass -h for details
@@ -31,13 +31,13 @@ $ sudo make install</pre>
     - shadow build is also supported.
 
     \section settings System Settings
-    <pre>$ export XMODIFIERS=\@im=qimsys
-$ export QT_IM_MODULE=qimsys</pre>
+    <pre>$ export XMODIFIERS=\@im=cuteime
+$ export QT_IM_MODULE=cuteime</pre>
 
 <pre>$ export PATH=$INSTALL_ROOT/bin:$PATH
 $ export LD_LIBRARY_PATH=$INSTALL_ROOT/lib/:$LD_LIBRARY_PATH</pre>
 
-    \section launch Launch qimsys
-    <pre>$ qimsys &</pre>
+    \section launch Launch cuteime
+    <pre>$ cuteime &</pre>
 
  */

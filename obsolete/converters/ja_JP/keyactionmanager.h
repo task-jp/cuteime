@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include "keyaction.h"
-#include "qimsyskeysequence.h"
+#include "cuteimekeysequence.h"
 #include "namespace.h"
 
 namespace ja_JP
@@ -31,7 +31,7 @@ namespace ja_JP
 
 struct KeyActionData {
     State state;
-    QimsysKeySequence key;
+    CuteimeKeySequence key;
     KeyAction *action;
     bool user;
 };

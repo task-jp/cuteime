@@ -1,6 +1,6 @@
-0x01	Ctrl+Space	Turn on QIMSYS
+0x01	Ctrl+Space	Turn on CUTEIME
 
-0x02	Ctrl+Space	Turn off QIMSYS
+0x02	Ctrl+Space	Turn off CUTEIME
 0x02	Space	Input space
 0x02	Shift+Space	Input Halfwidth space
 0x02	Up	Select previous prediction

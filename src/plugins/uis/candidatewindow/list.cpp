@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #include "list.h"
 #include "ui_list.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
 
 #include <QDesktopWidget>
 #include <QTimer>
@@ -38,7 +38,7 @@ class List::Private : private QObject
     Q_OBJECT
 public:
 
-    Private(QimsysAbstractPluginObject *object, List *parent);
+    Private(CuteimeAbstractPluginObject *object, List *parent);
     ~Private();
 
 public slots:
@@ -53,7 +53,7 @@ private slots:
 
     void rectChanged(const QRect &rect);
 
-    void itemsChanged(const QimsysConversionItemList &candidates);
+    void itemsChanged(const CuteimeConversionItemList &candidates);
     void candidateIndexChanged(int index);
 
     void itemClicked(QListWidgetItem* item);
@@ -66,18 +66,18 @@ private:
 private:
     List *q;
     Ui::List ui;
-    QimsysAbstractPluginObject *plugin;
+    CuteimeAbstractPluginObject *plugin;
 
-    QimsysApplicationManager *applicationManager;
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
-    QimsysCandidateManager *candidateManager;
+    CuteimeApplicationManager *applicationManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
+    CuteimeCandidateManager *candidateManager;
 
 public:
     QWidget *lastFocusedWidget;
 };
 
-List::Private::Private(QimsysAbstractPluginObject *object, List *parent)
+List::Private::Private(CuteimeAbstractPluginObject *object, List *parent)
     : QObject(parent)
     , q(parent)
     , plugin(object)
@@ -87,34 +87,34 @@ List::Private::Private(QimsysAbstractPluginObject *object, List *parent)
     , candidateManager(0)
     , lastFocusedWidget(0)
 {
-    qimsysDebugIn() << object << parent;
+    cuteimeDebugIn() << object << parent;
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 List::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void List::Private::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     setupUi();
 
-    applicationManager = new QimsysApplicationManager(this);
+    applicationManager = new CuteimeApplicationManager(this);
     applicationManager->init();
     connect(applicationManager, SIGNAL(composingChanged(bool)), this, SLOT(composingChanged(bool)));
     composingChanged(applicationManager->composing());
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::setupUi()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     q->setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint | Qt::FramelessWindowHint);
     connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*, QWidget*)), this, SLOT(focusChanged(QWidget*,QWidget*)));
@@ -128,47 +128,47 @@ void List::Private::setupUi()
 
     connect(ui.listWidget, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(itemClicked(QListWidgetItem*)));
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::focusChanged(QWidget *previous, QWidget *current)
 {
-    qimsysDebugIn() << previous << current;
+    cuteimeDebugIn() << previous << current;
     if (current != 0 && !q->isAncestorOf(current)) {
-        qimsysDebug() << previous << current;
+        cuteimeDebug() << previous << current;
         lastFocusedWidget = current;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::composingChanged(bool composing)
 {
-    qimsysDebugIn() << composing;
+    cuteimeDebugIn() << composing;
     if (composing) {
         if (!candidateManager) {
-            candidateManager = new QimsysCandidateManager(this);
+            candidateManager = new CuteimeCandidateManager(this);
             candidateManager->init();
-            connect(candidateManager, SIGNAL(itemsChanged(QimsysConversionItemList)), this, SLOT(itemsChanged(QimsysConversionItemList)));
+            connect(candidateManager, SIGNAL(itemsChanged(CuteimeConversionItemList)), this, SLOT(itemsChanged(CuteimeConversionItemList)));
             connect(candidateManager, SIGNAL(currentIndexChanged(int)), this, SLOT(candidateIndexChanged(int)));
         }
         itemsChanged(candidateManager->items());
         candidateIndexChanged(candidateManager->currentIndex());
     } else {
-        itemsChanged(QimsysConversionItemList());
+        itemsChanged(CuteimeConversionItemList());
         candidateIndexChanged(-1);
         if (candidateManager) {
-            disconnect(candidateManager, SIGNAL(itemsChanged(QimsysConversionItemList)), this, SLOT(itemsChanged(QimsysConversionItemList)));
+            disconnect(candidateManager, SIGNAL(itemsChanged(CuteimeConversionItemList)), this, SLOT(itemsChanged(CuteimeConversionItemList)));
             disconnect(candidateManager, SIGNAL(currentIndexChanged(int)), this, SLOT(candidateIndexChanged(int)));
             candidateManager->deleteLater();
             candidateManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::setVisible(bool visible)
 {
-    qimsysDebugIn() << visible;
+    cuteimeDebugIn() << visible;
     q->setVisible(visible);
     if (visible) {
         q->raise();
@@ -176,12 +176,12 @@ void List::Private::setVisible(bool visible)
         connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(move()));
 
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
         }
 
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
             connect(preeditManager, SIGNAL(rectChanged(QRect)), this, SLOT(rectChanged(QRect)));
         }
@@ -201,13 +201,13 @@ void List::Private::setVisible(bool visible)
             preeditManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::move()
 {
     if (!preeditManager) return;
-    qimsysDebugIn() << sender();
+    cuteimeDebugIn() << sender();
     QRect desktop = QApplication::desktop()->screenGeometry();
     QRect rect = preeditManager->rect();
 
@@ -225,32 +225,32 @@ void List::Private::move()
 
     q->move(pos);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::rectChanged(const QRect &rect)
 {
-    qimsysDebugIn() << rect;
+    cuteimeDebugIn() << rect;
     move();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::candidateIndexChanged(int index)
 {
-    qimsysDebugIn() << index;
+    cuteimeDebugIn() << index;
 //    for (int i = 0; i < ui.listWidget->count(); i++) {
-//        qimsysDebug() << i << ui.listWidget->item(i)->text();
+//        cuteimeDebug() << i << ui.listWidget->item(i)->text();
 //    }
     ui.listWidget->blockSignals(true);
     ui.listWidget->setCurrentRow(index);
     ui.listWidget->blockSignals(false);
     move();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void List::Private::itemsChanged(const QimsysConversionItemList &candidates)
+void List::Private::itemsChanged(const CuteimeConversionItemList &candidates)
 {
-    qimsysDebugIn() << candidates;
+    cuteimeDebugIn() << candidates;
 
     ui.listWidget->clear();
 
@@ -258,7 +258,7 @@ void List::Private::itemsChanged(const QimsysConversionItemList &candidates)
     int width = 0;
     int height = 0;
 
-    foreach (const QimsysConversionItem &candidate, candidates) {
+    foreach (const CuteimeConversionItem &candidate, candidates) {
         int w = met.width(candidate.to);
         QListWidgetItem *item = new QListWidgetItem(candidate.to);
         ui.listWidget->addItem(item);
@@ -275,49 +275,49 @@ void List::Private::itemsChanged(const QimsysConversionItemList &candidates)
     ui.listWidget->scrollToTop();
 
     setVisible(!candidates.isEmpty());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void List::Private::itemClicked(QListWidgetItem* item)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (candidateManager) {
         candidateManager->setCurrentIndex(ui.listWidget->currentRow());
     }
     if (inputMethodManager && preeditManager) {
-        QimsysPreeditItem preeditItem = preeditManager->item();
+        CuteimePreeditItem preeditItem = preeditManager->item();
         if (preeditItem.to.join("").length() == preeditItem.cursor + preeditItem.selection) {
             inputMethodManager->execute(QLatin1String("Commit all"));
         } else {
             inputMethodManager->execute(QLatin1String("Move cursor next"));
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-List::List(QimsysAbstractPluginObject *plugin, QWidget *parent)
+List::List(CuteimeAbstractPluginObject *plugin, QWidget *parent)
     : QFrame(parent)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(plugin, this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 List::~List()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool List::event(QEvent *e)
 {
     switch(e->type()) {
     case QEvent::WindowActivate:
-        qimsysDebugIn();
+        cuteimeDebugIn();
         if (d->lastFocusedWidget)
             d->lastFocusedWidget->activateWindow();
-        qimsysDebugOut();
+        cuteimeDebugOut();
         break;
     default:
         break;

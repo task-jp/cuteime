@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,9 +21,9 @@
 #include "object.h"
 #include "icon.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimedynamictranslator.h>
 
 namespace SystemTray {
 
@@ -41,7 +41,7 @@ private slots:
 private:
     Object *q;
     Icon *icon;
-    QimsysApplicationManager *applicationManager;
+    CuteimeApplicationManager *applicationManager;
 };
 
 }
@@ -78,7 +78,7 @@ void Object::Private::enabledChanged(bool enabled)
 {
     if (enabled) {
         if (!applicationManager) {
-            applicationManager = new QimsysApplicationManager(this);
+            applicationManager = new CuteimeApplicationManager(this);
             applicationManager->init();
             connect(applicationManager, SIGNAL(displayLanguageChanged(QString)), this, SLOT(languageChanged()), Qt::QueuedConnection);
         }
@@ -98,16 +98,16 @@ void Object::Private::enabledChanged(bool enabled)
 
 void Object::Private::languageChanged()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (icon) {
         delete icon;
     }
     icon = new Icon(q);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }

@@ -1,10 +1,10 @@
-Direct	Zenkaku Hankaku	Turn on qimsys
-Direct	Hiragana Katakana	Turn on qimsys
-Direct	Alt+`	Turn on qimsys
+Direct	Zenkaku Hankaku	Turn on cuteime
+Direct	Hiragana Katakana	Turn on cuteime
+Direct	Alt+`	Turn on cuteime
 
-Empty	Zenkaku Hankaku	Turn off qimsys
-Empty	CapsLock	Turn off qimsys
-Empty	Alt+`	Turn off qimsys
+Empty	Zenkaku Hankaku	Turn off cuteime
+Empty	CapsLock	Turn off cuteime
+Empty	Alt+`	Turn off cuteime
 Empty	Hiragana Katakana	Next character mode
 Empty	Shift+Hiragana Katakana	Previous character mode
 Empty	Alt+Romaji	Previous typing mode

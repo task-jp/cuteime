@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,7 +21,7 @@
 #include "dictionarymodel.h"
 #include "libanthydic.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QTextCodec>
 
@@ -79,13 +79,13 @@ DictionaryModel::Private::Private(DictionaryModel *parent)
     int ret = libanthydic.anthy_priv_dic_select_first_entry();
     switch (ret) {
     case ANTHY_DIC_UTIL_ERROR:
-        qimsysWarning() << "ANTHY_DIC_UTIL_ERROR";
+        cuteimeWarning() << "ANTHY_DIC_UTIL_ERROR";
         break;
     case ANTHY_DIC_UTIL_DUPLICATE:
-        qimsysWarning() << "ANTHY_DIC_UTIL_DUPLICATE";
+        cuteimeWarning() << "ANTHY_DIC_UTIL_DUPLICATE";
         break;
     case ANTHY_DIC_UTIL_INVALID:
-        qimsysWarning() << "ANTHY_DIC_UTIL_INVALID";
+        cuteimeWarning() << "ANTHY_DIC_UTIL_INVALID";
         break;
     }
     char buf[8192];
@@ -359,19 +359,19 @@ QHash<int,QByteArray> DictionaryModel::roleNames() const
 
 QVariantList DictionaryModel::rawData(int row) const
 {
-    qimsysDebugIn() << row;
+    cuteimeDebugIn() << row;
     QVariantList ret;
     ret.append(data(index(row, Sound)));
     ret.append(data(index(row, Spelling)));
     ret.append(data(index(row, WordType)));
     ret.append(data(index(row, Frequency)));
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 void DictionaryModel::setRawData(int row, QVariantList rawData)
 {
-    qimsysDebugIn() << row;
+    cuteimeDebugIn() << row;
     if (rawData.isEmpty()) {
         removeRow(row);
     } else {
@@ -385,7 +385,7 @@ void DictionaryModel::setRawData(int row, QVariantList rawData)
         setData(index(row, Frequency), rawData.takeFirst());
     }
     save();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "dictionarymodel.moc"

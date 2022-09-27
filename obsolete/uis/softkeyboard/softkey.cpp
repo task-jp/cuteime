@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -19,8 +19,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "softkey.h"
-#include "qimsysdebug.h"
-#include "qimsyskeysequence.h"
+#include "cuteimedebug.h"
+#include "cuteimekeysequence.h"
 #include <QPainter>
 #include <QMouseEvent>
 
@@ -40,7 +40,7 @@ SoftKey::SoftKey(const QString &line, QWidget *parent)
     d = new Private;
     d->pressed = false;
     d->texts = line.split("\t");
-    QimsysKeySequence seq(d->texts.takeFirst());
+    CuteimeKeySequence seq(d->texts.takeFirst());
     d->key = (Qt::Key)seq[0];
     if (d->key & Qt::SHIFT) {
         d->modifier = Qt::ShiftModifier;

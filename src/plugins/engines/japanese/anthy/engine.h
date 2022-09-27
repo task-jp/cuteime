@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,22 +21,22 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <qimsysengine.h>
+#include <cuteimeengine.h>
 
 namespace Japanese {
     namespace Anthy {
 
-class Engine : public QimsysEngine
+class Engine : public CuteimeEngine
 {
     Q_OBJECT
 public:
     Engine(QObject *parent = 0);
     ~Engine();
 
-    QimsysEngineDictionary *dictionary(QObject *parent = 0);
+    CuteimeEngineDictionary *dictionary(QObject *parent = 0);
 
-#ifndef QIMSYS_NO_GUI
-    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
+#ifndef CUTEIME_NO_GUI
+    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
 #endif
 
 private:

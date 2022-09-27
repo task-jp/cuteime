@@ -1,0 +1,98 @@
+/*!
+    \class CuteimeAbstractPluginObject
+    \brief Base class of object for cuteime plugin system
+
+    \sa CuteimePluginManager::object()
+ */
+
+/*!
+    \enum CuteimeAbstractPluginObject::CategoryType
+    \brief type of category
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::Hidden
+     \brief This category is invisible
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::CanBeNone
+     \brief This category can have multiple choice or nothing
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::AlwaysOne
+     \brief This category has exactly one plugin
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::MoreThanOne
+     \brief This category has one or more plugins
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::OneOrNone
+     \brief This category has one plugin or nothing
+ */
+
+/*!
+     \var CuteimeAbstractPluginObject::All
+     \brief This category has all plugins
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::icon
+    \brief icon of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::name
+    \brief name of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::description
+    \brief description of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::author
+    \brief author of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::url
+    \brief url of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::translator
+    \brief translator of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::license
+    \brief license of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::enabled
+    \brief enabled of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::groups
+    \brief groups of plugin
+
+    This is not used yet.
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::categoryType
+    \brief categoryType of plugin
+ */
+
+/*!
+    \property CuteimeAbstractPluginObject::categoryName
+    \brief categoryName of plugin
+ */

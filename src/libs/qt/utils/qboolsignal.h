@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,9 +22,9 @@
 #define QBOOLSIGNAL_H
 
 #include <QObject>
-#include "qimsysglobal.h"
+#include "cuteimeglobal.h"
 
-class QIMSYS_EXPORT QBoolSignal : public QObject
+class CUTEIME_EXPORT QBoolSignal : public QObject
 {
     Q_OBJECT
 public:
@@ -42,7 +42,7 @@ private:
     bool _value;
 };
 
-class QIMSYS_EXPORT QBoolsSignal : public QObject
+class CUTEIME_EXPORT QBoolsSignal : public QObject
 {
     Q_OBJECT
 public:

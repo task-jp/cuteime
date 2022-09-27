@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -24,11 +24,11 @@
 using namespace CandidateWindow;
 
 Plugin::Plugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
 }
 
-QimsysAbstractPluginObject *Plugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *Plugin::createObject(QObject *parent)
 {
     return new Object(parent);
 }

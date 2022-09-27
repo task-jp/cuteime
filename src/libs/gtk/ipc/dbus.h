@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,7 +21,7 @@
 #ifndef DBUS_H
 #define DBUS_H
 
-#ifndef QIMSYS_NO_DBUS
+#ifndef CUTEIME_NO_DBUS
 #define CHECK_DBUS_ERROR(ret, ...) \
 if (__VA_ARGS__) { \
     if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION) \
@@ -32,6 +32,6 @@ if (__VA_ARGS__) { \
     ret = FALSE; \
 }
 
-#endif // QIMSYS_NO_DBUS
+#endif // CUTEIME_NO_DBUS
 
 #endif

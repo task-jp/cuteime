@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,11 +21,11 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <qimsysabstractpluginobject.h>
+#include <cuteimeabstractpluginobject.h>
 
 namespace Xim {
 
-class Object : public QimsysAbstractPluginObject
+class Object : public CuteimeAbstractPluginObject
 {
     Q_OBJECT
 public:

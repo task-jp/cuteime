@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
 QT += widgets
 HEADERS += plugin.h object.h widget.h

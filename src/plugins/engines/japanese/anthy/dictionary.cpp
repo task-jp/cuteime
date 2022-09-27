@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -31,7 +31,7 @@ public:
 };
 
 Dictionary::Dictionary(QObject *parent)
-    : QimsysEngineDictionary(parent)
+    : CuteimeEngineDictionary(parent)
 {
     d = new Private;
     d->model = 0;

@@ -1,7 +1,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = qimsys
+PROJECT_NAME           = cuteime
 PROJECT_NUMBER         = 0.2.0
 OUTPUT_DIRECTORY       =
 CREATE_SUBDIRS         = NO

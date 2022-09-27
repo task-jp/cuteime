@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 include(../../utils/inputmethodcontroller/inputmethodcontroller.pri)
 
 HEADERS += plugin.h object.h widget.h settings.h

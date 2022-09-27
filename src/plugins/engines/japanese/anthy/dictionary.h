@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-#include <qimsysenginedictionary.h>
+#include <cuteimeenginedictionary.h>
 
 namespace Japanese {
     namespace Anthy {
 
-class Dictionary : public QimsysEngineDictionary
+class Dictionary : public CuteimeEngineDictionary
 {
     Q_OBJECT
 public:

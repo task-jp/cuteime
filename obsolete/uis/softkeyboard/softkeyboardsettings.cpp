@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "softkeyboardsettings.h"
 #include "ui_softkeyboardsettings.h"
-#include "qimsysabstractpluginobject.h"
+#include "cuteimeabstractpluginobject.h"
 #include "translator.h"
 
 #include <QSettings>
@@ -29,7 +29,7 @@ class SoftKeyboardSettings::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *plugin, SoftKeyboardSettings *parent);
+    Private(CuteimeAbstractPluginObject *plugin, SoftKeyboardSettings *parent);
     ~Private();
 
     void save();
@@ -38,7 +38,7 @@ private:
     Ui::SoftKeyboardSettings ui;
 };
 
-SoftKeyboardSettings::Private::Private(QimsysAbstractPluginObject *plugin, SoftKeyboardSettings *parent)
+SoftKeyboardSettings::Private::Private(CuteimeAbstractPluginObject *plugin, SoftKeyboardSettings *parent)
     : QObject(parent)
     , q(parent)
 {
@@ -67,8 +67,8 @@ void SoftKeyboardSettings::Private::save()
 {
 }
 
-SoftKeyboardSettings::SoftKeyboardSettings(QimsysAbstractPluginObject *plugin, QWidget *parent)
-    : QimsysSettingsWidget(parent)
+SoftKeyboardSettings::SoftKeyboardSettings(CuteimeAbstractPluginObject *plugin, QWidget *parent)
+    : CuteimeSettingsWidget(parent)
 {
     d = new Private(plugin, this);
 }

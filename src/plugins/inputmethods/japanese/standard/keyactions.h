@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,7 +23,7 @@
 
 #include <QObject>
 
-class QimsysKeySequence;
+class CuteimeKeySequence;
 
 namespace Japanese {
     namespace Standard {
@@ -35,8 +35,8 @@ class KeyActions : public QObject
 public:
     explicit KeyActions(QObject *parent = 0);
 
-    bool contains(const QimsysKeySequence &keySequence) const;
-    void trigger(const QimsysKeySequence &keySequence);
+    bool contains(const CuteimeKeySequence &keySequence) const;
+    void trigger(const CuteimeKeySequence &keySequence);
 
 private:
     class Private;

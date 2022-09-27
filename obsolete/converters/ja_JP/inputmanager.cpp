@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -19,7 +19,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "inputmanager.h"
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include <QSettings>
 
 using namespace ja_JP;
@@ -41,37 +41,37 @@ InputManager::Private::Private()
     , character(0)
     , characterTemp(0)
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 InputManager *InputManager::instance()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     static InputManager *ret = 0;
     if (!ret)
         ret = new InputManager;
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return ret;
 }
 
 InputManager::InputManager(QObject *parent)
     : QObject(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private;
     QSettings settings;
     settings.beginGroup(metaObject()->className());
     d->character = settings.value("character", Hiragana | FullWidth).toInt();
     d->typing = static_cast<Typing>(settings.value("typing", Roma).toInt());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputManager::~InputManager()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 State InputManager::state() const
@@ -82,7 +82,7 @@ State InputManager::state() const
 void InputManager::setState(State state)
 {
     if (d->state == state) return;
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     d->state = state;
     switch (d->state) {
     case Direct:
@@ -93,7 +93,7 @@ void InputManager::setState(State state)
         break;
     }
     emit stateChanged(d->state);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 int InputManager::character() const
@@ -135,7 +135,7 @@ Typing InputManager::typing() const
 void InputManager::setTyping(Typing typing)
 {
     if (d->typing == typing) return;
-    qimsysDebugIn() << typing;
+    cuteimeDebugIn() << typing;
 
     QSettings settings;
     settings.beginGroup(metaObject()->className());
@@ -143,5 +143,5 @@ void InputManager::setTyping(Typing typing)
 
     d->typing = typing;
     emit typingChanged(d->typing);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }

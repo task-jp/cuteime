@@ -1,0 +1,31 @@
+/*!
+    \class CuteimeConversionItem
+    \brief CuteimeConversionItem is data for each conversion items.
+ */
+
+/*!
+    \var CuteimeConversionItem::index
+    \brief index of list
+ */
+
+/*!
+    \var CuteimeConversionItem::from
+    \brief original input string
+ */
+
+/*!
+    \var CuteimeConversionItem::to
+    \brief converted string
+ */
+
+/*!
+    \var CuteimeConversionItem::hint
+    \brief hint information
+
+    Note that: hint is not used yet
+ */
+
+/*!
+    \class CuteimeConversionItemList
+    \brief QList of CuteimeConversionItem
+ */

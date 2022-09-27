@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,9 +23,9 @@
 
 #include <QPointer>
 
-#include <qimsysapplicationmanager.h>
-#include <qimsysdebug.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimedynamictranslator.h>
 
 namespace UserDictionary {
 
@@ -43,7 +43,7 @@ private slots:
 
 private:
     Object *q;
-    QimsysApplicationManager *applicationManager;
+    CuteimeApplicationManager *applicationManager;
     QPointer<Widget> widget;
 };
 
@@ -82,7 +82,7 @@ void Object::Private::enabledChanged(bool enabled)
 {
     if (enabled) {
         if (!applicationManager) {
-            applicationManager = new QimsysApplicationManager(this);
+            applicationManager = new CuteimeApplicationManager(this);
             applicationManager->init();
             connect(applicationManager, SIGNAL(triggered(int)), this, SLOT(exec(int)));
         }
@@ -101,7 +101,7 @@ void Object::Private::enabledChanged(bool enabled)
 void Object::Private::exec(int action)
 {
     switch (action) {
-    case QimsysApplicationManager::ShowDictionary:
+    case CuteimeApplicationManager::ShowDictionary:
         if (!widget) {
             languageChanged();
         } else {
@@ -115,18 +115,18 @@ void Object::Private::exec(int action)
 
 void Object::Private::languageChanged()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (widget)
         delete widget;
     widget = new Widget;
     connect(widget, SIGNAL(languageChanged()), this, SLOT(languageChanged()));
     widget->setAttribute(Qt::WA_DeleteOnClose);
     widget->show();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }

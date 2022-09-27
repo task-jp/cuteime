@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,11 +23,11 @@
 
 #include <plugins/inputmethods/japanese/standard/global.h>
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
+#include <cuteimedynamictranslator.h>
 
 #include <QCoreApplication>
 #include <QIcon>
@@ -49,15 +49,15 @@ public:
     Private(Engine *parent);
     ~Private();
 
-#ifndef QIMSYS_NO_GUI
-    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent);
+#ifndef CUTEIME_NO_GUI
+    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent);
 #endif
 
 private slots:
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
     void stateChanged(uint state);
-    void itemChanged(const QimsysPreeditItem &item);
+    void itemChanged(const CuteimePreeditItem &item);
 
     void clearCandidates();
 
@@ -80,16 +80,16 @@ private slots:
 
 private:
     Engine *q;
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
-    QimsysCandidateManager *candidateManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
+    CuteimeCandidateManager *candidateManager;
     QNetworkAccessManager *networkManager;
     QNetworkReply *conversionReply;
 
     State currentState;
     int preeditIndex;
-    QimsysConversionItemList predictionItems;
-    QList<QimsysConversionItemList> candidateList;
+    CuteimeConversionItemList predictionItems;
+    QList<CuteimeConversionItemList> candidateList;
 
     bool prediction;
     bool predictOnEmpty;
@@ -114,14 +114,14 @@ Engine::Private::Private(Engine *parent)
     , prediction(false)
     , predictOnEmpty(false)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
 
     q->setIdentifier(QLatin1String("Social IME"));
     q->setPriority(0x80);
 
     q->setLocale(QLatin1String("ja_JP"));
     q->setLanguage("Japanese(Standard)");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/icons/socialime.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Social IME Engine"), q, "name");
@@ -142,7 +142,7 @@ Engine::Private::Private(Engine *parent)
     connect(q, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     activeChanged(q->isActive());
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Engine::Private::~Private()
@@ -151,23 +151,23 @@ Engine::Private::~Private()
 
 void Engine::Private::enabledChanged(bool enabled)
 {
-    qimsysDebugIn() << enabled;
+    cuteimeDebugIn() << enabled;
     if (enabled) {
 
     } else {
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::activeChanged(bool active)
 {
-    qimsysDebugIn() << active;
+    cuteimeDebugIn() << active;
     if (active) {
         if (!networkManager) {
             networkManager = new QNetworkAccessManager(this);
         }
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
 
@@ -185,16 +185,16 @@ void Engine::Private::activeChanged(bool active)
             inputMethodManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     currentState = (State)state;
     if (state == Direct) {
         if (preeditManager) {
-            disconnect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            disconnect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
             preeditManager->deleteLater();
             preeditManager = 0;
         }
@@ -204,12 +204,12 @@ void Engine::Private::stateChanged(uint state)
         }
     } else {
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
-            connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         }
         if (!candidateManager) {
-            candidateManager = new QimsysCandidateManager(this);
+            candidateManager = new CuteimeCandidateManager(this);
             candidateManager->init();
         }
     }
@@ -243,14 +243,14 @@ void Engine::Private::stateChanged(uint state)
         break;
     }
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void Engine::Private::itemChanged(const QimsysPreeditItem &item)
+void Engine::Private::itemChanged(const CuteimePreeditItem &item)
 {
     if (item.rawString.contains(QString())) return;
 
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
     switch (currentState) {
     case Empty:
         if (!predictOnEmpty) {
@@ -261,7 +261,7 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
         if (!prediction) {
             break;
         }
-//        qimsysWarning() << "PREDICT:" << items;
+//        cuteimeWarning() << "PREDICT:" << items;
         predict();
         break;
     case Convert: {
@@ -274,7 +274,7 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
             }
             pos += item.to.at(i).length();
         }
-        qimsysDebug() << currentIndex << preeditIndex;
+        cuteimeDebug() << currentIndex << preeditIndex;
         if (currentIndex == preeditIndex) {
             resize();
         } else {
@@ -291,24 +291,24 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
         break;
     }
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::predict()
 {
     if (!prediction) return;
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     QString preeditString = item.from.join("");
 
     if (!predictOnEmpty && preeditString.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     QString url = QString("http://www.social-ime.com/api2/predict.php?string=%1").arg(preeditString);
     url.append(QLatin1String("&charset=UTF8"));
     url.append(QString("&user=%1").arg(user));
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    request.setRawHeader("User-Agent", "QIMSYS");
+    request.setRawHeader("User-Agent", "CUTEIME");
 
     QNetworkReply *reply = networkManager->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(readPrediction()));
@@ -317,33 +317,33 @@ void Engine::Private::predict()
     connect(reply, SIGNAL(sslErrors(QList<QSslError>))
             , this, SLOT(sslErrors(QList<QSslError>)));
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::readPrediction()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     reply->deleteLater();
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     QUrlQuery query(reply->url());
     QString preeditString = query.queryItemValue("string");
     if (preeditString != item.from.join("")) {
         return;
     }
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     QStringList result = QString::fromUtf8(reply->readAll()).split("\t");
     result.removeAll(QLatin1String("\n"));
 
     predictionItems = candidateManager->items();
-    foreach (const QimsysConversionItem &item, predictionItems) {
+    foreach (const CuteimeConversionItem &item, predictionItems) {
         if (item.source == q->identifier()) {
             predictionItems.removeOne(item);
         }
     }
 
     foreach(const QString &p, result) {
-        QimsysConversionItem convertionItem;
+        CuteimeConversionItem convertionItem;
         convertionItem.index = -1;
         convertionItem.to = p;
         convertionItem.from = preeditString;
@@ -351,29 +351,29 @@ void Engine::Private::readPrediction()
         predictionItems.append(convertionItem);
     }
 
-    qimsysDebug() << predictionItems;
+    cuteimeDebug() << predictionItems;
     candidateManager->setItems(predictionItems);
     reply->deleteLater();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 
 void Engine::Private::convert()
 {
     if (!candidateList.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     QString preeditString = item.from.join("");
 
-    qimsysDebug() << preeditString;
+    cuteimeDebug() << preeditString;
 
     QString url = QString("http://www.social-ime.com/api/?string=%1").arg(preeditString);
     url.append(QLatin1String("&charset=UTF8"));
     url.append(QString("&user=%1").arg(user));
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    request.setRawHeader("User-Agent", "QIMSYS");
+    request.setRawHeader("User-Agent", "CUTEIME");
 
     QNetworkReply *reply = networkManager->get(request);
     connect(reply, SIGNAL(finished()), this, SLOT(readConversion()));
@@ -387,7 +387,7 @@ void Engine::Private::convert()
     initialSizes.clear();
     preeditIndex = 0;
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::readConversion()
@@ -397,31 +397,31 @@ void Engine::Private::readConversion()
     if (conversionReply != reply) return;
     conversionReply = 0;
     if (reply->error() != QNetworkReply::NoError) return;
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     QUrlQuery query(reply->url());
     if (query.queryItemValue("string") != item.from.join("")) {
-        qimsysDebug() << query.queryItemValue("string") << item.from;
+        cuteimeDebug() << query.queryItemValue("string") << item.from;
         return;
     }
 
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     QStringList all = QString::fromUtf8(reply->readAll()).split("\n");
-    qimsysDebug() << all;
-    qimsysDebug() << item;
-    qimsysDebug() << preeditIndex;
+    cuteimeDebug() << all;
+    cuteimeDebug() << item;
+    cuteimeDebug() << preeditIndex;
 
     QStringList from = item.from;
     QStringList rawString = item.rawString;
 
     while (item.to.length() > preeditIndex) {
-        qimsysDebug() << item;
+        cuteimeDebug() << item;
         item.to.removeLast();
         item.from.removeLast();
         item.rawString.removeLast();
     }
 
-    qimsysDebug() << from;
+    cuteimeDebug() << from;
     foreach (QString f, item.from) {
         while (f.startsWith(from.first())) {
             f = f.mid(from.length());
@@ -429,34 +429,34 @@ void Engine::Private::readConversion()
             rawString.removeFirst();
         }
     }
-    qimsysDebug() << from;
+    cuteimeDebug() << from;
 
-    qimsysDebug() << candidateList;
+    cuteimeDebug() << candidateList;
     while (candidateList.length() > preeditIndex) {
         candidateList.removeLast();
     }
-    qimsysDebug() << candidateList;
+    cuteimeDebug() << candidateList;
 
     for (int i = 0; i < preeditIndex; i++) {
         all.removeFirst();
     }
-    qimsysDebug() << all;
-    qimsysDebug() << item;
+    cuteimeDebug() << all;
+    cuteimeDebug() << item;
     item.cursor = item.to.join("").length();
 
     foreach(const QString &line, all) {
         QStringList data = line.split("\t");
-        qimsysDebug() << data;
+        cuteimeDebug() << data;
         Q_ASSERT(!data.isEmpty());
         if (data.first().isEmpty()) continue;
 
         item.to.append(data.first());
 
         QString f;
-        QimsysConversionItemList cand;
+        CuteimeConversionItemList cand;
         for (int i = 0; i < data.length(); i++) {
             if (data.at(i).isEmpty()) continue;
-            QimsysConversionItem c;
+            CuteimeConversionItem c;
             c.to = data.at(i);
             c.index = i;
             c.source = q->identifier();
@@ -464,9 +464,9 @@ void Engine::Private::readConversion()
 
             if (f.isNull() && !from.isEmpty() && from.join("").startsWith(data.at(i))) {
                 f = data.at(i);
-                qimsysDebug() << f << from;
+                cuteimeDebug() << f << from;
                 while (!f.isEmpty() && !from.isEmpty()) {
-                    qimsysDebug() << f << from.first() << item;
+                    cuteimeDebug() << f << from.first() << item;
                     if (f.startsWith(from.first())) {
                         f = f.mid(from.first().length());
                         int l = item.to.length();
@@ -480,7 +480,7 @@ void Engine::Private::readConversion()
                     } else {
                         QString f = from.first();
                         QString ch = f.left(1);
-                        qimsysDebug() << f << ch;
+                        cuteimeDebug() << f << ch;
                         if (f.startsWith(ch)) {
                             f = f.mid(1);
                             item.from.append(ch);
@@ -492,16 +492,16 @@ void Engine::Private::readConversion()
             }
 
         }
-        qimsysDebug() << item;
+        cuteimeDebug() << item;
         for (int i = 0; i < cand.count(); i++) {
             cand[i].from = item.from.last();
         }
         candidateList.append(cand);
     }
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
 
     item.selection = item.to.at(preeditIndex).length();
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
 
     for (int i = initialSizes.length(); i < item.from.size(); i++) {
         initialSizes.append(item.from.at(i).length());
@@ -511,12 +511,12 @@ void Engine::Private::readConversion()
     preeditManager->setItem(item);
     preeditManager->blockSignals(false);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::resize()
 {
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     if (item.to.isEmpty()) return;
     QStringList from = item.from;
 
@@ -525,10 +525,10 @@ void Engine::Private::resize()
     if (initialSizes.at(preeditIndex) + delta < 1) return;
     if (delta > 0 && preeditIndex == initialSizes.count() - 1) return;
 
-    qimsysDebugIn() << delta;
+    cuteimeDebugIn() << delta;
 
-    qimsysDebug() << item;
-    qimsysDebug() << initialSizes;
+    cuteimeDebug() << item;
+    cuteimeDebug() << initialSizes;
 
     QString url = QString("http://www.social-ime.com/api/?string=%1").arg(from.join(""));
     while (initialSizes.count() - 1 > preeditIndex) {
@@ -541,7 +541,7 @@ void Engine::Private::resize()
     url.append(QString("&resize[%1]=%2").arg(preeditIndex).arg(item.from.at(preeditIndex).length() - initialSizes.at(preeditIndex)));
     url.append(QLatin1String("&charset=UTF8"));
     url.append(QString("&user=%1").arg(user));
-    qimsysDebug() << url;
+    cuteimeDebug() << url;
     QNetworkRequest request;
     request.setUrl(QUrl(url));
     request.setRawHeader("User-Agent", QString("%1(%2)").arg(QCoreApplication::applicationName()).arg(QCoreApplication::applicationVersion()).toUtf8());
@@ -554,14 +554,14 @@ void Engine::Private::resize()
             , this, SLOT(sslErrors(QList<QSslError>)));
     cancel();
     conversionReply = reply;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::setCandidates()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     int currentIndex = -1;
     int pos = 0;
     for (int i = 0; i < item.to.length(); i++) {
@@ -572,18 +572,18 @@ void Engine::Private::setCandidates()
         pos += item.to.at(i).length();
     }
 
-    qimsysDebug() << item << currentIndex;
-    qimsysDebug() << candidateList;
+    cuteimeDebug() << item << currentIndex;
+    cuteimeDebug() << candidateList;
     candidateManager->setItems(candidateList.at(currentIndex));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::learn()
 {
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     if (candidateList.isEmpty()) return;
     if (item.to.length() != initialSizes.length()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QString preeditString = item.from.join("");
     QString url = QString("http://www.social-ime.com/api/?string=%1").arg(preeditString);
     for (int i = 0; i < initialSizes.length(); i++) {
@@ -603,35 +603,35 @@ void Engine::Private::learn()
         }
     }
     url.append(QString("&user=%1").arg(user));
-    qimsysDebug() << url;
+    cuteimeDebug() << url;
     QNetworkRequest request;
     request.setUrl(QUrl(url));
-    request.setRawHeader("User-Agent", "QIMSYS");
+    request.setRawHeader("User-Agent", "CUTEIME");
 
     networkManager->get(request);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::clearCandidates()
 {
     if (!candidateManager) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    QimsysConversionItemList candidateItemList = candidateManager->items();
-    foreach (QimsysConversionItem candidateItem, candidateItemList) {
+    CuteimeConversionItemList candidateItemList = candidateManager->items();
+    foreach (CuteimeConversionItem candidateItem, candidateItemList) {
         if (candidateItem.source == q->identifier()) {
             candidateItemList.removeOne(candidateItem);
         }
     }
     candidateManager->setItems(candidateItemList);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::cancel()
 {
     if (conversionReply) {
-        qimsysWarning() << conversionReply;
+        cuteimeWarning() << conversionReply;
         conversionReply->abort();
         conversionReply = 0;
     }
@@ -639,23 +639,23 @@ void Engine::Private::cancel()
 
 void Engine::Private::error(QNetworkReply::NetworkError err)
 {
-    qimsysDebugIn() << err;
+    cuteimeDebugIn() << err;
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
-    qimsysDebug() << reply;
+    cuteimeDebug() << reply;
     reply->deleteLater();
-    qimsysWarning() << err;
-    qimsysDebugOut();
+    cuteimeWarning() << err;
+    cuteimeDebugOut();
 }
 
 void Engine::Private::sslErrors(QList<QSslError> errs)
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
     reply->deleteLater();
-    qimsysWarning() << errs.count();
+    cuteimeWarning() << errs.count();
 }
 
-#ifndef QIMSYS_NO_GUI
-QimsysSettingsWidget *Engine::Private::settings(const QString &hint, QWidget *parent)
+#ifndef CUTEIME_NO_GUI
+CuteimeSettingsWidget *Engine::Private::settings(const QString &hint, QWidget *parent)
 {
     Q_UNUSED(hint);
     Settings *settings = new Settings(q, parent);
@@ -672,7 +672,7 @@ void Engine::Private::saved()
 }
 
 Engine::Engine(QObject *parent)
-    : QimsysEngine(parent)
+    : CuteimeEngine(parent)
 {
     d = new Private(this);
 }
@@ -682,8 +682,8 @@ Engine::~Engine()
     delete d;
 }
 
-#ifndef QIMSYS_NO_GUI
-QimsysSettingsWidget *Engine::settings(const QString &hint, QWidget *parent)
+#ifndef CUTEIME_NO_GUI
+CuteimeSettingsWidget *Engine::settings(const QString &hint, QWidget *parent)
 {
     return d->settings(hint, parent);
 }

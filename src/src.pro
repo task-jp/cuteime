@@ -1,4 +1,4 @@
-include(../qimsys.pri)
+include(../cuteime.pri)
 TEMPLATE = subdirs
 CONFIG += ordered
 SUBDIRS = libs plugins

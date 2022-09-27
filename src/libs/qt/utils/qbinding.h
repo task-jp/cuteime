@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,11 +22,11 @@
 #define QBINDING_H
 
 #include <QObject>
-#include "qimsysglobal.h"
+#include "cuteimeglobal.h"
 
 class QState;
 
-class QIMSYS_EXPORT QBinding : public QObject
+class CUTEIME_EXPORT QBinding : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY(QBinding)

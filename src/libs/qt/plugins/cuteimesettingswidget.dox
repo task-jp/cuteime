@@ -1,0 +1,49 @@
+/*!
+    \class CuteimeSettingsWidget
+    \brief widget for plugin settings
+ */
+
+/*!
+    \fn CuteimeSettingsWidget::CuteimeSettingsWidget(QWidget *parent = 0)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeSettingsWidget::CuteimeSettingsWidget(CuteimeAbstractPluginObject *plugin, QWidget *parent = 0)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeSettingsWidget::~CuteimeSettingsWidget()
+    \brief Destructor
+ */
+
+/*!
+    \fn bool CuteimeSettingsWidget::isModified() const
+    \brief returns if settings is modified
+ */
+
+/*!
+    \fn void CuteimeSettingsWidget::save()
+    \brief save settings
+ */
+
+/*!
+    \fn void CuteimeSettingsWidget::setModified(bool modified = true)
+    \brief set modified flag
+ */
+
+/*!
+    \fn void CuteimeSettingsWidget::modifiedChanged(bool modified)
+    \brief This signal is emitted when modified
+ */
+
+/*!
+    \fn void CuteimeSettingsWidget::saved()
+    \brief This signal is emitted after saved
+ */
+
+/*!
+    \fn QWidget *CuteimeSettingsWidget::about(CuteimeAbstractPluginObject *plugin, const QString &spec, QWidget *parent = 0)
+    \todo
+ */

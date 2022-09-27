@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,11 +23,11 @@
 #include <QKeyEvent>
 #include <QAction>
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyspreedit.h>
-#include <qimsyscandidates.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimepreedit.h>
+#include <cuteimecandidates.h>
 
 #include "base/scoped_ptr.h"
 #include "client/session.h"
@@ -58,10 +58,10 @@ private:
 private:
     MozcObject *q;
 
-    QimsysApplicationManager manager;
-    QimsysKeyManager keyManager;
-    QimsysPreedit preedit;
-    QimsysCandidates candidates;
+    CuteimeApplicationManager manager;
+    CuteimeKeyManager keyManager;
+    CuteimePreedit preedit;
+    CuteimeCandidates candidates;
 
     scoped_ptr<client::Session> session;
     commands::CompositionMode mode;
@@ -83,7 +83,7 @@ MozcObject::Private::Private(MozcObject *parent)
     q->setName(tr("Mozc"));
     q->setAuthor(tr("Tasuku Suzuki"));
     q->setTranslator(tr("None"));
-    q->setDescription(tr("Mozc plugin for qimsys"));
+    q->setDescription(tr("Mozc plugin for cuteime"));
 
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
 }
@@ -111,7 +111,7 @@ void MozcObject::Private::init()
 void MozcObject::Private::focusChanged(uint focus)
 {
     if (!q->isActive()) return;
-    qimsysDebugIn() << focus;
+    cuteimeDebugIn() << focus;
     if (focus) {
         if (mode != commands::DIRECT) {
             manager.setComposing(true);
@@ -123,7 +123,7 @@ void MozcObject::Private::focusChanged(uint focus)
         session->SendCommand(command, &output);
         update(output);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void MozcObject::Private::setCharacterMode(commands::CompositionMode newMode)
@@ -194,18 +194,18 @@ QList<QAction*> MozcObject::Private::actions()
 void MozcObject::Private::keyPressed(const QString &text, int keycode, int modifiers, bool autoRepeat)
 {
     if (!q->isActive() || keyManager.isAccepted()) return;
-    qimsysDebugIn() << text << keycode << modifiers << autoRepeat;
+    cuteimeDebugIn() << text << keycode << modifiers << autoRepeat;
     if (keycode == Qt::Key_Zenkaku_Hankaku) {
         if (mode == commands::DIRECT) {
             setCharacterMode(commands::HIRAGANA);
         } else {
             setCharacterMode(commands::DIRECT);
         }
-        qimsysDebugOut();
+        cuteimeDebugOut();
         return;
     }
     if (mode == commands::DIRECT) {
-        qimsysDebugOut();
+        cuteimeDebugOut();
         return;
     }
     commands::KeyEvent key;
@@ -287,25 +287,25 @@ void MozcObject::Private::keyPressed(const QString &text, int keycode, int modif
             keyManager.accept();
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void MozcObject::Private::update(const commands::Output &output)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (output.has_result()) {
         const commands::Result &r = output.result();
         QString commitText = QString::fromUtf8(r.value().c_str());
         preedit.commit(manager.widget());
-        qimsysDebug() << commitText;
+        cuteimeDebug() << commitText;
     }
 
-    QimsysConversionItemList candidateItems;
+    CuteimeConversionItemList candidateItems;
     if (output.has_candidates()) {
         const commands::Candidates &c = output.candidates();
         for (int i = 0; i < c.candidate_size(); i++) {
             const commands::Candidates_Candidate cc = c.candidate(i);
-            QimsysConversionItem item;
+            CuteimeConversionItem item;
             item.to = QString::fromUtf8(cc.value().c_str());
             item.index = i;
 
@@ -321,14 +321,14 @@ void MozcObject::Private::update(const commands::Output &output)
     }
     candidates.setCandidates(candidateItems);
 
-    QimsysPreeditItemList preeditItems;
+    CuteimePreeditItemList preeditItems;
     if (output.has_preedit()) {
         const commands::Preedit &p = output.preedit();
         int cursor = p.has_highlighted_position() ? p.highlighted_position() : p.cursor();
         int length = 0;
         for (int i = 0; i < p.segment_size(); i++ ) {
             const commands::Preedit::Segment &s = p.segment(i);
-            QimsysPreeditItem item;
+            CuteimePreeditItem item;
             item.text = QString::fromUtf8(s.value().c_str());
             item.underline = QTextCharFormat::NoUnderline;
             if (length <= cursor && cursor < length + item.text.length()) {
@@ -359,11 +359,11 @@ void MozcObject::Private::update(const commands::Output &output)
         const commands::CompositionMode &m = output.mode();
         setCharacterMode(m);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 MozcObject::MozcObject(QObject *parent)
-    : QimsysConverter(parent)
+    : CuteimeConverter(parent)
 {
     d = new Private(this);
 }

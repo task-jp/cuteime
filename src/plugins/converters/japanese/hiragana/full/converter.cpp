@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,10 +22,10 @@
 
 #include <plugins/inputmethods/japanese/standard/global.h>
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimedynamictranslator.h>
 
 namespace Japanese {
     namespace Hiragana {
@@ -46,7 +46,7 @@ private slots:
 
 private:
     Converter *q;
-    QimsysInputMethodManager *inputMethodManager;
+    CuteimeInputMethodManager *inputMethodManager;
 };
 
         }
@@ -60,15 +60,15 @@ Converter::Private::Private(Converter *parent)
     , q(parent)
     , inputMethodManager(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     init();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::init()
@@ -78,7 +78,7 @@ void Converter::Private::init()
 
     q->setLocale("ja_JP");
     q->setLanguage("Japanese(Standard)");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/japanese/hiragana/full/resources/hiragana-full.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Hiragana"), q, "name");
@@ -96,10 +96,10 @@ void Converter::Private::init()
 
 void Converter::Private::activeChanged(bool isActive)
 {
-    qimsysDebugIn() << isActive;
+    cuteimeDebugIn() << isActive;
     if (isActive) {
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
         }
@@ -112,18 +112,18 @@ void Converter::Private::activeChanged(bool isActive)
             inputMethodManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     switch (state) {
     case ConvertTo: {
-        QimsysPreeditManager preeditManager;
+        CuteimePreeditManager preeditManager;
         preeditManager.init();
 
-        QimsysPreeditItem item = preeditManager.item();
+        CuteimePreeditItem item = preeditManager.item();
         item.to = item.from;
         preeditManager.setItem(item);
         break;
@@ -131,22 +131,22 @@ void Converter::Private::stateChanged(uint state)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::Converter(QObject *parent)
-    : QimsysConverter(parent)
+    : CuteimeConverter(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::~Converter()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "converter.moc"

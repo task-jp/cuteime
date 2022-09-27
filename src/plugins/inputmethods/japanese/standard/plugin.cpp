@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,22 +20,22 @@
 
 #include "plugin.h"
 #include "inputmethod.h"
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include <QtPlugin>
 
 using namespace Japanese::Standard;
 
 Plugin::Plugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
-QimsysAbstractPluginObject *Plugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *Plugin::createObject(QObject *parent)
 {
-    qimsysDebugIn() << parent;
-    QimsysAbstractPluginObject *ret = new InputMethod(parent);
-    qimsysDebugOut() << ret;
+    cuteimeDebugIn() << parent;
+    CuteimeAbstractPluginObject *ret = new InputMethod(parent);
+    cuteimeDebugOut() << ret;
     return ret;
 }

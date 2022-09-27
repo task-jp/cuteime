@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
 CONFIG += link_pkgconfig
 PKGCONFIG += zinnia
@@ -13,4 +13,4 @@ SOURCES += zinniaplugin.cpp zinniaobject.cpp \
 RESOURCES += \
     zinnia.qrc
 
-DEFINES += QIMSYS_ZINNIA_DEFAULT_MODEL_PATH=\\\"$$QIMSYS_ZINNIA_DEFAULT_MODEL_PATH\\\"
+DEFINES += CUTEIME_ZINNIA_DEFAULT_MODEL_PATH=\\\"$$CUTEIME_ZINNIA_DEFAULT_MODEL_PATH\\\"

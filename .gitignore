@@ -1,2 +1,2 @@
 *.pro.*
-src/libs/gtk/ipc/qimsysmarshalers.?
+src/libs/gtk/ipc/cuteimemarshalers.?

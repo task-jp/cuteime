@@ -2,6 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS = full half
 
-contains(QIMSYS_CONFIG, tests) {
+contains(CUTEIME_CONFIG, tests) {
     SUBDIRS += full/test
 }

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -119,7 +119,7 @@ inline QChar convert(XKeyEvent *xev, int &key)
         }
     }
     if (key == 0) {
-        qimsysWarning() << xev->keycode << keysym;
+        cuteimeWarning() << xev->keycode << keysym;
     }
     switch (count) {
     case 0:
@@ -128,7 +128,7 @@ inline QChar convert(XKeyEvent *xev, int &key)
         ret = chars.at(0);
         break;
     default:
-        qimsysWarning() << chars;
+        cuteimeWarning() << chars;
     }
     return ret;
 }

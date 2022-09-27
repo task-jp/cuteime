@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,30 +21,30 @@
 #include "inputcontextplugin.h"
 #include "inputcontext.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 InputContextPlugin::InputContextPlugin(QObject *parent)
     : QInputContextPlugin(parent)
 {
-    if (!qgetenv("QIMSYS_DEBUG").isEmpty()) {
-        qimsysDebugOn();
+    if (!qgetenv("CUTEIME_DEBUG").isEmpty()) {
+        cuteimeDebugOn();
     }
-    qimsysDebugIn() << parent;
-    qimsysDebugOut();
+    cuteimeDebugIn() << parent;
+    cuteimeDebugOut();
 }
 
 InputContextPlugin::~InputContextPlugin()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 QInputContext *InputContextPlugin::create(const QString &key)
 {
     if (!keys().contains(key)) return 0;
-    qimsysDebugIn() << key;
+    cuteimeDebugIn() << key;
     InputContext *ret = new InputContext(this);
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
@@ -62,7 +62,7 @@ QString InputContextPlugin::displayName(const QString &key)
 
 QStringList InputContextPlugin::keys() const
 {
-    return QStringList() << QLatin1String("qimsys");
+    return QStringList() << QLatin1String("cuteime");
 }
 
 QStringList InputContextPlugin::languages(const QString &key)
@@ -73,4 +73,4 @@ QStringList InputContextPlugin::languages(const QString &key)
     return ret;
 }
 
-Q_EXPORT_PLUGIN2(qimsysInputContextPlugin, InputContextPlugin)
+Q_EXPORT_PLUGIN2(cuteimeInputContextPlugin, InputContextPlugin)

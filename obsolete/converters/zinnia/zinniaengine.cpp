@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "zinniaengine.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QStringList>
 
@@ -51,33 +51,33 @@ ZinniaEngine::Private::Private(ZinniaEngine *parent)
     : q(parent)
     , size(100, 100)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     recognizer = Recognizer::create();
-    if (!recognizer->open(QIMSYS_ZINNIA_DEFAULT_MODEL_PATH)) {
+    if (!recognizer->open(CUTEIME_ZINNIA_DEFAULT_MODEL_PATH)) {
         delete recognizer;
         recognizer = 0;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 ZinniaEngine::Private::~Private()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete recognizer;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaEngine::Private::setSize(const QSize &s)
 {
-    qimsysDebugIn() << s;
+    cuteimeDebugIn() << s;
     size = s;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaEngine::Private::recognize(const QList<QPolygon> &data)
 {
     if (!recognizer) return;
-    qimsysDebugIn() << data;
+    cuteimeDebugIn() << data;
     Character *character = Character::create();
     character->clear();
     character->set_width(size.width());
@@ -97,12 +97,12 @@ void ZinniaEngine::Private::recognize(const QList<QPolygon> &data)
         for (uint i = 0; i < result->size(); i++) {
             candidates.append(QString::fromUtf8(result->value(i)));
         }
-        qimsysDebug() << candidates;
+        cuteimeDebug() << candidates;
         emit q->recognized(candidates);
         delete result;
     }
     delete character;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 ZinniaEngine::ZinniaEngine(QObject *parent)

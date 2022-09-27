@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,14 +20,14 @@
 
 #include "object.h"
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspluginmanager.h>
-#include <qimsyslanguage.h>
-#include <qimsysinputmethod.h>
-#include <qimsysconverter.h>
-#include <qimsysinterpreter.h>
-#include <qimsysengine.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepluginmanager.h>
+#include <cuteimelanguage.h>
+#include <cuteimeinputmethod.h>
+#include <cuteimeconverter.h>
+#include <cuteimeinterpreter.h>
+#include <cuteimeengine.h>
 
 #include <QSettings>
 
@@ -50,11 +50,11 @@ private slots:
 
 private:
     Object *q;
-    QimsysInputMethodManager inputMethodManager;
-    QimsysInputMethod *currentInputMethod;
-    QimsysConverter *currentConverter;
-    QimsysInterpreter *currentInterpreter;
-    QimsysEngine *currentEngine;
+    CuteimeInputMethodManager inputMethodManager;
+    CuteimeInputMethod *currentInputMethod;
+    CuteimeConverter *currentConverter;
+    CuteimeInterpreter *currentInterpreter;
+    CuteimeEngine *currentEngine;
 };
 
 Object::Private::Private(Object *parent)
@@ -65,7 +65,7 @@ Object::Private::Private(Object *parent)
     , currentInterpreter(0)
     , currentEngine(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     q->setCategoryType(Hidden);
     q->setActive(true);
 
@@ -76,7 +76,7 @@ Object::Private::Private(Object *parent)
     connect(&inputMethodManager, SIGNAL(interpreterChanged(QString)), this, SLOT(interpreterChanged(QString)));
     connect(&inputMethodManager, SIGNAL(engineChanged(QString)), this, SLOT(engineChanged(QString)));
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Private::~Private()
@@ -85,24 +85,24 @@ Object::Private::~Private()
 
 void Object::Private::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup(q->metaObject()->className());
     QString locale = settings.value(QLatin1String("Locale")).toString();
 
-    QList<QimsysLanguage *> languages = QimsysPluginManager::objects<QimsysLanguage>();
-    foreach(QimsysLanguage *language, languages) {
+    QList<CuteimeLanguage *> languages = CuteimePluginManager::objects<CuteimeLanguage>();
+    foreach(CuteimeLanguage *language, languages) {
         if (locale.isNull() || locale == language->locale()) {
             inputMethodManager.setLocale(language->locale());
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Object::Private::localeChanged(const QString &locale)
 {
-    qimsysDebugIn() << locale;
+    cuteimeDebugIn() << locale;
     QSettings settings;
     settings.beginGroup(q->metaObject()->className());
     settings.setValue("Locale", locale);
@@ -110,8 +110,8 @@ void Object::Private::localeChanged(const QString &locale)
     settings.beginGroup(locale);
     QString identifier = settings.value("InputMethod").toString();
     if (identifier.isNull()) {
-        QList<QimsysInputMethod *> inputMethods = QimsysPluginManager::objects<QimsysInputMethod>();
-        foreach (const QimsysInputMethod *inputMethod, inputMethods) {
+        QList<CuteimeInputMethod *> inputMethods = CuteimePluginManager::objects<CuteimeInputMethod>();
+        foreach (const CuteimeInputMethod *inputMethod, inputMethods) {
             if (inputMethod->locale() == locale) {
                 identifier = inputMethod->identifier();
                 break;
@@ -120,19 +120,19 @@ void Object::Private::localeChanged(const QString &locale)
     }
     inputMethodManager.setIdentifier(identifier);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Object::Private::inputMethodChanged(const QString &identifier)
 {
     if (currentInputMethod && currentInputMethod->identifier() == identifier) return;
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     if (currentInputMethod) {
         currentInputMethod->setActive(false);
     }
 
-    QList<QimsysInputMethod *> inputMethods = QimsysPluginManager::objects<QimsysInputMethod>();
-    foreach(QimsysInputMethod *inputMethod, inputMethods) {
+    QList<CuteimeInputMethod *> inputMethods = CuteimePluginManager::objects<CuteimeInputMethod>();
+    foreach(CuteimeInputMethod *inputMethod, inputMethods) {
         if (inputMethod->identifier() == identifier) {
             inputMethod->setActive(true);
             currentInputMethod = inputMethod;
@@ -148,8 +148,8 @@ void Object::Private::inputMethodChanged(const QString &identifier)
 
     QString converterIdentifier = settings.value("Converter").toString();
     if (converterIdentifier.isNull()) {
-        QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
-        foreach(QimsysConverter *converter, converters) {
+        QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
+        foreach(CuteimeConverter *converter, converters) {
             if (currentInputMethod->identifier() == converter->language() && !converter->identifier().isNull()) {
                 converterIdentifier = converter->identifier();
                 break;
@@ -160,8 +160,8 @@ void Object::Private::inputMethodChanged(const QString &identifier)
 
     QString interpreterIdentifier = settings.value("Interpreter").toString();
     if (interpreterIdentifier.isNull()) {
-        QList<QimsysInterpreter *> interpreters = QimsysPluginManager::objects<QimsysInterpreter>();
-        foreach(QimsysInterpreter *interpreter, interpreters) {
+        QList<CuteimeInterpreter *> interpreters = CuteimePluginManager::objects<CuteimeInterpreter>();
+        foreach(CuteimeInterpreter *interpreter, interpreters) {
             if (currentInputMethod->identifier() == interpreter->language() && !interpreter->identifier().isNull()) {
                 interpreterIdentifier = interpreter->identifier();
                 break;
@@ -172,8 +172,8 @@ void Object::Private::inputMethodChanged(const QString &identifier)
 
     QString engineIdentifier = settings.value("Engine").toString();
     if (engineIdentifier.isNull()) {
-        QList<QimsysEngine *> engines = QimsysPluginManager::objects<QimsysEngine>();
-        foreach(QimsysEngine *engine, engines) {
+        QList<CuteimeEngine *> engines = CuteimePluginManager::objects<CuteimeEngine>();
+        foreach(CuteimeEngine *engine, engines) {
             if (currentInputMethod->identifier() == engine->language() && !engine->identifier().isNull()) {
                 engineIdentifier = engine->identifier();
                 break;
@@ -182,20 +182,20 @@ void Object::Private::inputMethodChanged(const QString &identifier)
     }
     inputMethodManager.setEngine(engineIdentifier);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Object::Private::converterChanged(const QString &identifier)
 {
     if (currentConverter && currentConverter->identifier() == identifier) return;
-    qimsysDebugIn() << identifier;
-    qimsysDebug() << currentConverter;
+    cuteimeDebugIn() << identifier;
+    cuteimeDebug() << currentConverter;
     if (currentConverter) {
         currentConverter->setActive(false);
     }
 
-    QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
-    foreach(QimsysConverter *converter, converters) {
+    QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
+    foreach(CuteimeConverter *converter, converters) {
         if (converter->identifier() == identifier) {
             converter->setActive(true);
             currentConverter = converter;
@@ -210,19 +210,19 @@ void Object::Private::converterChanged(const QString &identifier)
         settings.beginGroup(inputMethodManager.identifier());
         settings.setValue("Converter", identifier);
     }
-    qimsysDebugOut() << currentConverter;
+    cuteimeDebugOut() << currentConverter;
 }
 
 void Object::Private::interpreterChanged(const QString &identifier)
 {
     if (currentInterpreter && currentInterpreter->identifier() == identifier) return;
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     if (currentInterpreter) {
         currentInterpreter->setActive(false);
     }
 
-    QList<QimsysInterpreter *> interpreters = QimsysPluginManager::objects<QimsysInterpreter>();
-    foreach(QimsysInterpreter *interpreter, interpreters) {
+    QList<CuteimeInterpreter *> interpreters = CuteimePluginManager::objects<CuteimeInterpreter>();
+    foreach(CuteimeInterpreter *interpreter, interpreters) {
         if (interpreter->identifier() == identifier) {
             interpreter->setActive(true);
             currentInterpreter = interpreter;
@@ -237,23 +237,23 @@ void Object::Private::interpreterChanged(const QString &identifier)
         settings.beginGroup(inputMethodManager.identifier());
         settings.setValue("Interpreter", identifier);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Object::Private::engineChanged(const QString &identifier)
 {
     if (currentEngine && currentEngine->identifier() == identifier) return;
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     if (currentEngine) {
         currentEngine->setActive(false);
     }
 
-    QList<QimsysEngine *> engines = QimsysPluginManager::objects<QimsysEngine>();
-    foreach(QimsysEngine *engine, engines) {
+    QList<CuteimeEngine *> engines = CuteimePluginManager::objects<CuteimeEngine>();
+    foreach(CuteimeEngine *engine, engines) {
         if (engine->identifier() == identifier) {
-            qimsysDebug() << engine;
+            cuteimeDebug() << engine;
             engine->setActive(true);
-            qimsysDebug() << engine;
+            cuteimeDebug() << engine;
             currentEngine = engine;
             break;
         }
@@ -266,22 +266,22 @@ void Object::Private::engineChanged(const QString &identifier)
         settings.beginGroup(inputMethodManager.identifier());
         settings.setValue("Engine", identifier);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::~Object()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "object.moc"

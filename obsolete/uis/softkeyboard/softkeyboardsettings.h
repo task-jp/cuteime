@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,15 +21,15 @@
 #ifndef SOFTKEYBOARDSETTINGS_H
 #define SOFTKEYBOARDSETTINGS_H
 
-#include "qimsyssettingswidget.h"
+#include "cuteimesettingswidget.h"
 
-class QimsysAbstractPluginObject;
+class CuteimeAbstractPluginObject;
 
-class SoftKeyboardSettings : public QimsysSettingsWidget
+class SoftKeyboardSettings : public CuteimeSettingsWidget
 {
     Q_OBJECT
 public:
-    SoftKeyboardSettings(QimsysAbstractPluginObject *plugin, QWidget *parent = 0);
+    SoftKeyboardSettings(CuteimeAbstractPluginObject *plugin, QWidget *parent = 0);
     ~SoftKeyboardSettings();
 
 public slots:

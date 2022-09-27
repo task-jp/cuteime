@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,19 +21,19 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
 
-#include "qimsyssettingswidget.h"
+#include "cuteimesettingswidget.h"
 
 namespace Japanese {
     namespace SocialIME {
 
-class Settings : public QimsysSettingsWidget
+class Settings : public CuteimeSettingsWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(Settings)
 public:
-    explicit Settings(QimsysAbstractPluginObject *plugin, QWidget *parent = 0);
+    explicit Settings(CuteimeAbstractPluginObject *plugin, QWidget *parent = 0);
     ~Settings();
 
 public slots:
@@ -48,6 +48,6 @@ private:
     }
 }
 
-#endif // QIMSYS_NO_GUI
+#endif // CUTEIME_NO_GUI
 
 #endif // SETTINGS_H

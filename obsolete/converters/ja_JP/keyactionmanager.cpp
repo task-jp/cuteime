@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -19,7 +19,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "keyactionmanager.h"
-#include "qimsysdebug.h"
+#include "cuteimedebug.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -46,28 +46,28 @@ public:
 KeyActionDataList::Private::Private(KeyActionDataList *parent)
     : q(parent)
 {
-    qimsysDebugIn() << parent;
-    qimsysDebugOut();
+    cuteimeDebugIn() << parent;
+    cuteimeDebugOut();
 }
 
 KeyActionDataList::KeyActionDataList()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 KeyActionDataList::KeyActionDataList(const QString &fileName)
 {
-    qimsysDebugIn() << fileName;
+    cuteimeDebugIn() << fileName;
     d = new Private(this);
     d->readData(fileName);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActionDataList::Private::readData(const QString &fn)
 {
-    qimsysDebugIn() << fn;
+    cuteimeDebugIn() << fn;
     fileName = QFileInfo(fn).fileName();
     KeyActionManager *actions = KeyActionManager::instance();
     QFile file(fn);
@@ -80,29 +80,29 @@ void KeyActionDataList::Private::readData(const QString &fn)
                 if (fields.isEmpty() || fields.first().isEmpty() || fields.first().startsWith("//")) continue;
                 KeyActionData data;
                 data.state = (State)(fields.takeFirst().toInt(0, 16));
-                data.key = QimsysKeySequence(fields.takeFirst());
+                data.key = CuteimeKeySequence(fields.takeFirst());
                 data.action = actions->action(fields.takeFirst());
                 data.user = false;
                 q->append(data);
             } else if (!line.isEmpty()) {
-                qimsysDebug() << line;
+                cuteimeDebug() << line;
             }
         }
         file.close();
     } else {
-        qimsysWarning() << "No such file" << fileName;
+        cuteimeWarning() << "No such file" << fileName;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActionDataList::Private::saveData() const
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     KeyActionManager::instance();
     QDir dir(QString("%1/.config/%2/%3/").arg(QDir::homePath()).arg(QCoreApplication::organizationName()).arg(QCoreApplication::applicationName()));
 
     foreach(const QString &str, dir.entryList(QStringList() << "*.txt")) {
-        qimsysDebug() << str;
+        cuteimeDebug() << str;
     }
     QFile file(dir.absoluteFilePath(fileName));
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -113,7 +113,7 @@ void KeyActionDataList::Private::saveData() const
             fields << QString("0x%1").arg(data.state, 2, 16, QChar('0'));
             fields << data.key.toString();
             fields << data.action->name();
-//   qimsysDebug() << fields.join( "\t" );
+//   cuteimeDebug() << fields.join( "\t" );
             stream << fields.join("\t") + "\n";
         }
         file.close();
@@ -121,9 +121,9 @@ void KeyActionDataList::Private::saveData() const
         settings.beginGroup("ja_JP::KeyActionManager");
         settings.setValue("DataFile", file.fileName());
     } else {
-        qimsysWarning() << "Cannot write" << fileName;
+        cuteimeWarning() << "Cannot write" << fileName;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 KeyActionDataList::~KeyActionDataList()
@@ -179,34 +179,34 @@ public:
 
 KeyActionManager *KeyActionManager::instance()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     static KeyActionManager *manager = 0;
     if (!manager)
         manager = new KeyActionManager;
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return manager;
 }
 
 KeyActionManager::KeyActionManager(QObject *parent)
     : QObject(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 KeyActionManager::~KeyActionManager()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActionManager::addAction(KeyAction *action)
 {
-    qimsysDebugIn() << action;
+    cuteimeDebugIn() << action;
     d->actions.append(action);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 const KeyActionList &KeyActionManager::actions() const
@@ -216,32 +216,32 @@ const KeyActionList &KeyActionManager::actions() const
 
 const KeyActionDataList &KeyActionManager::list() const
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (d->list.isEmpty()) {
         QSettings settings;
         settings.beginGroup("ja_JP::KeyActionManager");
-#ifdef QIMSYS_PLATFORM_MAEMO
+#ifdef CUTEIME_PLATFORM_MAEMO
         d->list.read(settings.value("DataFile", ":/keyassigns/maemo.txt").toString());
 #else
         d->list.read(settings.value("DataFile", ":/keyassigns/msime.txt").toString());
 #endif
     }
-    qimsysDebugOut() << d->list.count();
+    cuteimeDebugOut() << d->list.count();
     return d->list;
 }
 
 void KeyActionManager::setList(const KeyActionDataList &list)
 {
-    qimsysDebugIn() << list.count();
+    cuteimeDebugIn() << list.count();
     d->list = list;
     d->list.save();
     emit listChanged(d->list);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 KeyAction *KeyActionManager::action(const QString &name) const
 {
-    qimsysDebugIn() << name;
+    cuteimeDebugIn() << name;
     KeyAction *ret = 0;
     foreach(KeyAction *a, d->actions) {
         if (name == a->name()) {
@@ -253,8 +253,8 @@ KeyAction *KeyActionManager::action(const QString &name) const
         }
     }
     if (!ret) {
-        qimsysWarning() << name << "not found";
+        cuteimeWarning() << name << "not found";
     }
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -25,11 +25,11 @@
 
 #include <plugins/inputmethods/japanese/standard/global.h>
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
+#include <cuteimedynamictranslator.h>
 
 #include <QIcon>
 #include <QSettings>
@@ -45,14 +45,14 @@ public:
     Private(Engine *parent);
     ~Private();
 
-#ifndef QIMSYS_NO_GUI
-    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent);
+#ifndef CUTEIME_NO_GUI
+    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent);
 #endif
 
 private slots:
     void activeChanged(bool active);
     void stateChanged(uint state);
-    void itemChanged(const QimsysPreeditItem &item);
+    void itemChanged(const CuteimePreeditItem &item);
     void currentIndexChanged(int currentIndex);
 
     void saved();
@@ -69,9 +69,9 @@ private:
 private:
     Engine *q;
 
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
-    QimsysCandidateManager *candidateManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
+    CuteimeCandidateManager *candidateManager;
 
     QTextCodec *eucjp;
     LibAnthy *libAnthy;
@@ -79,8 +79,8 @@ private:
 
     State currentState;
     int preeditIndex;
-    QimsysConversionItemList predictionItems;
-    QimsysConversionItemList conversionItems;
+    CuteimeConversionItemList predictionItems;
+    CuteimeConversionItemList conversionItems;
 
     bool prediction;
     bool predictOnEmpty;
@@ -100,7 +100,7 @@ Engine::Private::Private(Engine *parent)
     , libAnthy(0)
     , preeditIndex(-1)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
 
     q->setIdentifier(QLatin1String("anthy"));
     q->setPriority(0x40);
@@ -112,7 +112,7 @@ Engine::Private::Private(Engine *parent)
     q->setCategoryType(CanBeNone);
     trConnect(this, QT_TR_NOOP("Input/Conversion Engine"), q, "categoryName");
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/icon/anthy.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Anthy"), q, "name");
@@ -126,21 +126,21 @@ Engine::Private::Private(Engine *parent)
 
     saved();
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Engine::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::activeChanged(bool active)
 {
-    qimsysDebugIn() << active;
+    cuteimeDebugIn() << active;
     if (active) {
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
 
@@ -165,16 +165,16 @@ void Engine::Private::activeChanged(bool active)
         }
         stateChanged(Direct);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     currentState = (State)state;
     if (state == Direct) {
         if (preeditManager) {
-            disconnect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            disconnect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
             preeditManager->deleteLater();
             preeditManager = 0;
         }
@@ -185,12 +185,12 @@ void Engine::Private::stateChanged(uint state)
         }
     } else {
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
-            connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         }
         if (!candidateManager) {
-            candidateManager = new QimsysCandidateManager(this);
+            candidateManager = new CuteimeCandidateManager(this);
             candidateManager->init();
             connect(candidateManager, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged(int)));
         }
@@ -225,14 +225,14 @@ void Engine::Private::stateChanged(uint state)
         break;
     }
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void Engine::Private::itemChanged(const QimsysPreeditItem &item)
+void Engine::Private::itemChanged(const CuteimePreeditItem &item)
 {
     if (item.to.contains(QString())) return;
 
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
     switch (currentState) {
     case Empty:
         if (!predictOnEmpty) {
@@ -243,7 +243,7 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
         if (!prediction) {
             break;
         }
-//        qimsysWarning() << "PREDICT:" << items;
+//        cuteimeWarning() << "PREDICT:" << items;
         predict();
         break;
     case Convert: {
@@ -256,7 +256,7 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
             }
             pos += item.to.at(i).length();
         }
-        qimsysDebug() << currentIndex << preeditIndex;
+        cuteimeDebug() << currentIndex << preeditIndex;
         if (currentIndex == preeditIndex) {
             resize();
         } else {
@@ -272,16 +272,16 @@ void Engine::Private::itemChanged(const QimsysPreeditItem &item)
         break;
     }
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::currentIndexChanged(int currentIndex)
 {
     if (currentIndex == -1) return;
     if (conversionItems.isEmpty()) return;
-    qimsysDebugIn() << currentIndex;
+    cuteimeDebugIn() << currentIndex;
 
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     int index = -1;
     int pos = 0;
     for (int i = 0; i < item.to.length(); i++) {
@@ -294,7 +294,7 @@ void Engine::Private::currentIndexChanged(int currentIndex)
 
     QString to = candidateManager->items().at(currentIndex).to;
 
-    QimsysConversionItem convertionItem = conversionItems.at(index);
+    CuteimeConversionItem convertionItem = conversionItems.at(index);
     convertionItem.to = to;
     if (candidateManager->items().at(currentIndex).source == q->identifier()) {
         convertionItem.index = candidateManager->items().at(currentIndex).index;
@@ -303,20 +303,20 @@ void Engine::Private::currentIndexChanged(int currentIndex)
     }
     conversionItems.replace(index, convertionItem);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::predict()
 {
     if (!prediction) return;
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     QString preeditString = item.from.join("");
 
     if (!predictOnEmpty && preeditString.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     predictionItems = candidateManager->items();
-    foreach (const QimsysConversionItem &item, predictionItems) {
+    foreach (const CuteimeConversionItem &item, predictionItems) {
         if (item.source == q->identifier()) {
             predictionItems.removeOne(item);
         }
@@ -332,7 +332,7 @@ void Engine::Private::predict()
         int len = libAnthy->anthy_get_prediction(context, i, buf, sizeof(buf));
         Q_ASSERT(len > 0);
 
-        QimsysConversionItem convertionItem;
+        CuteimeConversionItem convertionItem;
         convertionItem.to = eucjp->toUnicode(buf, len);
         convertionItem.from = preeditString;
         convertionItem.index = i;
@@ -340,20 +340,20 @@ void Engine::Private::predict()
         predictionItems.append(convertionItem);
     }
 
-    qimsysDebug() << predictionItems;
+    cuteimeDebug() << predictionItems;
     candidateManager->setItems(predictionItems);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::convert()
 {
     if (!conversionItems.isEmpty()) return;
-    qimsysDebugIn();
-    QimsysPreeditItem item = preeditManager->item();
+    cuteimeDebugIn();
+    CuteimePreeditItem item = preeditManager->item();
     QStringList from = item.from;
     QString preeditString = from.join("");
 
-    qimsysDebug() << from << preeditString;
+    cuteimeDebug() << from << preeditString;
 
     int ret = libAnthy->anthy_set_string(context, eucjp->fromUnicode(preeditString).data());
     Q_ASSERT(ret >= 0);
@@ -362,7 +362,7 @@ void Engine::Private::convert()
     Q_ASSERT(ret >= 0);
     conversionItems.clear();
     for (int i = 0; i < stat.nr_segment; i++) {
-        QimsysConversionItem conversionItem;
+        CuteimeConversionItem conversionItem;
         conversionItem.index = 0;
         char buf[8192];
         int len = libAnthy->anthy_get_segment(context, i, 0, buf, sizeof(buf));
@@ -371,7 +371,7 @@ void Engine::Private::convert()
         len = libAnthy->anthy_get_segment(context, i, NTH_UNCONVERTED_CANDIDATE, buf, sizeof(buf));
         Q_ASSERT(len > 0);
         conversionItem.from = eucjp->toUnicode(buf, len);
-        qimsysDebug() << conversionItem;
+        cuteimeDebug() << conversionItem;
         conversionItems.append(conversionItem);
     }
 
@@ -379,15 +379,15 @@ void Engine::Private::convert()
     item.from.clear();
     item.rawString.clear();
     item.cursor = 0;
-    foreach (const QimsysConversionItem &conversionItem, conversionItems) {
-        qimsysDebug() << conversionItem;
+    foreach (const CuteimeConversionItem &conversionItem, conversionItems) {
+        cuteimeDebug() << conversionItem;
         if (item.to.isEmpty()) {
             item.selection = conversionItem.to.length();
         }
         item.to.append(conversionItem.to);
         QString f = conversionItem.from;
         while (!f.isEmpty()) {
-            qimsysDebug() << f << from.first() << item;
+            cuteimeDebug() << f << from.first() << item;
             if (f.startsWith(from.first())) {
                 f = f.mid(from.first().length());
                 int l = item.to.length();
@@ -400,7 +400,7 @@ void Engine::Private::convert()
             } else {
                 QString f = from.first();
                 QString ch = f.left(1);
-                qimsysDebug() << f << ch;
+                cuteimeDebug() << f << ch;
                 if (f.startsWith(ch)) {
                     f = f.mid(1);
                     item.from.append(ch);
@@ -410,28 +410,28 @@ void Engine::Private::convert()
             }
         }
     }
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
 
     preeditManager->blockSignals(true);
     preeditManager->setItem(item);
     preeditManager->blockSignals(false);
     preeditIndex = 0;
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::resize()
 {
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     if (item.to.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QStringList from = item.from;
 
-    qimsysDebug() << item << preeditIndex;
+    cuteimeDebug() << item << preeditIndex;
     int delta = item.from.at(preeditIndex).length() - conversionItems.at(preeditIndex).from.length();
-    qimsysDebug() << delta;
+    cuteimeDebug() << delta;
     if (delta == 0) {
-        qimsysDebugOut();
+        cuteimeDebugOut();
         return;
     }
     libAnthy->anthy_resize_segment(context, preeditIndex, delta);
@@ -444,7 +444,7 @@ void Engine::Private::resize()
     }
 
     for (int i = preeditIndex; i < stat.nr_segment; i++) {
-        QimsysConversionItem convertionItem;
+        CuteimeConversionItem convertionItem;
         convertionItem.index = 0;
         char buf[8192];
         int len = libAnthy->anthy_get_segment(context, i, 0, buf, sizeof(buf));
@@ -459,7 +459,7 @@ void Engine::Private::resize()
     item.to.clear();
     item.from.clear();
     item.rawString.clear();
-    foreach (const QimsysConversionItem &conversionItem, conversionItems) {
+    foreach (const CuteimeConversionItem &conversionItem, conversionItems) {
         if (item.to.length() == preeditIndex) {
             item.cursor = item.to.join("").length();
             item.selection = conversionItem.to.length();
@@ -468,7 +468,7 @@ void Engine::Private::resize()
         item.from.append(QString());
         item.rawString.append(QString());
         QString f = conversionItem.from;
-        qimsysDebug() << f << from;
+        cuteimeDebug() << f << from;
         while (!f.isEmpty()) {
             if (f.startsWith(from.first())) {
                 f= f.mid(from.first().length());
@@ -483,14 +483,14 @@ void Engine::Private::resize()
     preeditManager->setItem(item);
     preeditManager->blockSignals(false);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::setCandidates()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     int currentIndex = -1;
     int pos = 0;
     for (int i = 0; i < item.to.length(); i++) {
@@ -501,14 +501,14 @@ void Engine::Private::setCandidates()
         pos += item.to.at(i).length();
     }
 
-    QimsysConversionItemList candidateItemList = candidateManager->items();
+    CuteimeConversionItemList candidateItemList = candidateManager->items();
 
     LibAnthy::anthy_segment_stat stat;
     int ret = libAnthy->anthy_get_segment_stat(context, currentIndex, &stat);
     Q_ASSERT(ret >= 0);
 
     for (int i = 0; i < stat.nr_candidate; i++) {
-        QimsysConversionItem convertionItem;
+        CuteimeConversionItem convertionItem;
         convertionItem.index = i;
         char buf[8192];
         int len = libAnthy->anthy_get_segment(context, currentIndex, i, buf, sizeof(buf));
@@ -520,12 +520,12 @@ void Engine::Private::setCandidates()
     }
 
     candidateManager->setItems(candidateItemList);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::learn()
 {
-    qimsysDebugIn() << conversionItems << predictionItems;
+    cuteimeDebugIn() << conversionItems << predictionItems;
     if (!conversionItems.isEmpty()) {
         for (int i = 0; i < conversionItems.count(); i++) {
             if (conversionItems[i].index < 0) continue;
@@ -539,70 +539,70 @@ void Engine::Private::learn()
         }
         predictionItems.clear();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Engine::Private::clearCandidates()
 {
     if (!candidateManager) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    QimsysConversionItemList candidateItemList = candidateManager->items();
-    foreach (QimsysConversionItem candidateItem, candidateItemList) {
+    CuteimeConversionItemList candidateItemList = candidateManager->items();
+    foreach (CuteimeConversionItem candidateItem, candidateItemList) {
         if (candidateItem.source == q->identifier()) {
             candidateItemList.removeOne(candidateItem);
         }
     }
     candidateManager->setItems(candidateItemList);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-#ifndef QIMSYS_NO_GUI
-QimsysSettingsWidget *Engine::Private::settings(const QString &hint, QWidget *parent)
+#ifndef CUTEIME_NO_GUI
+CuteimeSettingsWidget *Engine::Private::settings(const QString &hint, QWidget *parent)
 {
-    qimsysDebugIn() << hint << parent;
+    cuteimeDebugIn() << hint << parent;
     Q_UNUSED(hint);
     Settings *settings = new Settings(q, parent);
     connect(settings, SIGNAL(saved()), this, SLOT(saved()));
-    qimsysDebugOut() << settings;
+    cuteimeDebugOut() << settings;
     return settings;
 }
 #endif
 
 void Engine::Private::saved()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup(q->metaObject()->className());
     prediction = settings.value("Prediction", false).toBool();
     predictOnEmpty = settings.value("Empty", false).toBool();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Engine::Engine(QObject *parent)
-    : QimsysEngine(parent)
+    : CuteimeEngine(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Engine::~Engine()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 
-QimsysEngineDictionary *Engine::dictionary(QObject *parent)
+CuteimeEngineDictionary *Engine::dictionary(QObject *parent)
 {
     return new Dictionary(parent);
 }
 
-#ifndef QIMSYS_NO_GUI
-QimsysSettingsWidget *Engine::settings(const QString &hint, QWidget *parent)
+#ifndef CUTEIME_NO_GUI
+CuteimeSettingsWidget *Engine::settings(const QString &hint, QWidget *parent)
 {
     return d->settings(hint, parent);
 }

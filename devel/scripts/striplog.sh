@@ -1,2 +1,2 @@
 #!/bin/sh
-find -name "*.cpp" | xargs sed -i 's/qimsysDebug/\/\/qimsysDebug/'
+find -name "*.cpp" | xargs sed -i 's/cuteimeDebug/\/\/cuteimeDebug/'

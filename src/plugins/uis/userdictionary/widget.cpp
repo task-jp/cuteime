@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsysengine.h>
-#include <qimsysenginedictionary.h>
-#include <qimsyspluginmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimeengine.h>
+#include <cuteimeenginedictionary.h>
+#include <cuteimepluginmanager.h>
 
 #include <QMessageBox>
 #include <QSettings>
@@ -55,8 +55,8 @@ private slots:
 private:
     Widget *q;
     Ui::Widget ui;
-    QimsysInputMethodManager inputMethodManager;
-    QimsysEngineDictionary *currentDictionary;
+    CuteimeInputMethodManager inputMethodManager;
+    CuteimeEngineDictionary *currentDictionary;
     QSortFilterProxyModel *model;
 };
 
@@ -69,7 +69,7 @@ Widget::Private::Private(Widget *parent)
     , q(parent)
     , currentDictionary(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     ui.setupUi(q);
 
     connect(ui.add, SIGNAL(clicked()), this, SLOT(add()));
@@ -82,13 +82,13 @@ Widget::Private::Private(Widget *parent)
     model->setFilterKeyColumn(0);
     ui.treeView->setModel(model);
     exec();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Widget::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Widget::Private::accept()
@@ -98,9 +98,9 @@ void Widget::Private::accept()
 
 void Widget::Private::exec()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QString currentEngine = inputMethodManager.engine();
-    foreach(QimsysEngine *engine, QimsysPluginManager::objects<QimsysEngine>(this)) {
+    foreach(CuteimeEngine *engine, CuteimePluginManager::objects<CuteimeEngine>(this)) {
         if (engine->identifier() == currentEngine) {
             currentDictionary = engine->dictionary();
             if (currentDictionary) {
@@ -113,7 +113,7 @@ void Widget::Private::exec()
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Widget::Private::show()

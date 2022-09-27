@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "softkeyboard.h"
 #include "softkey.h"
-#include "qimsysdebug.h"
+#include "cuteimedebug.h"
 
 #include <QPainter>
 #include <QFile>
@@ -32,10 +32,10 @@
 #include <QDesktopWidget>
 #include <QTimer>
 
-#include "qimsysapplicationmanager.h"
-#include "qimsyspreeditmanager.h"
-#include "qimsyskeymanager.h"
-#include "qimsyskeysequence.h"
+#include "cuteimeapplicationmanager.h"
+#include "cuteimepreeditmanager.h"
+#include "cuteimekeymanager.h"
+#include "cuteimekeysequence.h"
 
 class SoftKeyboard::Private : private QObject
 {
@@ -56,12 +56,12 @@ private slots:
 
 private:
     SoftKeyboard *q;
-    QimsysApplicationManager manager;
-    QimsysPreeditManager preedit;
+    CuteimeApplicationManager manager;
+    CuteimePreeditManager preedit;
     QTimer hideTimer;
     QTimer startRepeatTimer;
     QTimer repeatTimer;
-    QimsysKeyManager input;
+    CuteimeKeyManager input;
 
 public:
     SoftKey *key;
@@ -153,7 +153,7 @@ void SoftKeyboard::Private::rectChanged(const QRect &rect)
 void SoftKeyboard::Private::press()
 {
     key->setPressed(true);
-    input.process(QimsysKeySequence(key->key()).toString(), key->key(), modifiers, true, false);
+    input.process(CuteimeKeySequence(key->key()).toString(), key->key(), modifiers, true, false);
     startRepeatTimer.start(250);
 }
 
@@ -165,7 +165,7 @@ void SoftKeyboard::Private::release()
     if (repeatTimer.isActive()) {
         repeatTimer.stop();
     }
-    input.process(QimsysKeySequence(key->key()).toString(), key->key(), modifiers, false, false);
+    input.process(CuteimeKeySequence(key->key()).toString(), key->key(), modifiers, false, false);
     key->setPressed(false);
     key = 0;
 }
@@ -177,7 +177,7 @@ void SoftKeyboard::Private::repeatStart()
 
 void SoftKeyboard::Private::repeat()
 {
-    input.process(QimsysKeySequence(key->key()).toString(), key->key(), modifiers, true, true);
+    input.process(CuteimeKeySequence(key->key()).toString(), key->key(), modifiers, true, true);
 }
 
 void SoftKeyboard::Private::modifierChanged(Qt::KeyboardModifier modifier, bool on)
@@ -204,13 +204,13 @@ SoftKeyboard::~SoftKeyboard()
 
 void SoftKeyboard::mousePressEvent(QMouseEvent *e)
 {
-    qimsysDebugIn() << e->pos();
+    cuteimeDebugIn() << e->pos();
     d->key = qobject_cast<SoftKey*>(childAt(e->pos()));
-    qimsysDebug() << d->key << childAt(e->pos());
+    cuteimeDebug() << d->key << childAt(e->pos());
     if (d->key) {
         d->press();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void SoftKeyboard::mouseMoveEvent(QMouseEvent *e)

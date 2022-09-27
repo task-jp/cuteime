@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,9 +21,9 @@
 #ifndef SETTINGSOBJECT_H
 #define SETTINGSOBJECT_H
 
-#include "qimsysabstractpluginobject.h"
+#include "cuteimeabstractpluginobject.h"
 
-class SettingsObject : public QimsysAbstractPluginObject
+class SettingsObject : public CuteimeAbstractPluginObject
 {
     Q_OBJECT
 public:

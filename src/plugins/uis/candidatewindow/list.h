@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,7 +23,7 @@
 
 #include <QFrame>
 
-class QimsysAbstractPluginObject;
+class CuteimeAbstractPluginObject;
 
 namespace CandidateWindow
 {
@@ -31,7 +31,7 @@ namespace CandidateWindow
     {
         Q_OBJECT
     public:
-        List(QimsysAbstractPluginObject *plugin, QWidget *parent = 0);
+        List(CuteimeAbstractPluginObject *plugin, QWidget *parent = 0);
         ~List();
 
     protected:

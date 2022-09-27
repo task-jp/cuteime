@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,19 +21,19 @@
 #ifndef JAPANESE_H
 #define JAPANESE_H
 
-#include "qimsysplugin.h"
+#include "cuteimeplugin.h"
 
-class QimsysConverter;
+class CuteimeConverter;
 
-class JapanesePlugin : public QimsysPlugin
+class JapanesePlugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_INTERFACES(QimsysPlugin)
+    Q_INTERFACES(CuteimePlugin)
 public:
     JapanesePlugin();
 
 protected:
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 #endif//JAPANESE_H

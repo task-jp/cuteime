@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,40 +21,40 @@
 #ifndef DBUS_H
 #define DBUS_H
 
-#include "qimsysglobal.h"
+#include "cuteimeglobal.h"
 
 #include <QtCore/QDataStream>
 
 #define DATASTREAM_IN(T, ...) \
-    QIMSYS_EXPORT inline QDataStream &operator>>(QDataStream &s, T) \
+    CUTEIME_EXPORT inline QDataStream &operator>>(QDataStream &s, T) \
     { \
         __VA_ARGS__ \
         return s; \
     }
 
 #define DATASTREAM_OUT(T, ...) \
-    QIMSYS_EXPORT inline QDataStream &operator<<(QDataStream &s, T) \
+    CUTEIME_EXPORT inline QDataStream &operator<<(QDataStream &s, T) \
     { \
         __VA_ARGS__ \
         return s; \
     }
 
-#ifndef QIMSYS_NO_DBUS
+#ifndef CUTEIME_NO_DBUS
 #include <QDBusArgument>
 
 #define DBUSARGUMENT_IN(T, ...) \
-    QIMSYS_EXPORT inline const QDBusArgument &operator>>(const QDBusArgument &arg, T) \
+    CUTEIME_EXPORT inline const QDBusArgument &operator>>(const QDBusArgument &arg, T) \
     { \
         __VA_ARGS__ \
         return arg; \
     }
 
 #define DBUSARGUMENT_OUT(T, ...) \
-    QIMSYS_EXPORT inline QDBusArgument &operator<<(QDBusArgument &arg, T) \
+    CUTEIME_EXPORT inline QDBusArgument &operator<<(QDBusArgument &arg, T) \
     { \
         __VA_ARGS__ \
         return arg; \
     }
-#endif // QIMSYS_NO_DBUS
+#endif // CUTEIME_NO_DBUS
 
 #endif//DBUS_H

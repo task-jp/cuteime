@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
 QT += declarative
 
@@ -10,6 +10,6 @@ SOURCES += plugin.cpp \
 COPY_TARGET = qml/Debug/StatusViewer
 COPY_FILES += \
     $$PWD/main.qml
-include(../../../../qimsysdata.pri)
+include(../../../../cuteimedata.pri)
 
 OTHER_FILES += $$COPY_FILES

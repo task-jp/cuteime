@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,8 +21,8 @@
 #include "settings.h"
 #include "ui_settings.h"
 
-#include <qimsysdebug.h>
-#include <qimsysabstractpluginobject.h>
+#include <cuteimedebug.h>
+#include <cuteimeabstractpluginobject.h>
 
 #include <QSettings>
 
@@ -32,7 +32,7 @@ class Settings::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *object, Settings *parent);
+    Private(CuteimeAbstractPluginObject *object, Settings *parent);
     ~Private();
 
     void save();
@@ -43,10 +43,10 @@ private slots:
 private:
     Settings *q;
     Ui::Settings ui;
-    QimsysAbstractPluginObject *plugin;
+    CuteimeAbstractPluginObject *plugin;
 };
 
-Settings::Private::Private(QimsysAbstractPluginObject *object, Settings *parent)
+Settings::Private::Private(CuteimeAbstractPluginObject *object, Settings *parent)
     : QObject(parent)
     , q(parent)
     , plugin(object)
@@ -96,8 +96,8 @@ void Settings::Private::toggled()
     ui.unavailable->setEnabled(ui.inactive->isEnabled() && !ui.inactive->isChecked());
 }
 
-Settings::Settings(QimsysAbstractPluginObject *plugin, QWidget *parent)
-    : QimsysSettingsWidget(parent)
+Settings::Settings(CuteimeAbstractPluginObject *plugin, QWidget *parent)
+    : CuteimeSettingsWidget(parent)
 {
     d = new Private(plugin, this);
 }
@@ -110,7 +110,7 @@ Settings::~Settings()
 void Settings::save()
 {
     d->save();
-    QimsysSettingsWidget::save();
+    CuteimeSettingsWidget::save();
 }
 
 #include "settings.moc"

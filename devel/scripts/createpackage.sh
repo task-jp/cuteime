@@ -7,7 +7,7 @@ fi
 VERSION=$1
 shift
 
-wget http://gitorious.org/qimsys/qimsys/archive-tarball/master -O master.tar.gz
+wget http://gitorious.org/cuteime/cuteime/archive-tarball/master -O master.tar.gz
 `file master.tar.gz | grep ASCII`
 if [ $? -eq 0 ]; then
 	cat master.tar.gz
@@ -15,10 +15,10 @@ if [ $? -eq 0 ]; then
 fi
 tar zxf master.tar.gz
 rm master.tar.gz
-cd qimsys-qimsys
+cd cuteime-cuteime
 ../${0%/*}/striplog.sh
 cd -
-mv qimsys-qimsys qimsys-$VERSION
-tar czf qimsys-$VERSION.tar.gz qimsys-$VERSION
-rm -rf qimsys-$VERSION
+mv cuteime-cuteime cuteime-$VERSION
+tar czf cuteime-$VERSION.tar.gz cuteime-$VERSION
+rm -rf cuteime-$VERSION
 

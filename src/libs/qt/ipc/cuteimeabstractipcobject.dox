@@ -1,0 +1,74 @@
+/*!
+    \class CuteimeAbstractIpcObject
+    \brief The CuteimeAbstractIpcObject class provides facilities for implementing the client and server sides of IPC communications paths.
+
+    This class makes it easier to implement IPC mechanisms in cuteime.
+
+    \sa \ref subclass-cuteimeabstractipcobject
+ */
+
+/*!
+    \enum CuteimeAbstractIpcObject::Type
+    \brief Type of instance.
+ */
+
+/*!
+    \var CuteimeAbstractIpcObject::Server
+    \brief is used for server instance
+ */
+
+/*!
+    \var CuteimeAbstractIpcObject::Client
+    \brief is used for client instance
+ */
+
+/*!
+    \fn CuteimeAbstractIpcObject::CuteimeAbstractIpcObject(QObject *parent=0, Type type=Client)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeAbstractIpcObject::~CuteimeAbstractIpcObject()
+    \brief Destructor
+ */
+
+/*!
+    \fn void CuteimeAbstractIpcObject::init()
+    \brief Initialize object
+
+    Make sure to call init() for every instance.
+ */
+
+/*!
+    \fn Type CuteimeAbstractIpcObject::type() const
+    \brief Object Type
+
+    \retval CuteimeAbstractIpcObject::Server
+    \retval CuteimeAbstractIpcObject::Client
+ */
+
+/*!
+    \fn bool CuteimeAbstractIpcObject::hasError() const
+    \brief returns if an instance has error.
+ */
+
+/*!
+    \fn CuteimeAbstractIpcObject *CuteimeAbstractIpcObject::server() const
+    \brief returns server instance.
+
+    \sa CuteimeAbstractIpcObject::Server
+    \sa \ref subclass-cuteimeabstractipcobject
+ */
+
+/*!
+    \fn QObject *CuteimeAbstractIpcObject::proxy() const
+    \brief Proxy object
+
+    This method returns
+    \li QObject that server() returns if the server instance is in the same process
+    \li QDBusInterface if the server instance is out of the process
+
+    In both way, subclass can use the object to get/set properties and to connect signals/slots.
+
+    \sa \ref subclass-cuteimeabstractipcobject
+ */

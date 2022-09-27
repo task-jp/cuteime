@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,16 +21,16 @@
 #include "keyactions.h"
 #include "global.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
-#include <qimsyspluginmanager.h>
-#include <qimsysconverter.h>
-#include <qimsysinterpreter.h>
-#include <qimsyskeyboardmanager.h>
-#include <qimsyskeysequence.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
+#include <cuteimepluginmanager.h>
+#include <cuteimeconverter.h>
+#include <cuteimeinterpreter.h>
+#include <cuteimekeyboardmanager.h>
+#include <cuteimekeysequence.h>
 
 #include <QSignalMapper>
 #include <QFile>
@@ -58,8 +58,8 @@ class KeyActions::Private : private QObject
 public:
     Private(KeyActions *parent);
 
-    bool contains(const QimsysKeySequence &keySequence) const;
-    void trigger(const QimsysKeySequence &keySequence);
+    bool contains(const CuteimeKeySequence &keySequence) const;
+    void trigger(const CuteimeKeySequence &keySequence);
 
 private:
     void init();
@@ -94,17 +94,17 @@ private slots:
 private:
     KeyActions *q;
 
-    QimsysApplicationManager applicationManager;
-    QimsysInputMethodManager inputMethodManager;
-    QimsysPreeditManager preeditManager;
-    QimsysCandidateManager candidateManager;
-    QimsysKeyboardManager keyboardManager;
+    CuteimeApplicationManager applicationManager;
+    CuteimeInputMethodManager inputMethodManager;
+    CuteimePreeditManager preeditManager;
+    CuteimeCandidateManager candidateManager;
+    CuteimeKeyboardManager keyboardManager;
 
     State currentState;
     QMap<QString, Action*> actionMap;
-    QMap<uint, QMap<QimsysKeySequence, QString> > keyMap;
+    QMap<uint, QMap<CuteimeKeySequence, QString> > keyMap;
 
-    QimsysPreeditItem cache;
+    CuteimePreeditItem cache;
 };
 
 KeyActions::Private::Private(KeyActions *parent)
@@ -116,7 +116,7 @@ KeyActions::Private::Private(KeyActions *parent)
 
 void KeyActions::Private::readKeyMap(const QString &fileName)
 {
-    qimsysDebugIn() << fileName;
+    cuteimeDebugIn() << fileName;
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         keyMap.clear();
@@ -129,9 +129,9 @@ void KeyActions::Private::readKeyMap(const QString &fileName)
                 QString state = fields.takeFirst();
                 QString key = fields.takeFirst();
                 QString action = fields.takeFirst();
-                QimsysKeySequence keySequence(key);
+                CuteimeKeySequence keySequence(key);
                 if (key == QLatin1String("Multi_key")) {
-                    keySequence = QimsysKeySequence(Qt::Key_Multi_key);
+                    keySequence = CuteimeKeySequence(Qt::Key_Multi_key);
                 }
                 if (state == QLatin1String("Direct"))
                     keyMap[Direct][keySequence] = action;
@@ -144,49 +144,49 @@ void KeyActions::Private::readKeyMap(const QString &fileName)
                 else if (state == QLatin1String("Select"))
                     keyMap[Select][keySequence] = action;
                 else
-                    qimsysWarning() << state;
+                    cuteimeWarning() << state;
             }
         }
         file.close();
     } else {
-        qimsysWarning() << file.error() << file.errorString();
+        cuteimeWarning() << file.error() << file.errorString();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-bool KeyActions::Private::contains(const QimsysKeySequence &keySequence) const
+bool KeyActions::Private::contains(const CuteimeKeySequence &keySequence) const
 {
-#ifdef QIMSYS_DEBUG_MODE
-    qimsysDebugIn() << keySequence.toString();
-    qimsysDebug() << currentState;
+#ifdef CUTEIME_DEBUG_MODE
+    cuteimeDebugIn() << keySequence.toString();
+    cuteimeDebug() << currentState;
     bool ret = keyMap[currentState].contains(keySequence);
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 #else
     return keyMap[currentState].contains(keySequence);
 #endif
 }
 
-void KeyActions::Private::trigger(const QimsysKeySequence &keySequence)
+void KeyActions::Private::trigger(const CuteimeKeySequence &keySequence)
 {
-    qimsysDebugIn() << keySequence.toString();
+    cuteimeDebugIn() << keySequence.toString();
     if (actionMap.contains(keyMap[currentState][keySequence])) {
         actionMap[keyMap[currentState][keySequence]]->trigger();
     } else {
-        qimsysWarning() << keyMap[currentState][keySequence] << actionMap.keys();
+        cuteimeWarning() << keyMap[currentState][keySequence] << actionMap.keys();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::execute(const QString &command)
 {
-    qimsysDebugIn() << command;
+    cuteimeDebugIn() << command;
     if (actionMap.contains(command)) {
         actionMap[command]->trigger();
     } else {
-        qimsysWarning() << command << "not found.";
+        cuteimeWarning() << command << "not found.";
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::init()
@@ -207,14 +207,14 @@ void KeyActions::Private::init()
             Action *action = new Action(this);
             connect(action, SIGNAL(triggered()), setEnabled, SLOT(map()));
             setEnabled->setMapping(action, true);
-            actionMap["Turn on qimsys"] = action;
+            actionMap["Turn on cuteime"] = action;
         }
 
         {
             Action *action = new Action(this);
             connect(action, SIGNAL(triggered()), setEnabled, SLOT(map()));
             setEnabled->setMapping(action, false);
-            actionMap["Turn off qimsys"] = action;
+            actionMap["Turn off cuteime"] = action;
         }
     }
 
@@ -425,8 +425,8 @@ void KeyActions::Private::init()
         QSignalMapper *convertTo = new QSignalMapper(this);
         connect(convertTo, SIGNAL(mapped(QString)), this, SLOT(convertTo(QString)));
 
-        QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
-        foreach(QimsysConverter *converter, converters) {
+        QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
+        foreach(CuteimeConverter *converter, converters) {
             Action *action = new Action(this);
             connect(action, SIGNAL(triggered()), convertTo, SLOT(map()));
             convertTo->setMapping(action, converter->identifier());
@@ -489,16 +489,16 @@ void KeyActions::Private::stateChanged(uint state)
 
 void KeyActions::Private::toggleKeyboard()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     keyboardManager.setVisible(!keyboardManager.visible());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::setEnabled(int enabled)
 {
-    qimsysDebugIn() << enabled;
+    cuteimeDebugIn() << enabled;
     applicationManager.setComposing(enabled);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::composingChanged(bool composing)
@@ -511,9 +511,9 @@ void KeyActions::Private::composingChanged(bool composing)
 
 void KeyActions::Private::moveCursor(int offset)
 {
-    qimsysDebugIn() << offset;
-    QimsysPreeditItem item = preeditManager.item();
-    qimsysDebug() << item;
+    cuteimeDebugIn() << offset;
+    CuteimePreeditItem item = preeditManager.item();
+    cuteimeDebug() << item;
 
     switch (currentState) {
     case Input: {
@@ -557,7 +557,7 @@ void KeyActions::Private::moveCursor(int offset)
         }
 
         if (currentIndex < 0) {
-            qimsysWarning() << "current item not found." << to << cursor;
+            cuteimeWarning() << "current item not found." << to << cursor;
         }
 
         switch (offset) {
@@ -587,14 +587,14 @@ void KeyActions::Private::moveCursor(int offset)
     preeditManager.blockSignals(true);
     preeditManager.setItem(item);
     preeditManager.blockSignals(false);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::changeSelectionLength(int delta)
 {
-    qimsysDebugIn() << delta;
+    cuteimeDebugIn() << delta;
 
-    QimsysPreeditItem item = preeditManager.item();
+    CuteimePreeditItem item = preeditManager.item();
     int length = item.to.join("").length();
     int cursor = item.cursor;
     int selection = item.selection;
@@ -619,17 +619,17 @@ void KeyActions::Private::changeSelectionLength(int delta)
     preeditManager.blockSignals(true);
     preeditManager.setItem(item);
     preeditManager.blockSignals(false);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::remove(int length)
 {
-    QimsysPreeditItem item = preeditManager.item();
+    CuteimePreeditItem item = preeditManager.item();
     if (item.to.isEmpty()) return;
     if (length == 0 && item.selection == 0) return;
 
-    qimsysDebugIn() << length;
-    qimsysDebug() << item;
+    cuteimeDebugIn() << length;
+    cuteimeDebug() << item;
 
     QStringList to = item.to;
     QStringList from = item.from;
@@ -652,14 +652,14 @@ void KeyActions::Private::remove(int length)
         cursor = 0;
     }
 
-    qimsysDebug() << cursor << length;
+    cuteimeDebug() << cursor << length;
     int pos = 0;
     int i = 0;
     while (length > 0) {
         int l = to.at(i).length();
-        qimsysDebug() << pos << cursor << l << i;
+        cuteimeDebug() << pos << cursor << l << i;
         if (pos == cursor) {
-            qimsysDebug() << l << length;
+            cuteimeDebug() << l << length;
             if (l <= length) {
                 length -= l;
                 to.removeAt(i);
@@ -673,7 +673,7 @@ void KeyActions::Private::remove(int length)
                 break;
             }
         } else if (pos + l > cursor) {
-            qimsysDebug() << pos << cursor << length << l;
+            cuteimeDebug() << pos << cursor << length << l;
             to.replace(i, to[i].remove(cursor - pos, length));
             from.replace(i, from[i].remove(cursor - pos, length));
             rawString.replace(i, QString());
@@ -689,19 +689,19 @@ void KeyActions::Private::remove(int length)
     item.cursor = cursor;
     item.selection = selection;
     item.modified = 0;
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
     preeditManager.setItem(item);
     if (to.isEmpty()) {
         inputMethodManager.setState(Empty);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::commit(int all)
 {
-    QimsysPreeditItem item = preeditManager.item();
+    CuteimePreeditItem item = preeditManager.item();
     if (item.to.isEmpty()) return;
-    qimsysDebugIn() << all;
+    cuteimeDebugIn() << all;
 
     terminate();
 
@@ -713,7 +713,7 @@ void KeyActions::Private::commit(int all)
 
     if (!all) {
         if (selection == 0 || cursor == 0) {
-            qimsysWarning() << "first segment should be selected" << to << cursor << selection;
+            cuteimeWarning() << "first segment should be selected" << to << cursor << selection;
         }
     }
 
@@ -736,7 +736,7 @@ void KeyActions::Private::commit(int all)
     item.cursor = cursor;
     item.selection = selection;
     item.modified = 0;
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
     preeditManager.setItem(item);
     preeditManager.commit(commitString, applicationManager.widget());
     if (all || to.isEmpty()) {
@@ -744,29 +744,29 @@ void KeyActions::Private::commit(int all)
     }
     saveCache();
     candidateManager.setCurrentIndex(-1);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::convert()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     terminate();
     saveCache();
-    candidateManager.setItems(QimsysConversionItemList());
+    candidateManager.setItems(CuteimeConversionItemList());
     inputMethodManager.setState(Convert);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::resizeSegment(int delta)
 {
-//    qimsysDebugOn();
-    qimsysDebugIn() << delta;
+//    cuteimeDebugOn();
+    cuteimeDebugIn() << delta;
 
     inputMethodManager.setState(Convert);
 
-    QimsysPreeditItem item = preeditManager.item();
+    CuteimePreeditItem item = preeditManager.item();
 
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
 
     int currentIndex = -1;
     QList<int> length;
@@ -781,12 +781,12 @@ void KeyActions::Private::resizeSegment(int delta)
         length.append(item.from.at(i).length());
     }
 
-    qimsysDebug() << length << currentIndex;
+    cuteimeDebug() << length << currentIndex;
 
     if (delta < 0) {
         int len = length.at(currentIndex) + delta;
         if (len < 1) {
-            qimsysDebugOut();
+            cuteimeDebugOut();
             return;
         }
         length.replace(currentIndex, len);
@@ -795,7 +795,7 @@ void KeyActions::Private::resizeSegment(int delta)
         while (delta > 0) {
             if (length.length() == currentIndex + 1) {
                 if (!changed) {
-                    qimsysDebugOut();
+                    cuteimeDebugOut();
                     return;
                 }
                 break;
@@ -812,8 +812,8 @@ void KeyActions::Private::resizeSegment(int delta)
         }
     }
 
-    qimsysDebug() << length;
-    qimsysDebug() << item;
+    cuteimeDebug() << length;
+    cuteimeDebug() << item;
 
     while (item.to.length() > currentIndex) {
         item.to.removeLast();
@@ -821,12 +821,12 @@ void KeyActions::Private::resizeSegment(int delta)
         if (!item.rawString.isEmpty()) item.rawString.removeLast();
     }
 
-    QimsysPreeditItem previous = cache;
-    qimsysDebug() << item << previous;
+    CuteimePreeditItem previous = cache;
+    cuteimeDebug() << item << previous;
 
     for (int i = 0; i < currentIndex + 2; i++) {
-        qimsysDebug() << i << currentIndex;
-        qimsysDebug() << item << previous;
+        cuteimeDebug() << i << currentIndex;
+        cuteimeDebug() << item << previous;
         if (i < currentIndex) {
             for (int j = 0; j < length.at(i); j++) {
                 QString to = previous.to.first();
@@ -845,64 +845,64 @@ void KeyActions::Private::resizeSegment(int delta)
             if (i == currentIndex) {
                 item.cursor = item.to.join("").length();
                 for (int j = 0; j < length.at(i); j++) {
-                    qimsysDebug() << previous;
+                    cuteimeDebug() << previous;
                     QString to = previous.to.first();
                     QString from = previous.from.first();
                     if (from.length() == 1) {
-                        qimsysDebug();
+                        cuteimeDebug();
                         if (item.to.length() - 1 < currentIndex) {
-                            qimsysDebug();
+                            cuteimeDebug();
                             item.to.append(previous.to.takeFirst());
                             if (!previous.from.isEmpty()) item.from.append(previous.from.takeFirst());
                             if (!previous.rawString.isEmpty()) item.rawString.append(previous.rawString.takeFirst());
-                            qimsysDebug() << item;
+                            cuteimeDebug() << item;
                         } else {
-                            qimsysDebug() << item << previous;
+                            cuteimeDebug() << item << previous;
                             item.to.replace(currentIndex, item.to.at(currentIndex) + previous.to.takeFirst());
                             if (!previous.from.isEmpty()) item.from.replace(currentIndex, item.from.at(currentIndex) + previous.from.takeFirst());
                             if (!previous.rawString.isEmpty()) item.rawString.replace(currentIndex, item.rawString.at(currentIndex) + previous.rawString.takeFirst());
-                            qimsysDebug() << item;
+                            cuteimeDebug() << item;
                         }
                     } else {
-                        qimsysDebug() << item;
+                        cuteimeDebug() << item;
                         if (item.to.length() - 1 < currentIndex) {
                             item.to.append(to.left(1));
                             item.from.append(from.left(1));
                             item.rawString.append(QString());
-                            qimsysDebug() << item;
+                            cuteimeDebug() << item;
                         } else {
                             item.to.replace(currentIndex, item.to.at(currentIndex) + to.left(1));
                             item.from.replace(currentIndex, item.from.at(currentIndex) + from.left(1));
-                            qimsysDebug() << item;
+                            cuteimeDebug() << item;
                         }
 
                         previous.to.replace(0, to.mid(1));
                         previous.from.replace(0, from.mid(1));
                         previous.rawString.replace(0, QString());
-                        qimsysDebug() << item;
+                        cuteimeDebug() << item;
                     }
                 }
                 item.selection = item.to.join("").length() - item.cursor;
                 item.modified = 0;
-                qimsysDebug() << item;
+                cuteimeDebug() << item;
             } else if (!previous.from.isEmpty()){
                 item.to.append(previous.to);
                 item.from.append(previous.from);
                 item.rawString.append(previous.rawString);
-                qimsysDebug() << item;
+                cuteimeDebug() << item;
             }
         }
     }
 
-    qimsysDebug() << item;
+    cuteimeDebug() << item;
     preeditManager.setItem(item);
-    qimsysDebugOut();
-//    qimsysDebugOff();
+    cuteimeDebugOut();
+//    cuteimeDebugOff();
 }
 
 void KeyActions::Private::selectCandidate(int delta)
 {
-    qimsysDebugIn() << delta;
+    cuteimeDebugIn() << delta;
     switch (inputMethodManager.state()) {
     case Empty:
     case Input:
@@ -913,7 +913,7 @@ void KeyActions::Private::selectCandidate(int delta)
         }
         break;
     case Convert:
-        candidateManager.setItems(QimsysConversionItemList());
+        candidateManager.setItems(CuteimeConversionItemList());
         inputMethodManager.setState(Select);
         if (candidateManager.currentIndex() == -1 && delta == 1) {
             delta = 2;
@@ -927,13 +927,13 @@ void KeyActions::Private::selectCandidate(int delta)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::cancel()
 {
-    qimsysDebugIn();
-    qimsysDebug() << cache;
+    cuteimeDebugIn();
+    cuteimeDebug() << cache;
     if (cache.to.isEmpty()) {
         inputMethodManager.setState(Empty);
     } else {
@@ -941,7 +941,7 @@ void KeyActions::Private::cancel()
     }
     restoreCache();
     candidateManager.setCurrentIndex(-1);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::clear()
@@ -951,11 +951,11 @@ void KeyActions::Private::clear()
 
 void KeyActions::Private::setCharacterMode(int direction)
 {
-    qimsysDebugIn() << direction;
+    cuteimeDebugIn() << direction;
     QString current = inputMethodManager.converter();
-    qimsysDebug() << current;
+    cuteimeDebug() << current;
 
-    QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
+    QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
     int count = converters.length();
     int index = 0;
     //! TODO locale and/or available
@@ -968,19 +968,19 @@ void KeyActions::Private::setCharacterMode(int direction)
 
     index = (index + direction + count) % count;
     current = converters.at(index)->identifier();
-    qimsysDebug() << current;
+    cuteimeDebug() << current;
     terminate();
     inputMethodManager.setConverter(current);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::setTypingMode(int mode)
 {
-    qimsysDebugIn() << mode;
+    cuteimeDebugIn() << mode;
     QString current = inputMethodManager.interpreter();
-    qimsysDebug() << current;
+    cuteimeDebug() << current;
 
-    QList<QimsysInterpreter *> interpreters = QimsysPluginManager::objects<QimsysInterpreter>();
+    QList<CuteimeInterpreter *> interpreters = CuteimePluginManager::objects<CuteimeInterpreter>();
     int count = interpreters.length();
     int index = 0;
     //! TODO locale and/or available
@@ -993,23 +993,23 @@ void KeyActions::Private::setTypingMode(int mode)
 
     index = (index + mode + count) % count;
     current = interpreters.at(index)->identifier();
-    qimsysDebug() << current;
+    cuteimeDebug() << current;
     terminate();
     inputMethodManager.setInterpreter(current);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::convertTo(const QString &converter)
 {
-    qimsysDebugOn();
-    qimsysDebugIn() << converter;
+    cuteimeDebugOn();
+    cuteimeDebugIn() << converter;
     QString current = inputMethodManager.converter();
     inputMethodManager.setConverter(converter);
     inputMethodManager.setState(ConvertTo);
     inputMethodManager.setState(Input);
     inputMethodManager.setConverter(current);
-    qimsysDebugOut();
-    qimsysDebugOff();
+    cuteimeDebugOut();
+    cuteimeDebugOff();
 }
 
 void KeyActions::Private::inputSpace(int width)
@@ -1043,9 +1043,9 @@ void KeyActions::Private::inputSpace(int width)
 
 void KeyActions::Private::clearSelection()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     remove();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::terminate()
@@ -1053,11 +1053,11 @@ void KeyActions::Private::terminate()
     if (inputMethodManager.state() != Input) return;
     if (preeditManager.item().modified == 0) return;
 
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     static QString terminator = QString();
     preeditManager.insert(terminator);
-    QimsysPreeditItem item = preeditManager.item();
+    CuteimePreeditItem item = preeditManager.item();
     item.to.removeOne(QString());
     item.from.removeOne(QString());
     item.rawString.removeOne(QString());
@@ -1066,7 +1066,7 @@ void KeyActions::Private::terminate()
     preeditManager.setItem(item);
     preeditManager.blockSignals(false);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void KeyActions::Private::saveCache()
@@ -1085,12 +1085,12 @@ KeyActions::KeyActions(QObject *parent)
     d = new Private(this);
 }
 
-bool KeyActions::contains(const QimsysKeySequence &keySequence) const
+bool KeyActions::contains(const CuteimeKeySequence &keySequence) const
 {
     return d->contains(keySequence);
 }
 
-void KeyActions::trigger(const QimsysKeySequence &keySequence)
+void KeyActions::trigger(const CuteimeKeySequence &keySequence)
 {
     d->trigger(keySequence);
 }

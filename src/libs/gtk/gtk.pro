@@ -1,20 +1,20 @@
 TEMPLATE = lib
-TARGET = qimsys_gtk
+TARGET = cuteime_gtk
 
 CONFIG += gtk
 CONFIG -= qt
 
-include(../../../qimsyslibrary.pri)
+include(../../../cuteimelibrary.pri)
 
-DEFINES += QIMSYS_LIBRARY
+DEFINES += CUTEIME_LIBRARY
 
-LIB_HEADERS = $$PWD/qimsysglobal.h
+LIB_HEADERS = $$PWD/cuteimeglobal.h
 
 HEADERS *= $$LIB_HEADERS
 
-contains(QIMSYS_CONFIG, sdk) {
+contains(CUTEIME_CONFIG, sdk) {
     lib_headers.files = $$LIB_HEADERS
-    lib_headers.path = $$PREFIX/include/qimsys/gtk
+    lib_headers.path = $$PREFIX/include/cuteime/gtk
     INSTALLS += lib_headers
 }
 

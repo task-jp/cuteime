@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,8 +20,8 @@
 
 #include "language.h"
 
-#include <qimsysdebug.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimedynamictranslator.h>
 
 namespace Japanese {
 
@@ -44,11 +44,11 @@ Language::Private::Private(Language *parent)
     : QObject(parent)
     , q(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
 
     q->setLocale("ja_JP");
     q->setLanguage("Japanese");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/icons/japan.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Japanese"), q, "name");
@@ -61,28 +61,28 @@ Language::Private::Private(Language *parent)
     trConnect(this, QT_TR_NOOP("Input/Language"), q, "categoryName");
 
     q->setActive(true);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Language::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 Language::Language(QObject *parent)
-    : QimsysLanguage(parent)
+    : CuteimeLanguage(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Language::~Language()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "language.moc"

@@ -1,10 +1,10 @@
-include(../../../../qimsys.pri)
+include(../../../../cuteime.pri)
 
-SOURCES += $$PWD/qimsyskeywidget.cpp $$PWD/qimsyswidget.cpp
-HEADERS += $$PWD/qimsyskeywidget.h $$PWD/qimsyswidget.h
+SOURCES += $$PWD/cuteimekeywidget.cpp $$PWD/cuteimewidget.cpp
+HEADERS += $$PWD/cuteimekeywidget.h $$PWD/cuteimewidget.h
 
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
 OTHER_FILES += \
-    $$PWD/qimsyskeywidget.dox \
+    $$PWD/cuteimekeywidget.dox \
