@@ -1,0 +1,58 @@
+/*!
+    \def cuteimeDebugOn()
+    \brief enable debug output
+ */
+
+/*!
+    \def cuteimeDebugOff()
+    \brief disable debug output
+ */
+
+/*!
+    \def cuteimeDebugIn()
+    \brief cuteimeDebugIn() is used at the beginning of each method
+ */
+
+/*!
+    \def cuteimeDebugOut()
+    \brief cuteimeDebugOut() is used at the end of each method
+ */
+
+/*!
+    \def cuteimeDebug()
+    \brief cuteimeDebug() is qDebug() for cuteime
+ */
+
+/*!
+    \def cuteimeWarning()
+    \brief cuteimeWarning() is qWarning() for cuteime
+ */
+
+/*!
+    \page debug Debugging
+
+    In cuteime, we embed log at the beginning and at the end of method.
+    e.g.
+<pre>QString echo(const QString &message)
+{
+    cuteimeDebugIn() << message;
+    QString ret = message;
+    ...
+    cuteimeDebug() << "hoge";
+    ...
+    cuteimeDebugOut() << ret;
+    return ret;
+}</pre>
+
+    To make put them out,
+<pre>int main(int argc, char **argv)
+{
+    cuteimeDebugOn();
+    QString ret = message;
+    ...
+    echo("hoge");
+    ...
+    cuteimeDebugOff();
+    return 0;
+}</pre>
+ */

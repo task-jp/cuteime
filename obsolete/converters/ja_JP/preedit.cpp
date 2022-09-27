@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,10 +20,10 @@
 
 #include "preedit.h"
 
-#include <qimsysapplicationmanager.h>
-#include <qimsysconverter.h>
-#include <qimsyscandidates.h>
-#include <qimsysdebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeconverter.h>
+#include <cuteimecandidates.h>
+#include <cuteimedebug.h>
 
 using namespace ja_JP;
 
@@ -45,13 +45,13 @@ private slots:
 private:
     Preedit *q;
 public:
-    QimsysApplicationManager manager;
+    CuteimeApplicationManager manager;
 private:
-    QimsysCandidates candidates;
+    CuteimeCandidates candidates;
 
 public:
     int conversionIndex;
-    QList< QimsysConversionItemList > conversionsMap;
+    QList< CuteimeConversionItemList > conversionsMap;
 };
 
 Preedit::Private::Private(Preedit *parent)
@@ -59,8 +59,8 @@ Preedit::Private::Private(Preedit *parent)
     , q(parent)
     , conversionIndex(-1)
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 Preedit::Private::~Private()
@@ -69,24 +69,24 @@ Preedit::Private::~Private()
 
 bool Preedit::Private::init()
 {
-    qimsysDebugIn();
-    bool ret = q->QimsysPreedit::init();
+    cuteimeDebugIn();
+    bool ret = q->CuteimePreedit::init();
     if (ret) {
         manager.init();
         candidates.init();
         connect(&candidates, SIGNAL(currentIndexChanged(int)), this, SLOT(currentCandidateChanged(int)));
     }
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 void Preedit::Private::cancel()
 {
-    qimsysDebugIn();
-    QimsysPreeditItem item;
+    cuteimeDebugIn();
+    CuteimePreeditItem item;
     item.cursor = -1;
     int i = 0;
-    foreach(const QimsysConversionItemList &conversion, conversionsMap) {
+    foreach(const CuteimeConversionItemList &conversion, conversionsMap) {
         item.to.append(conversion.first().from);
         if (i++ == conversionIndex) {
             item.cursor = item.to.length();
@@ -96,14 +96,14 @@ void Preedit::Private::cancel()
         item.cursor = item.to.length();
     }
     item.selection = 0;
-#ifdef QIMSYS_PLATFORM_MAEMO
+#ifdef CUTEIME_PLATFORM_MAEMO
     item.underline = QTextCharFormat::SingleUnderline;
 #else
     item.underline = QTextCharFormat::WaveUnderline;
 #endif
-    q->setItems(QimsysPreeditItemList() << item);
-    q->setConversions(QimsysConversionItemList());
-    qimsysDebugOut();
+    q->setItems(CuteimePreeditItemList() << item);
+    q->setConversions(CuteimeConversionItemList());
+    cuteimeDebugOut();
 }
 
 Preedit *Preedit::instance()
@@ -115,33 +115,33 @@ Preedit *Preedit::instance()
 }
 
 Preedit::Preedit(QObject *parent)
-    : QimsysPreedit(parent)
+    : CuteimePreedit(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Preedit::~Preedit()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool Preedit::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     bool ret = d->init();
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 void Preedit::move(int offset, bool selection)
 {
-    qimsysDebugIn() << offset << selection;
+    cuteimeDebugIn() << offset << selection;
     if (d->conversionIndex < 0) {
-        QimsysPreeditItem item = items().first();
+        CuteimePreeditItem item = items().first();
         int pos = (item.cursor + offset + item.to.length() + 1) % (item.to.length() + 1);
         if (pos == item.cursor) {
             if (!selection) {
@@ -155,7 +155,7 @@ void Preedit::move(int offset, bool selection)
                 item.selection = 0;
             }
         }
-        setItems(QimsysPreeditItemList() << item);
+        setItems(CuteimePreeditItemList() << item);
     } else {
         int conversionIndex = d->conversionIndex + offset;
         conversionIndex = (conversionIndex + d->conversionsMap.count()) % (d->conversionsMap.count());
@@ -164,7 +164,7 @@ void Preedit::move(int offset, bool selection)
             d->setPreeditString();
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 int Preedit::conversionIndex() const
@@ -177,18 +177,18 @@ int Preedit::convercionCount() const
     return d->conversionsMap.count();
 }
 
-void Preedit::setConversions(const QimsysConversionItemList &conversions)
+void Preedit::setConversions(const CuteimeConversionItemList &conversions)
 {
-    QimsysConverter *converter = qobject_cast<QimsysConverter*>(parent());
+    CuteimeConverter *converter = qobject_cast<CuteimeConverter*>(parent());
     if (!converter || !converter->isActive()) return;
-    qimsysDebugIn() << conversions;
+    cuteimeDebugIn() << conversions;
     if (conversions.isEmpty()) {
         d->conversionIndex = -1;
         d->conversionsMap.clear();
     } else if (d->conversionIndex < 0) {
         d->conversionIndex = 0;
         for (int i = 0; i < conversions.count(); i++) {
-            QimsysConversionItemList qce;
+            CuteimeConversionItemList qce;
             qce.append(conversions[i]);
             d->conversionsMap.append(qce);
         }
@@ -196,14 +196,14 @@ void Preedit::setConversions(const QimsysConversionItemList &conversions)
     } else {
         for (int i = 0; i < conversions.count(); i++) {
             if (i > d->conversionsMap.count() - 1) {
-                QimsysConversionItemList qce;
+                CuteimeConversionItemList qce;
                 qce.append(conversions[i]);
                 d->conversionsMap.append(qce);
             } else {
                 Q_ASSERT(!d->conversionsMap[i].isEmpty());
                 if (d->conversionsMap[i].first() == conversions[i]) {
                 } else {
-                    QimsysConversionItemList qce;
+                    CuteimeConversionItemList qce;
                     qce.append(conversions[i]);
                     d->conversionsMap[i] = qce;
                 }
@@ -214,17 +214,17 @@ void Preedit::setConversions(const QimsysConversionItemList &conversions)
         }
         d->setPreeditString();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Preedit::Private::setPreeditString()
 {
-    qimsysDebugIn();
-    qimsysDebug() << conversionIndex;
-    QimsysConversionItemList c = candidates.candidates();
-    QimsysPreeditItemList items;
+    cuteimeDebugIn();
+    cuteimeDebug() << conversionIndex;
+    CuteimeConversionItemList c = candidates.candidates();
+    CuteimePreeditItemList items;
     for (int i = 0; i < conversionsMap.count(); i++) {
-        QimsysPreeditItem item;
+        CuteimePreeditItem item;
         item.to = conversionsMap[i].last().to;
         item.cursor = -1;
         item.selection = 0;
@@ -240,19 +240,19 @@ void Preedit::Private::setPreeditString()
         }
         items.append(item);
     }
-    qimsysDebug() << items;
+    cuteimeDebug() << items;
     q->setItems(items);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Preedit::Private::currentCandidateChanged(int currentIndex)
 {
-    QimsysConverter *converter = qobject_cast<QimsysConverter*>(q->parent());
+    CuteimeConverter *converter = qobject_cast<CuteimeConverter*>(q->parent());
     if (!converter || !converter->isActive()) return;
     if (currentIndex < 0) return;
-    qimsysDebugIn() << currentIndex;
+    cuteimeDebugIn() << currentIndex;
     if (conversionIndex < 0) {
-        QimsysConversionItemList list;
+        CuteimeConversionItemList list;
         list.append(candidates.candidates()[currentIndex]);
         switch (conversionsMap.count()) {
         case 0:
@@ -262,7 +262,7 @@ void Preedit::Private::currentCandidateChanged(int currentIndex)
             conversionsMap[0] = list;
             break;
         default:
-            qimsysWarning() << currentIndex << "is not handled here.";
+            cuteimeWarning() << currentIndex << "is not handled here.";
             break;
         }
         setPreeditString();
@@ -275,11 +275,11 @@ void Preedit::Private::currentCandidateChanged(int currentIndex)
             conversionsMap[conversionIndex][1] = candidates.candidates().at(currentIndex);
             break;
         default:
-            qimsysWarning();
+            cuteimeWarning();
         }
         setPreeditString();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Preedit::setCurrentText(const QString &text)
@@ -289,8 +289,8 @@ void Preedit::setCurrentText(const QString &text)
 
 void Preedit::Private::setCurrentText(const QString &text)
 {
-    qimsysDebugIn() << text;
-    QimsysConversionItem qce;
+    cuteimeDebugIn() << text;
+    CuteimeConversionItem qce;
     Q_ASSERT(!conversionsMap[conversionIndex].isEmpty());
     qce.from = conversionsMap[conversionIndex].first().from;
     qce.to = text;
@@ -302,27 +302,27 @@ void Preedit::Private::setCurrentText(const QString &text)
         conversionsMap[conversionIndex][1] = qce;
         break;
     default:
-        qimsysWarning();
+        cuteimeWarning();
     }
     setPreeditString();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Preedit::commit()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QString commitString;
-    foreach (const QimsysPreeditItem &item, items())
+    foreach (const CuteimePreeditItem &item, items())
         commitString += item.to;
-    QimsysPreedit::commit(commitString, d->manager.widget());
-    QimsysConversionItemList qce;
+    CuteimePreedit::commit(commitString, d->manager.widget());
+    CuteimeConversionItemList qce;
     for (int i = 0; i < d->conversionsMap.count(); i++) {
         qce.append(d->conversionsMap.last().last());
     }
     emit committed(qce);
     d->conversionsMap.clear();
     d->conversionIndex = -1;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Preedit::cancel()

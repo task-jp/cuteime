@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = qimsys
+SUBDIRS = cuteime

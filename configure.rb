@@ -35,22 +35,22 @@ class Configure
         opt.on("--qt_im_module", "install dir for immodule for Qt") { @qt_im_module = val }
         opt.on("--gtk2_im_module", "install dir for immodule for Gtk+2") { @gtk2_im_module = val }
         opt.on("--gtk3_im_module", "install dir for immodule for Gtk+3") { @gtk3_im_module = val }
-        opt.on("--no-dbus", "build and install qimsys without dbus") { @config.push( 'no-dbus' ) }
-        opt.on("--no-systemtray", "build and install qimsys without systemtray") { @config.push( 'no-systemtray' ) }
-        opt.on("--no-toolbar", "build and install qimsys without toolbar") { @config.push( 'no-toolbar' ) }
+        opt.on("--no-dbus", "build and install cuteime without dbus") { @config.push( 'no-dbus' ) }
+        opt.on("--no-systemtray", "build and install cuteime without systemtray") { @config.push( 'no-systemtray' ) }
+        opt.on("--no-toolbar", "build and install cuteime without toolbar") { @config.push( 'no-toolbar' ) }
         opt.on("--no-xim", "disable xim support") { @config.push( 'no-xim' ) }
         opt.on("--no-socialime", "disable socialime support") { @config.push( 'no-socialime' ) }
         opt.on("--no-googleime", "disable googleime cgi api support") { @config.push( 'no-googleime' ) }
-        opt.on("--debug", 'build qimsys in debug mode') { @debug = true }
-        opt.on("--sdk", "build and install qimsys sdk") { @config.push( 'sdk' ) }
+        opt.on("--debug", 'build cuteime in debug mode') { @debug = true }
+        opt.on("--sdk", "build and install cuteime sdk") { @config.push( 'sdk' ) }
         opt.on("--examples", "build and install examples") { @config.push( 'examples' ) }
         opt.on("--tests", "build tests") { @config.push( 'tests' ) }
         opt.parse!(ARGV.dup)
     end
 
     def checkPro()
-        @pro = $0.sub(/configure.rb$/, "qimsys.pro")
-        raise ArgumentError "qimsys.pro not found" if @pro.empty?
+        @pro = $0.sub(/configure.rb$/, "cuteime.pro")
+        raise ArgumentError "cuteime.pro not found" if @pro.empty?
     end
 
     def checkQMake()
@@ -79,7 +79,7 @@ class Configure
         cmd.push "GTK2_IM_MODULE_DIR=#{@gtk2_im_module}"
         cmd.push "GTK3_IM_MODULE_DIR=#{@gtk3_im_module}"
         cmd.push "CONFIG+=#{@debug ? 'debug' : 'release'}"
-        cmd.push @config.collect{ |c| "QIMSYS_CONFIG+=#{c}" } unless @config.empty?
+        cmd.push @config.collect{ |c| "CUTEIME_CONFIG+=#{c}" } unless @config.empty?
 
         print "Qt(qmake)          : #{@qmake} #{@debug ? '(Debug)' : ''}\n"
         print "Prefix             : #{@install_root}\n"

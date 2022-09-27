@@ -1,6 +1,6 @@
-include(../../../qimsys.pri)
+include(../../../cuteime.pri)
 
 TEMPLATE = subdirs
 versionCheck(4,7,0) {
-    !contains(QIMSYS_CONFIG, no-gui): SUBDIRS = statusviewer
+    !contains(CUTEIME_CONFIG, no-gui): SUBDIRS = statusviewer
 }

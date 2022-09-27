@@ -1,4 +1,4 @@
-include(../../../../../qimsysplugin.pri)
+include(../../../../../cuteimeplugin.pri)
 
 QT += network
 

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,7 +22,7 @@
 #include "ui_settings.h"
 
 #include <QSettings>
-#include <qimsysabstractpluginobject.h>
+#include <cuteimeabstractpluginobject.h>
 
 using namespace Japanese::SocialIME;
 
@@ -30,17 +30,17 @@ class Settings::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *plugin, Settings *parent);
+    Private(CuteimeAbstractPluginObject *plugin, Settings *parent);
     ~Private();
 
     void save();
 private:
     Settings *q;
     Ui::Settings ui;
-    QimsysAbstractPluginObject *plugin;
+    CuteimeAbstractPluginObject *plugin;
 };
 
-Settings::Private::Private(QimsysAbstractPluginObject *p, Settings *parent)
+Settings::Private::Private(CuteimeAbstractPluginObject *p, Settings *parent)
     : QObject(parent)
     , q(parent)
     , plugin(p)
@@ -64,8 +64,8 @@ void Settings::Private::save()
     settings.setValue("User", ui.user->text());
 }
 
-Settings::Settings(QimsysAbstractPluginObject *plugin, QWidget *parent)
-    : QimsysSettingsWidget(parent)
+Settings::Settings(CuteimeAbstractPluginObject *plugin, QWidget *parent)
+    : CuteimeSettingsWidget(parent)
 {
     d = new Private(plugin, this);
 }
@@ -78,7 +78,7 @@ Settings::~Settings()
 void Settings::save()
 {
     d->save();
-    QimsysSettingsWidget::save();
+    CuteimeSettingsWidget::save();
 }
 
 #include "settings.moc"

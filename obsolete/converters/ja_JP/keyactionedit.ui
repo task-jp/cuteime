@@ -97,7 +97,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QimsysKeyWidget" name="key">
+      <widget class="CuteimeKeyWidget" name="key">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -118,9 +118,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QimsysKeyWidget</class>
+   <class>CuteimeKeyWidget</class>
    <extends>QToolButton</extends>
-   <header>qimsyskeywidget.h</header>
+   <header>cuteimekeywidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

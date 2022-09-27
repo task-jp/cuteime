@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <qimsysengine.h>
+#include <cuteimeengine.h>
 
 namespace Japanese {
     namespace GoogleIME {
 
-class Engine : public QimsysEngine
+class Engine : public CuteimeEngine
 {
     Q_OBJECT
 public:

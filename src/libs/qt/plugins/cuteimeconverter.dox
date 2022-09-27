@@ -1,0 +1,26 @@
+/*!
+    \class CuteimeConverter
+    \brief An interface for converter plugins
+ */
+
+/*!
+    \fn CuteimeConverter::CuteimeConverter(QObject *parent)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeConverter::~CuteimeConverter()
+    \brief Destructor
+ */
+
+/*!
+    \fn QStringList CuteimeConverter::locales() const
+    \brief returns locales that the plugin supports
+
+    Note that this method is not used yet.
+ */
+
+/*!
+    \fn QList<QAction*> CuteimeConverter::actions()
+    \brief QActions to be used by system tray or floating tool bar
+ */

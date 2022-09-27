@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QX11Info>
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include "inputcontext.h"
 #include "qtx11.h"
 
@@ -79,25 +79,25 @@ QXimInputMethod::Private::Private(QXimInputMethod *parent)
     , xims(0)
     , currentIc(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
 //    Q_ASSERT(instance == 0);
     instance = this;
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QXimInputMethod::Private::~Private()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (xims) {
         IMCloseIM(xims);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void QXimInputMethod::Private::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     XIMStyle ims_styles_onspot [] = {
         XIMPreeditCallbacks | XIMStatusNothing, // on the spot
         XIMPreeditPosition  | XIMStatusNothing, // over the spot
@@ -119,7 +119,7 @@ void QXimInputMethod::Private::init()
     encodings.count_encodings = sizeof(ims_encodings) / sizeof(XIMEncoding) - 1;
     encodings.supported_encodings = ims_encodings;
 
-    qimsysDebug() << q->name() << q->locale();
+    cuteimeDebug() << q->name() << q->locale();
     xims = IMOpenIM(QX11Info::display()
                     , IMModifiers, "Xi18n"
                     , IMServerWindow, (unsigned long)q->winId()
@@ -134,7 +134,7 @@ void QXimInputMethod::Private::init()
     if (!xims) {
         qFatal("IMOpenIM error");
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool QXimInputMethod::Private::open(XIMS xims, IMOpenStruct *opts)
@@ -155,41 +155,41 @@ bool QXimInputMethod::Private::close(XIMS xims, IMCloseStruct *opts)
 
 bool QXimInputMethod::Private::createIc(XIMS xims, IMChangeICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = new InputContext(xims, this);
     currentIc->setConnectId(opts->connect_id);
     icMap[currentIc->id()] = currentIc;
     bool ret = storeIcValues(currentIc, opts);
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 bool QXimInputMethod::Private::destroyIc(XIMS xims, IMChangeICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     q->updateHandler(QAbstractInputMethod::Destroyed);
     delete icMap.take(opts->icid);
     currentIc = 0;
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::setIcValues(XIMS xims, IMChangeICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     bool ret = storeIcValues(currentIc, opts);
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 bool QXimInputMethod::Private::getIcValues(XIMS xims, IMChangeICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     XICAttribute *ic_attr = opts->ic_attr;
@@ -200,7 +200,7 @@ bool QXimInputMethod::Private::getIcValues(XIMS xims, IMChangeICStruct *opts)
             *(CARD32*)ic_attr->value = KeyPressMask | KeyReleaseMask;
             ic_attr->value_length = sizeof(CARD32);
         } else {
-            qimsysWarning() << ic_attr->name;
+            cuteimeWarning() << ic_attr->name;
         }
     }
 
@@ -244,37 +244,37 @@ bool QXimInputMethod::Private::getIcValues(XIMS xims, IMChangeICStruct *opts)
     }
     XICAttribute *sts_attr = opts->status_attr;
     for (int i = 0; i < opts->status_attr_num; i++, sts_attr++) {
-        qimsysWarning() << sts_attr->name << "is not supported yet.";
+        cuteimeWarning() << sts_attr->name << "is not supported yet.";
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::setIcFocus(XIMS xims, IMChangeFocusStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     currentIc->setFocus(true);
     q->updateHandler(QAbstractInputMethod::FocusIn);
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::unsetIcFocus(XIMS xims, IMChangeFocusStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     currentIc->setFocus(false);
     q->updateHandler(QAbstractInputMethod::FocusOut);
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::forward(XIMS xims, IMForwardEventStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     bool ret = false;
     currentIc = icMap[opts->icid];
     Q_ASSERT(currentIc);
@@ -302,40 +302,40 @@ bool QXimInputMethod::Private::forward(XIMS xims, IMForwardEventStruct *opts)
         break;
     }
     default:
-        qimsysWarning() << opts->event.type;
+        cuteimeWarning() << opts->event.type;
         break;
     }
     if (!ret) {
         IMForwardEvent(xims, (XPointer)opts);
     }
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 bool QXimInputMethod::Private::resetIc(XIMS xims, IMResetICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
     q->reset();
     currentIc->reset();
     q->updateHandler(QAbstractInputMethod::Reset);
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::preeditStartReply(XIMS xims, IMPreeditCBStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(xims)
     currentIc = icMap[opts->icid];
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::storeIcValues(InputContext *ic, IMChangeICStruct *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     XICAttribute *ic_attr = opts->ic_attr;
     for (int i = 0; i < opts->ic_attr_num; i++, ic_attr++) {
         if (QLatin1String(XNInputStyle) == ic_attr->name) {
@@ -345,7 +345,7 @@ bool QXimInputMethod::Private::storeIcValues(InputContext *ic, IMChangeICStruct 
         } else if (QLatin1String(XNFocusWindow) == ic_attr->name) {
             ic->setProperty(ic_attr->name, qVariantFromValue(X112Qt::convert((Window*)ic_attr->value)));
         } else {
-            qimsysWarning() << ic_attr->name << "is not supported.";
+            cuteimeWarning() << ic_attr->name << "is not supported.";
         }
     }
     XICAttribute *pre_attr = opts->preedit_attr;
@@ -376,16 +376,16 @@ bool QXimInputMethod::Private::storeIcValues(InputContext *ic, IMChangeICStruct 
     }
     XICAttribute *sts_attr = opts->status_attr;
     for (int i = 0; i < opts->status_attr_num; i++, sts_attr++) {
-        qimsysWarning() << sts_attr->name << "is not supported yet.";
+        cuteimeWarning() << sts_attr->name << "is not supported yet.";
     }
     opts->icid = ic->id();
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return true;
 }
 
 bool QXimInputMethod::Private::protocolHandler(XIMS xims, IMProtocol *opts)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     int ret = false;
     Private *d = QXimInputMethod::Private::instance;
     switch (opts->major_code) {
@@ -423,26 +423,26 @@ bool QXimInputMethod::Private::protocolHandler(XIMS xims, IMProtocol *opts)
         ret = d->preeditStartReply(xims, (IMPreeditCBStruct*)opts);
         break;
     default:
-        qimsysWarning() << opts->major_code << " is not supported yet.";
+        cuteimeWarning() << opts->major_code << " is not supported yet.";
         break;
     }
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
 QXimInputMethod::QXimInputMethod(QObject *parent)
     : QAbstractInputMethod(parent)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QXimInputMethod::~QXimInputMethod()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void QXimInputMethod::reset()
@@ -453,18 +453,18 @@ void QXimInputMethod::sendCommitString(const QString &commitString)
 {
     if (!d->currentIc) return;
     if (!d->currentIc->hasFocus()) return;
-    qimsysDebugIn() << commitString;
+    cuteimeDebugIn() << commitString;
     d->currentIc->sendCommitString(commitString);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void QXimInputMethod::sendPreeditString(const QString &preeditString, int cursorPosition, int selectionLength)
 {
     if (!d->currentIc) return;
     if (!d->currentIc->hasFocus()) return;
-    qimsysDebugIn() << preeditString << cursorPosition << selectionLength;
+    cuteimeDebugIn() << preeditString << cursorPosition << selectionLength;
     d->currentIc->sendPreeditString(preeditString, cursorPosition, selectionLength);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 qulonglong QXimInputMethod::clientWindow() const

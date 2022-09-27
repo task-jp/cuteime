@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-include(../../qimsys.pri)
+include(../../cuteime.pri)
 SUBDIRS += inputmethods

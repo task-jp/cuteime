@@ -1,15 +1,15 @@
-DEBUG_HEADERS = $$PWD/qimsysdebug.h
-DEBUG_SOURCES = $$PWD/qimsysdebug.cpp
+DEBUG_HEADERS = $$PWD/cuteimedebug.h
+DEBUG_SOURCES = $$PWD/cuteimedebug.cpp
 INCLUDEPATH += $$PWD
 
 HEADERS *= $$DEBUG_HEADERS
 SOURCES *= $$DEBUG_SOURCES
 
-contains(QIMSYS_CONFIG, sdk) {
+contains(CUTEIME_CONFIG, sdk) {
     debug_headers.files = $$DEBUG_HEADERS
-    debug_headers.path = $$PREFIX/include/qimsys/qt
+    debug_headers.path = $$PREFIX/include/cuteime/qt
     INSTALLS += debug_headers
 }
 
 OTHER_FILES += \
-    $$PWD/qimsysdebug.dox
+    $$PWD/cuteimedebug.dox

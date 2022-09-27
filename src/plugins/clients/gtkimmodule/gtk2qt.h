@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2016 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,19 +23,19 @@
 
 #include <gdk/gdkkeysyms.h>
 
-static const int qimsys_gtk2qt_key_tbl[] = {
+static const int cuteime_gtk2qt_key_tbl[] = {
 #include "gtk2qtkey.tbl"
     0,                          0
 };
 
-static inline int qimsys_gtk2qt_key_convert(int key)
+static inline int cuteime_gtk2qt_key_convert(int key)
 {
     int i;
     int ret = key;
 
-    for (i = 0; qimsys_gtk2qt_key_tbl[i]; i += 2) {
-        if (qimsys_gtk2qt_key_tbl[i] == key) {
-            ret = qimsys_gtk2qt_key_tbl[i+1];
+    for (i = 0; cuteime_gtk2qt_key_tbl[i]; i += 2) {
+        if (cuteime_gtk2qt_key_tbl[i] == key) {
+            ret = cuteime_gtk2qt_key_tbl[i+1];
             break;
         }
     }

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,10 +22,10 @@
 
 #include <plugins/inputmethods/japanese/standard/global.h>
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimedynamictranslator.h>
 
 namespace Japanese {
     namespace Alphabet {
@@ -44,15 +44,15 @@ private slots:
     void activeChanged(bool isActive);
     void stateChanged(uint state);
 
-    void itemChanged(const QimsysPreeditItem &item);
+    void itemChanged(const CuteimePreeditItem &item);
 
 private:
     void readMap(const QString &fileName);
 
 private:
     Converter *q;
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
 
     QStringList previous;
 };
@@ -69,26 +69,26 @@ Converter::Private::Private(Converter *parent)
     , inputMethodManager(0)
     , preeditManager(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     init();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     q->setIdentifier(QLatin1String("Alphabet"));
     q->setPriority(0x31);
 
     q->setLocale("ja_JP");
     q->setLanguage("Japanese(Standard)");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/japanese/alphabet/half/resources/alphabet-half.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Alphabet"), q, "name");
@@ -102,15 +102,15 @@ void Converter::Private::init()
 
     connect(q, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
     activeChanged(q->isActive());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::activeChanged(bool isActive)
 {
-    qimsysDebugIn() << isActive;
+    cuteimeDebugIn() << isActive;
     if (isActive) {
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
         }
@@ -123,50 +123,50 @@ void Converter::Private::activeChanged(bool isActive)
             inputMethodManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     switch (state) {
     case Input:
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
-            connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         }
         itemChanged(preeditManager->item());
         break;
     case ConvertTo: {
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
-            connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         }
 
-        QimsysPreeditItem item = preeditManager->item();
+        CuteimePreeditItem item = preeditManager->item();
         item.to = item.rawString;
         preeditManager->setItem(item);
         fallthrough;
     }
     default:
         if (preeditManager) {
-            disconnect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            disconnect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
             preeditManager->deleteLater();
             preeditManager = 0;
         }
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void Converter::Private::itemChanged(const QimsysPreeditItem &item)
+void Converter::Private::itemChanged(const CuteimePreeditItem &item)
 {
     if (item.selection != 0) return;
     if (item.from == previous) return;
 
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
 
     QStringList to = item.to;
     int cursor = item.cursor;
@@ -180,18 +180,18 @@ void Converter::Private::itemChanged(const QimsysPreeditItem &item)
         }
     }
 
-    qimsysDebug() << i;
+    cuteimeDebug() << i;
     int modified = item.modified;
     int k = i;
     for (int j = 0; j < modified; j++) {
         QString str = item.rawString.at(k);
         j += str.length() - 1;
-        qimsysDebug() << str << j;
+        cuteimeDebug() << str << j;
         cursor += str.length() - to.at(k).length();
         to.replace(k, str);
         k--;
     }
-    QimsysPreeditItem newItem = item;
+    CuteimePreeditItem newItem = item;
     newItem.to = to;
     newItem.cursor = cursor;
     newItem.modified = 0;
@@ -200,22 +200,22 @@ void Converter::Private::itemChanged(const QimsysPreeditItem &item)
     preeditManager->blockSignals(false);
     previous = item.from;
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::Converter(QObject *parent)
-    : QimsysConverter(parent)
+    : CuteimeConverter(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::~Converter()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "converter.moc"

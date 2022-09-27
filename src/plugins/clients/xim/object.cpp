@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,8 +21,8 @@
 #include "object.h"
 #include "client.h"
 
-#include <qimsysdebug.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimedynamictranslator.h>
 
 using namespace Xim;
 
@@ -46,7 +46,7 @@ Object::Private::Private(Object *parent)
     , q(parent)
     , client(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     q->setGroups(QStringList() << QLatin1String("X11 Classic"));
     q->setCategoryType(Hidden);
     trConnect(this, QT_TR_NOOP("Input/Platform"), q, "categoryName");
@@ -56,40 +56,40 @@ Object::Private::Private(Object *parent)
     trConnect(this, QT_TR_NOOP(""), q, "translator");
     connect(q, SIGNAL(enabledChanged(bool)), this, SLOT(enabledChanged(bool)));
     enabledChanged(q->isEnabled());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Object::Private::enabledChanged(bool enabled)
 {
-    qimsysDebugIn() << enabled;
+    cuteimeDebugIn() << enabled;
     if (enabled && !client) {
         client = new Client(this);
     } else if (!enabled && client) {
         delete client;
         client = 0;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Object::~Object()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "object.moc"

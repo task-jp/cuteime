@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,18 +21,18 @@
 #ifndef AUTOSTARTPLUGIN_H
 #define AUTOSTARTPLUGIN_H
 
-#include "qimsysplugin.h"
+#include "cuteimeplugin.h"
 
-class AutoStartPlugin : public QimsysPlugin
+class AutoStartPlugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "me.qtquick.qimsys.QimsysPlugin/0.1" FILE "autostart.json")
-    Q_INTERFACES(QimsysPlugin)
+    Q_PLUGIN_METADATA(IID "me.qtquick.cuteime.CuteimePlugin/0.1" FILE "autostart.json")
+    Q_INTERFACES(CuteimePlugin)
 public:
     AutoStartPlugin();
 
 protected:
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 #endif//AUTOSTARTPLUGIN_H

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,18 +21,18 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <qimsysabstractpluginobject.h>
+#include <cuteimeabstractpluginobject.h>
 
 namespace ToolBar {
 
-class Object : public QimsysAbstractPluginObject
+class Object : public CuteimeAbstractPluginObject
 {
     Q_OBJECT
 public:
     Object(QObject *parent = 0);
     ~Object();
 
-    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
+    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
 
 private:
     class Private;

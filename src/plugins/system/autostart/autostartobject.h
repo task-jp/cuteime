@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,9 +21,9 @@
 #ifndef AUTOSTARTOBJECT_H
 #define AUTOSTARTOBJECT_H
 
-#include "qimsysabstractpluginobject.h"
+#include "cuteimeabstractpluginobject.h"
 
-class AutoStartObject : public QimsysAbstractPluginObject
+class AutoStartObject : public CuteimeAbstractPluginObject
 {
     Q_OBJECT
 public:

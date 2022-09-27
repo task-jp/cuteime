@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,19 +21,19 @@
 #ifndef ZINNIAPLUGIN_H
 #define ZINNIAPLUGIN_H
 
-#include <qimsysplugin.h>
+#include <cuteimeplugin.h>
 
-class QimsysConverter;
+class CuteimeConverter;
 
-class ZinniaPlugin : public QimsysPlugin
+class ZinniaPlugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_INTERFACES(QimsysPlugin)
+    Q_INTERFACES(CuteimePlugin)
 public:
     ZinniaPlugin();
 
 protected:
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 #endif//ZINNIAPLUGIN_H

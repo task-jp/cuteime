@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,14 +21,14 @@
 #ifndef PREEDIT_H
 #define PREEDIT_H
 
-#include "qimsyspreedit.h"
-#include "qimsysconversionitem.h"
+#include "cuteimepreedit.h"
+#include "cuteimeconversionitem.h"
 #include "japanese.h"
 
 namespace ja_JP
 {
 
-class Preedit : public QimsysPreedit
+class Preedit : public CuteimePreedit
 {
     Q_OBJECT
 public:
@@ -48,11 +48,11 @@ public:
 
 public slots:
     void cancel();
-    void setConversions(const QimsysConversionItemList &conversions);
+    void setConversions(const CuteimeConversionItemList &conversions);
     void setCurrentText(const QString &text);
 
 signals:
-    void committed(const QimsysConversionItemList &conversions);
+    void committed(const CuteimeConversionItemList &conversions);
 
 private:
     class Private;

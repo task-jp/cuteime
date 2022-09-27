@@ -1,0 +1,53 @@
+/*!
+    \class CuteimePreedit
+    \brief CuteimePreedit represents preedit data and preedit area
+ */
+
+/*!
+    \property CuteimePreedit::items
+    \brief items contains CuteimePreeditItemList
+
+    \li [read] CuteimePreeditItemList items() const
+    \li [write] void setItems(const CuteimePreeditItemList &items)
+    \li [notify] void itemsChanged(const CuteimePreeditItemList &items)
+ */
+
+/*!
+    \property CuteimePreedit::rect
+    \brief geometry of preedit area
+
+    \li [read] QRect rect() const
+    \li [write] void setRect(const QRect &rect)
+    \li [notify] void rectChanged(const QRect &rect)
+
+    \todo The property name should be "geometry".
+ */
+
+/*!
+    \property CuteimePreedit::font
+    \brief font data of preedit area
+
+    \li [read] QFont font() const
+    \li [write] void setFont(const QFont &font)
+    \li [notify] void fontChanged(const QFont &font)
+ */
+
+/*!
+    \fn CuteimePreedit::CuteimePreedit(QObject *parent = 0, Type type = Client)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimePreedit::~CuteimePreedit()
+    \brief Destructor
+ */
+
+/*!
+    \fn void CuteimePreedit::commit(uint target = 0)
+    \brief commit string
+
+    This method is used to commit string from current preedit items().
+
+    \sa commit(const QString &commitString, uint target)
+ */
+

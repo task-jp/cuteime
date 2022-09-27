@@ -1,6 +1,6 @@
-0x01	Zenkaku Hankaku	Turn on QIMSYS
+0x01	Zenkaku Hankaku	Turn on CUTEIME
 
-0x02	Zenkaku Hankaku	Turn off QIMSYS
+0x02	Zenkaku Hankaku	Turn off CUTEIME
 0x02	F6	Hiragana mode
 0x02	F7	Katakana mode
 0x02	F8	Halfwidth Katakana mode

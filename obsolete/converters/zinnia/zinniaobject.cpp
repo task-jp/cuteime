@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,10 +22,10 @@
 
 #include <QAction>
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsyspreedit.h>
-#include <qimsyscandidates.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimepreedit.h>
+#include <cuteimecandidates.h>
 
 #include "zinniaengine.h"
 #include "zinniawidget.h"
@@ -53,9 +53,9 @@ private:
 
     ZinniaEngine *engine;
     ZinniaWidget *widget;
-    QimsysApplicationManager manager;
-    QimsysPreedit preedit;
-    QimsysCandidates candidates;
+    CuteimeApplicationManager manager;
+    CuteimePreedit preedit;
+    CuteimeCandidates candidates;
 };
 }
 
@@ -67,7 +67,7 @@ ZinniaObject::Private::Private(ZinniaObject *parent)
     , engine(0)
     , widget(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     q->setGroups(QStringList() << QLatin1String("X11"));
     q->setCategoryType(MoreThanOne);
     q->setCategoryName(tr("Input/Language"));
@@ -75,10 +75,10 @@ ZinniaObject::Private::Private(ZinniaObject *parent)
     q->setName(tr("Zinnia"));
     q->setAuthor(tr("Tasuku Suzuki"));
     q->setTranslator(tr("None"));
-    q->setDescription(tr("Zinnia plugin for qimsys"));
+    q->setDescription(tr("Zinnia plugin for cuteime"));
 
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 ZinniaObject::Private::~Private()
@@ -89,7 +89,7 @@ ZinniaObject::Private::~Private()
 void ZinniaObject::Private::init()
 {
     if (widget) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     manager.init();
     connect(&manager, SIGNAL(inputLanguageChanged(QString)), this, SLOT(inputLanguageChanged(QString)));
     connect(&manager, SIGNAL(focusChanged(uint)), this, SLOT(focusChanged(uint)));
@@ -106,50 +106,50 @@ void ZinniaObject::Private::init()
     engine->setSize(widget->size());
     connect(widget, SIGNAL(dataChanged(QList<QPolygon>)), engine, SLOT(setData(QList<QPolygon>)));
     connect(engine, SIGNAL(recognized(QStringList)), this, SLOT(recognized(QStringList)));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaObject::Private::recognized(const QStringList &data)
 {
-    qimsysDebugIn() << data;
-    QimsysConversionItemList items;
+    cuteimeDebugIn() << data;
+    CuteimeConversionItemList items;
     int i = 0;
     foreach (const QString &candidate, data) {
-        QimsysConversionItem item;
+        CuteimeConversionItem item;
         item.index = i++;
         item.to = candidate;
         items.append(item);
     }
     candidates.setCandidates(items);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaObject::Private::currentIndexChanged(int currentIndex)
 {
     if (manager.inputLanguage() != q->identifier()) return;
     if (currentIndex < 0) return;
-    qimsysDebugIn() << currentIndex;
+    cuteimeDebugIn() << currentIndex;
     preedit.commit(manager.widget());
     widget->clear();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaObject::Private::inputLanguageChanged(const QString &inputLanguage)
 {
-    qimsysDebugIn() << inputLanguage;
+    cuteimeDebugIn() << inputLanguage;
     widget->setVisible(inputLanguage == q->identifier() && manager.focus() > 0);
     engine->setSize(widget->size());
     manager.setCurrentIcon(q->icon());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void ZinniaObject::Private::focusChanged(uint focus)
 {
     if (manager.inputLanguage() != q->identifier()) return;
-    qimsysDebugIn() << focus;
+    cuteimeDebugIn() << focus;
     widget->setVisible(manager.inputLanguage() == q->identifier() && focus > 0);
     engine->setSize(widget->size());
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QList<QAction*> ZinniaObject::Private::actions()
@@ -172,7 +172,7 @@ QList<QAction*> ZinniaObject::Private::actions()
 }
 
 ZinniaObject::ZinniaObject(QObject *parent)
-    : QimsysConverter(parent)
+    : CuteimeConverter(parent)
 {
     d = new Private(this);
 }

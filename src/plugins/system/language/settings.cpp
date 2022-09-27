@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,9 +21,9 @@
 #include "settings.h"
 #include "ui_settings.h"
 
-#include <qimsysdebug.h>
-#include <qimsysabstractpluginobject.h>
-#include <qimsysapplicationmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeabstractpluginobject.h>
+#include <cuteimeapplicationmanager.h>
 
 #include <QApplication>
 #include <QDir>
@@ -37,7 +37,7 @@ class Settings::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *plugin, Settings *parent);
+    Private(CuteimeAbstractPluginObject *plugin, Settings *parent);
     ~Private();
 
     void save();
@@ -46,48 +46,48 @@ private:
     Settings *q;
     Ui::Settings ui;
     QMap<QRadioButton*, QString> map;
-    QimsysAbstractPluginObject *plugin;
-    QimsysApplicationManager applicationManager;
+    CuteimeAbstractPluginObject *plugin;
+    CuteimeApplicationManager applicationManager;
 };
 
-Settings::Private::Private(QimsysAbstractPluginObject *p, Settings *parent)
+Settings::Private::Private(CuteimeAbstractPluginObject *p, Settings *parent)
     : QObject(parent)
     , q(parent)
     , plugin(p)
 {
-    qimsysDebugIn() << p << parent;
+    cuteimeDebugIn() << p << parent;
     applicationManager.init();
     ui.setupUi(q);
 
     QString current = applicationManager.displayLanguage();
     QTranslator translator;
 
-#ifdef QIMSYS_APPLICATION_DIR_PATH
-    QDir rootDir(QIMSYS_MACRO_TO_STRING2(QIMSYS_APPLICATION_DIR_PATH));
+#ifdef CUTEIME_APPLICATION_DIR_PATH
+    QDir rootDir(CUTEIME_MACRO_TO_STRING2(CUTEIME_APPLICATION_DIR_PATH));
 #else
     QDir rootDir = QApplication::applicationDirPath();
 #endif
     // up to root dir
-    for (int i = 0; i < QString(QIMSYS_MACRO_TO_STRING(QIMSYS_APP_PATH)).count(QLatin1Char('/')) + 1; i++) {
+    for (int i = 0; i < QString(CUTEIME_MACRO_TO_STRING(CUTEIME_APP_PATH)).count(QLatin1Char('/')) + 1; i++) {
         rootDir.cdUp();
     }
 
-    rootDir.cd(QLatin1String(QIMSYS_MACRO_TO_STRING(QIMSYS_TRANSLATIONS_PATH)));
+    rootDir.cd(QLatin1String(CUTEIME_MACRO_TO_STRING(CUTEIME_TRANSLATIONS_PATH)));
 
-    qimsysDebug() << rootDir;
+    cuteimeDebug() << rootDir;
     foreach(const QString &qm, rootDir.entryList(QStringList("*.qm"), QDir::Files, QDir::Name)) {
-        qimsysDebug() << qm;
+        cuteimeDebug() << qm;
         if (translator.load(qm, rootDir.absolutePath())) {
             QString translation = translator.translate("System::Language::Settings::Private", QT_TR_NOOP("English"));
             QRadioButton *radio = new QRadioButton(translation.isEmpty() ? QLatin1String("English") : translation);
-            map[radio] =  QFileInfo(qm).baseName().mid(QString("qimsys_").length());
+            map[radio] =  QFileInfo(qm).baseName().mid(QString("cuteime_").length());
             ui.languages->addWidget(radio);
             radio->setChecked(map[radio] == current);
             radio->show();
         }
     }
     ui.languages->addStretch();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Settings::Private::~Private()
@@ -96,22 +96,22 @@ Settings::Private::~Private()
 
 void Settings::Private::save()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup("Application");
     foreach(QRadioButton *radio, map.keys()) {
         if (radio->isChecked()) {
-            qimsysDebug() << map[radio];
+            cuteimeDebug() << map[radio];
             applicationManager.setDisplayLanguage(map[radio]);
             settings.setValue("Language", map[radio]);
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-Settings::Settings(QimsysAbstractPluginObject *plugin, QWidget *parent)
-    : QimsysSettingsWidget(parent)
+Settings::Settings(CuteimeAbstractPluginObject *plugin, QWidget *parent)
+    : CuteimeSettingsWidget(parent)
 {
     d = new Private(plugin, this);
 }
@@ -124,7 +124,7 @@ Settings::~Settings()
 void Settings::save()
 {
     d->save();
-    QimsysSettingsWidget::save();
+    CuteimeSettingsWidget::save();
 }
 
 #include "settings.moc"

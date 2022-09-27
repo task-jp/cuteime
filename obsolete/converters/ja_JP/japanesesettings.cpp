@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,7 +22,7 @@
 #include "ui_japanesesettings.h"
 #include "keyactionmanager.h"
 #include "inputmanager.h"
-#include "qimsysdebug.h"
+#include "cuteimedebug.h"
 #include "translator.h"
 
 #include <QSettings>
@@ -33,7 +33,7 @@ class JapaneseSettings::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *plugin, JapaneseSettings *parent);
+    Private(CuteimeAbstractPluginObject *plugin, JapaneseSettings *parent);
     ~Private();
 
     void save();
@@ -48,7 +48,7 @@ private:
     KeyActionDataList list;
 };
 
-JapaneseSettings::Private::Private(QimsysAbstractPluginObject *plugin, JapaneseSettings *parent)
+JapaneseSettings::Private::Private(CuteimeAbstractPluginObject *plugin, JapaneseSettings *parent)
     : QObject(parent)
     , q(parent)
     , actions(KeyActionManager::instance())
@@ -117,8 +117,8 @@ void JapaneseSettings::Private::save()
     KeyActionManager::instance()->setList(list);
 }
 
-JapaneseSettings::JapaneseSettings(QimsysAbstractPluginObject *plugin, QWidget *parent)
-    : QimsysSettingsWidget(parent)
+JapaneseSettings::JapaneseSettings(CuteimeAbstractPluginObject *plugin, QWidget *parent)
+    : CuteimeSettingsWidget(parent)
 {
     d = new Private(plugin, this);
 }
@@ -131,7 +131,7 @@ JapaneseSettings::~JapaneseSettings()
 void JapaneseSettings::save()
 {
     d->save();
-    QimsysSettingsWidget::save();
+    CuteimeSettingsWidget::save();
 }
 
 #include "japanesesettings.moc"

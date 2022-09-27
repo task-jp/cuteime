@@ -1,2 +1,2 @@
-OTHER_FILES += $$PWD/qimsysabstractipcobject.dox $$PWD/main.dox
+OTHER_FILES += $$PWD/cuteimeabstractipcobject.dox $$PWD/main.dox
 

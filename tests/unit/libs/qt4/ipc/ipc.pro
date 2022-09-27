@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
-!contains(QIMSYS_CONFIG, no-dbus) {
-    SUBDIRS = qimsysabstractipcobject qimsysapplicationmanager qimsysinputmethodmanager qimsyspreeditmanager qimsyscandidatemanager qimsyskeyboardmanager
+!contains(CUTEIME_CONFIG, no-dbus) {
+    SUBDIRS = cuteimeabstractipcobject cuteimeapplicationmanager cuteimeinputmethodmanager cuteimepreeditmanager cuteimecandidatemanager cuteimekeyboardmanager
 }

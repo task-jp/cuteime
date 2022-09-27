@@ -1,4 +1,4 @@
-SOURCES += $$PWD/qimsystest.cpp
-HEADERS += $$PWD/qimsystest.h
+SOURCES += $$PWD/cuteimetest.cpp
+HEADERS += $$PWD/cuteimetest.h
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "qbinding.h"
 
-#include "qimsysdebug.h"
+#include "cuteimedebug.h"
 
 #include <QMetaProperty>
 #include <QStateMachine>
@@ -37,12 +37,12 @@ public:
 
 QBinding::QBinding(const QObject *sourceObject, const char *sourcePropertyName, QObject *targetObject, const char *targetPropertyName)
 {
-    qimsysDebugIn() << sourceObject << sourcePropertyName << targetObject << targetPropertyName;
+    cuteimeDebugIn() << sourceObject << sourcePropertyName << targetObject << targetPropertyName;
     d = new Private;
     if (!sourceObject || !sourcePropertyName || !targetObject || !targetPropertyName) {
-        qimsysWarning() << sourceObject << sourcePropertyName << targetObject << targetPropertyName;
+        cuteimeWarning() << sourceObject << sourcePropertyName << targetObject << targetPropertyName;
         deleteLater();
-        qimsysDebugOut();
+        cuteimeDebugOut();
         return;
     }
     d->sourceObject = sourceObject;
@@ -65,17 +65,17 @@ QBinding::QBinding(const QObject *sourceObject, const char *sourcePropertyName, 
     connect(targetObject, SIGNAL(destroyed()), this, SLOT(deleteLater()));
 
     setProperty();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QBinding::QBinding(const QObject *sourceObject, const char *sourcePropertyName, QState *state, QObject *targetObject, const char *targetPropertyName)
 {
-    qimsysDebugIn() << sourceObject << sourcePropertyName << state << targetObject << targetPropertyName;
+    cuteimeDebugIn() << sourceObject << sourcePropertyName << state << targetObject << targetPropertyName;
     d = new Private;
     if (!sourceObject || !sourcePropertyName || !targetObject || !targetPropertyName) {
         qWarning() << sourceObject << sourcePropertyName << targetObject << targetPropertyName;
         deleteLater();
-        qimsysDebugOut();
+        cuteimeDebugOut();
         return;
     }
     d->sourceObject = sourceObject;
@@ -99,19 +99,19 @@ QBinding::QBinding(const QObject *sourceObject, const char *sourcePropertyName, 
     connect(targetObject, SIGNAL(destroyed()), this, SLOT(deleteLater()));
 
     setProperty();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QBinding::~QBinding()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void QBinding::setProperty()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (d->state) {
         d->state->assignProperty(d->targetObject, d->targetPropertyName, d->sourceObject->property(d->sourcePropertyName));
         if (d->state->machine()->configuration().contains(d->state)) {
@@ -120,5 +120,5 @@ void QBinding::setProperty()
     } else {
         d->targetObject->setProperty(d->targetPropertyName, d->sourceObject->property(d->sourcePropertyName));
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }

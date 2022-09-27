@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,10 +23,10 @@
 
 #include "inputmethodcontroller.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
-#include <qimsysapplicationmanager.h>
-#include <qimsysabstractpluginobject.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeabstractpluginobject.h>
 #include <qbinding.h>
 
 #include <QDesktopWidget>
@@ -52,7 +52,7 @@ class Widget::Private : private QObject
 {
     Q_OBJECT
 public:
-    Private(QimsysAbstractPluginObject *object, Widget *parent);
+    Private(CuteimeAbstractPluginObject *object, Widget *parent);
     ~Private();
 
     void setEnter(bool enter);
@@ -80,9 +80,9 @@ private:
     Widget *q;
     Ui::Widget ui;
     QStateMachine *machine;
-    QimsysAbstractPluginObject *plugin;
+    CuteimeAbstractPluginObject *plugin;
 
-    QimsysApplicationManager applicationManager;
+    CuteimeApplicationManager applicationManager;
 
     QBoolSignal *enter;
 public:
@@ -90,7 +90,7 @@ public:
     QSize normalSize;
 };
 
-Widget::Private::Private(QimsysAbstractPluginObject *object, Widget *parent)
+Widget::Private::Private(CuteimeAbstractPluginObject *object, Widget *parent)
     : QObject(parent)
     , q(parent)
     , machine(0)
@@ -136,7 +136,7 @@ void Widget::Private::init()
 
 void Widget::Private::setupStateMachine()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     if (machine) {
         machine->stop();
@@ -190,15 +190,15 @@ void Widget::Private::setupStateMachine()
 
     settings.beginGroup(plugin->metaObject()->className());
     if (settings.value("Always", true).toBool()) {
-        qimsysDebug();
+        cuteimeDebug();
         visibleStates->setInitialState(visibleState);
     } else if (settings.value("Available", true).toBool()) {
-        qimsysDebug();
+        cuteimeDebug();
         visibleStates->setInitialState(invisibleState);
         invisibleState->addTransition(focus, SIGNAL(on()), visibleState);
         visibleState->addTransition(focus, SIGNAL(off()), invisibleState);
     } else if (settings.value("Active", true).toBool()) {
-        qimsysDebug();
+        cuteimeDebug();
         visibleStates->setInitialState(invisibleState);
         invisibleState->addTransition(composing, SIGNAL(on()), visibleState);
         visibleState->addTransition(composing, SIGNAL(off()), invisibleState);
@@ -221,7 +221,7 @@ void Widget::Private::setupStateMachine()
     }
 
     if (settings.value("Inactive", true).toBool()) {
-        qimsysDebug();
+        cuteimeDebug();
         sizeStates->setInitialState(smallState);
         TRANSITION(smallState->addTransition(combination, SIGNAL(on()), normalState));
         TRANSITION(smallState->addTransition(enter, SIGNAL(on()), hoverState));
@@ -233,7 +233,7 @@ void Widget::Private::setupStateMachine()
         TRANSITION(normalState->addTransition(combination, SIGNAL(off()), smallState));
     } else {
         if (settings.value("Unavailable", true).toBool()) {
-            qimsysDebug();
+            cuteimeDebug();
             sizeStates->setInitialState(smallState);
             TRANSITION(smallState->addTransition(focus, SIGNAL(on()), normalState));
             TRANSITION(smallState->addTransition(enter, SIGNAL(on()), hoverState));
@@ -244,7 +244,7 @@ void Widget::Private::setupStateMachine()
             TRANSITION(popupState->addTransition(this, SIGNAL(normalize()), hoverState));
             TRANSITION(normalState->addTransition(focus, SIGNAL(off()), smallState));
         } else {
-            qimsysDebug();
+            cuteimeDebug();
             sizeStates->setInitialState(normalState);
         }
     }
@@ -254,12 +254,12 @@ void Widget::Private::setupStateMachine()
     activeState->addTransition(focus, SIGNAL(off()), inactiveState);
     machine->start();
     positionChanged();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Widget::Private::positionChanged()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QSettings settings;
     settings.beginGroup(q->metaObject()->className());
     settings.setValue("Position", q->pos());
@@ -271,33 +271,33 @@ void Widget::Private::positionChanged()
             if (state->property("smallness").toBool()) {
                 if (q->width() > ui.icon->width()) {
                     if (rect.center().x() < desktop.center().x()) {
-                        qimsysDebug() << q->pos();
+                        cuteimeDebug() << q->pos();
                         state->assignProperty(q, "pos", q->pos());
                     } else {
-                        qimsysDebug() << QPoint(q->x() + ui.widget->width(), q->y());
+                        cuteimeDebug() << QPoint(q->x() + ui.widget->width(), q->y());
                         state->assignProperty(q, "pos", QPoint(q->x() + ui.widget->width(), q->y()));
                     }
                 } else {
-                    qimsysDebug() << q->pos();
+                    cuteimeDebug() << q->pos();
                     state->assignProperty(q, "pos", q->pos());
                 }
             } else {
                 if (q->width() > ui.icon->width()) {
-                    qimsysDebug() << q->pos();
+                    cuteimeDebug() << q->pos();
                     state->assignProperty(q, "pos", q->pos());
                 } else {
                     if (rect.center().x() < desktop.center().x()) {
-                        qimsysDebug() << q->pos();
+                        cuteimeDebug() << q->pos();
                         state->assignProperty(q, "pos", q->pos());
                     } else {
-                        qimsysDebug() << QPoint(q->x() - ui.widget->width(), q->y());
+                        cuteimeDebug() << QPoint(q->x() - ui.widget->width(), q->y());
                         state->assignProperty(q, "pos", QPoint(q->x() - ui.widget->width(), q->y()));
                     }
                 }
             }
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Widget::Private::aboutToHide()
@@ -329,11 +329,11 @@ void Widget::Private::settingsUpdated()
 
 void Widget::Private::setupUi()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     InputMethodController *controller = new InputMethodController(this);
 
     foreach (QAction *parentAction, controller->actions()) {
-        qimsysDebug() << parentAction->text();
+        cuteimeDebug() << parentAction->text();
         if (parentAction->text() == QLatin1String("-")) {
             QFrame *separator = new QFrame;
             separator->setFrameShape(QFrame::VLine);
@@ -367,10 +367,10 @@ void Widget::Private::setupUi()
     }
     ui.widget->resize(ui.widget->sizeHint());
     metaObject()->invokeMethod(this, "positionChanged", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-Widget::Widget(QimsysAbstractPluginObject *plugin, QWidget *parent)
+Widget::Widget(CuteimeAbstractPluginObject *plugin, QWidget *parent)
     : QFrame(parent)
 {
     d = new Private(plugin, this);

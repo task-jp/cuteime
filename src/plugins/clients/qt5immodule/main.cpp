@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,13 +20,13 @@
 
 #include <qpa/qplatforminputcontextplugin_p.h>
 #include <QtCore/QStringList>
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include "inputcontext.h"
 
 class InputContextPlugin : public QPlatformInputContextPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID QPlatformInputContextFactoryInterface_iid FILE "qimsys.json")
+    Q_PLUGIN_METADATA(IID QPlatformInputContextFactoryInterface_iid FILE "cuteime.json")
 
 public:
     QPlatformInputContext *create(const QString&, const QStringList&);
@@ -34,16 +34,16 @@ public:
 
 QPlatformInputContext *InputContextPlugin::create(const QString& system, const QStringList& paramList)
 {
-    if (!qgetenv("QIMSYS_DEBUG").isEmpty()) {
-        qimsysDebugOn();
+    if (!qgetenv("CUTEIME_DEBUG").isEmpty()) {
+        cuteimeDebugOn();
     }
-    qimsysDebugIn() << system << paramList;
+    cuteimeDebugIn() << system << paramList;
     Q_UNUSED(paramList);
     QPlatformInputContext *ret  = 0;
 
-    if (system.compare(system, QStringLiteral("qimsys"), Qt::CaseInsensitive) == 0)
+    if (system.compare(system, QStringLiteral("cuteime"), Qt::CaseInsensitive) == 0)
         ret = new InputContext;
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 

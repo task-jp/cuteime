@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = im-qimsys-gtk
+TARGET = im-cuteime-gtk
 
 isEmpty(GTK2_IM_MODULE_DIR) {
     target.path = $$system(pkg-config --variable=libdir gtk+-2.0)/gtk-2.0/$$system(pkg-config --variable=gtk_binary_version gtk+-2.0)/immodules/
@@ -11,24 +11,24 @@ CONFIG += gtk
 CONFIG -= qt
 QT -= core gui
 
-include(../../../../../qimsysplugin.pri)
+include(../../../../../cuteimeplugin.pri)
 
 CONFIG += link_pkgconfig
 PKGCONFIG += gtk+-2.0
 
 HEADERS = \
-    ../qimsysimcontext.h \
+    ../cuteimeimcontext.h \
     ../gtk2qt.h
 SOURCES = \
-    im-qimsys.c \
-    qimsysimcontext.c
+    im-cuteime.c \
+    cuteimeimcontext.c
 
-DESTDIR = $$QIMSYS_BUILD_TREE/$$QIMSYS_LIBRARY_PATH/plugins/inputmethods/gtk2immodules
+DESTDIR = $$CUTEIME_BUILD_TREE/$$CUTEIME_LIBRARY_PATH/plugins/inputmethods/gtk2immodules
 
 update_local_gtk_immodules.path = $$DESTDIR
 update_local_gtk_immodules.depends = all
 update_local_gtk_immodules.files = gtk.immodules
-update_local_gtk_immodules.commands = (cd $$DESTDIR && LD_LIBRARY_PATH=../../ gtk-query-immodules-2.0 libim-qimsys.so > gtk.immodules)
+update_local_gtk_immodules.commands = (cd $$DESTDIR && LD_LIBRARY_PATH=../../ gtk-query-immodules-2.0 libim-cuteime.so > gtk.immodules)
 
 QMAKE_EXTRA_TARGETS += update_local_gtk_immodules
 

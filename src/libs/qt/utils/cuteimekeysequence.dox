@@ -1,0 +1,41 @@
+/*!
+    \class CuteimeKeySequence
+    \brief CuteimeKeySequence is yet another QKeySequence
+
+    Until Qt 4.7 QKeySequence doesn't handle Japanese/Korean keyboard specific
+    keys like Zenkaku_Hankaku. CuteimeKeySequence covers such keys if they are not
+    handled in QKeySequence.
+
+    \sa http://qt.gitorious.org/qt/qt/commit/b19899f81cb7ac3b35e5fad3af777e89f1627474
+    \sa QKeySequence
+ */
+
+/*!
+    \fn CuteimeKeySequence::CuteimeKeySequence()
+    \brief Default constructor
+ */
+
+/*!
+    \fn CuteimeKeySequence::CuteimeKeySequence(const CuteimeKeySequence &other)
+    \brief copy constructor
+ */
+
+/*!
+    \fn CuteimeKeySequence::CuteimeKeySequence(const QString &key)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeKeySequence::CuteimeKeySequence(int k1)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeKeySequence::~CuteimeKeySequence()
+    \brief Destructor
+ */
+
+/*!
+    \fn QString CuteimeKeySequence::toString() const
+    \brief string value
+ */

@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
 HEADERS += object.h \
     plugin.h
@@ -6,7 +6,7 @@ HEADERS += object.h \
 SOURCES += object.cpp \
     plugin.cpp
 
-!contains(QIMSYS_CONFIG, no-gui) {
+!contains(CUTEIME_CONFIG, no-gui) {
     QT += widgets
     HEADERS += settings.h
     SOURCES += settings.cpp

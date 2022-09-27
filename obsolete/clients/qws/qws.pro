@@ -1,8 +1,8 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
-SOURCES += qimsysclient_qws.cpp \
-    qimsysclientobject_qws.cpp \
-    qimsysclientplugin_qws.cpp
-HEADERS += qimsysclient_qws.h \
-    qimsysclientobject_qws.h \
-    qimsysclientplugin_qws.h
+SOURCES += cuteimeclient_qws.cpp \
+    cuteimeclientobject_qws.cpp \
+    cuteimeclientplugin_qws.cpp
+HEADERS += cuteimeclient_qws.h \
+    cuteimeclientobject_qws.h \
+    cuteimeclientplugin_qws.h

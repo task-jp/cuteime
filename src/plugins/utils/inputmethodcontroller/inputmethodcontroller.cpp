@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,14 +20,14 @@
 
 #include "inputmethodcontroller.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspluginmanager.h>
-#include <qimsysinputmethod.h>
-#include <qimsysconverter.h>
-#include <qimsysinterpreter.h>
-#include <qimsysengine.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepluginmanager.h>
+#include <cuteimeinputmethod.h>
+#include <cuteimeconverter.h>
+#include <cuteimeinterpreter.h>
+#include <cuteimeengine.h>
 
 #include <qbinding.h>
 
@@ -57,8 +57,8 @@ private slots:
 private:
     InputMethodController *q;
 
-    QimsysApplicationManager *applicationManager;
-    QimsysInputMethodManager *inputMethodManager;
+    CuteimeApplicationManager *applicationManager;
+    CuteimeInputMethodManager *inputMethodManager;
 
     QAction *inputMethodAction;
     QAction *converterAction;
@@ -74,13 +74,13 @@ InputMethodController::Private::Private(InputMethodController *parent)
     : QObject(parent)
     , q(parent)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
-    applicationManager = new QimsysApplicationManager(this);
+    applicationManager = new CuteimeApplicationManager(this);
     applicationManager->init();
     connect(applicationManager, SIGNAL(composingChanged(bool)), this, SLOT(composingChanged(bool)));
 
-    inputMethodManager = new QimsysInputMethodManager(this);
+    inputMethodManager = new CuteimeInputMethodManager(this);
     inputMethodManager->init();
     connect(inputMethodManager, SIGNAL(identifierChanged(QString)), this, SLOT(inputMethodChanged(QString)));
     connect(inputMethodManager, SIGNAL(converterChanged(QString)), this, SLOT(converterChanged(QString)));
@@ -95,8 +95,8 @@ InputMethodController::Private::Private(InputMethodController *parent)
         inputMethodAction = new QAction(tr("Input Method"), this);
         QActionGroup *group = new QActionGroup(this);
 
-        QList<QimsysInputMethod *> inputMethods = QimsysPluginManager::objects<QimsysInputMethod>();
-        foreach(QimsysInputMethod *inputMethod, inputMethods) {
+        QList<CuteimeInputMethod *> inputMethods = CuteimePluginManager::objects<CuteimeInputMethod>();
+        foreach(CuteimeInputMethod *inputMethod, inputMethods) {
             QAction *action = new QAction(inputMethodAction);
             new QBinding(inputMethod, "icon", action, "icon");
             new QBinding(inputMethod, "name", action, "text");
@@ -123,8 +123,8 @@ InputMethodController::Private::Private(InputMethodController *parent)
 
         new QAction(QLatin1String("-"), converterAction);
 
-        QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
-        foreach(QimsysConverter *converter, converters) {
+        QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
+        foreach(CuteimeConverter *converter, converters) {
             QAction *action = new QAction(converterAction);
             new QBinding(converter, "icon", action, "icon");
             new QBinding(converter, "name", action, "text");
@@ -141,8 +141,8 @@ InputMethodController::Private::Private(InputMethodController *parent)
         interpreterAction = new QAction(tr("Input Style"), this);
         QActionGroup *group = new QActionGroup(this);
 
-        QList<QimsysInterpreter *> interpreters = QimsysPluginManager::objects<QimsysInterpreter>();
-        foreach(QimsysInterpreter *interpreter, interpreters) {
+        QList<CuteimeInterpreter *> interpreters = CuteimePluginManager::objects<CuteimeInterpreter>();
+        foreach(CuteimeInterpreter *interpreter, interpreters) {
             QAction *action = new QAction(interpreterAction);
             new QBinding(interpreter, "icon", action, "icon");
             new QBinding(interpreter, "name", action, "text");
@@ -159,8 +159,8 @@ InputMethodController::Private::Private(InputMethodController *parent)
         engineAction = new QAction(tr("Conversion Engine"), this);
         QActionGroup *group = new QActionGroup(this);
 
-        QList<QimsysEngine *> engines = QimsysPluginManager::objects<QimsysEngine>();
-        foreach(QimsysEngine *engine, engines) {
+        QList<CuteimeEngine *> engines = CuteimePluginManager::objects<CuteimeEngine>();
+        foreach(CuteimeEngine *engine, engines) {
             QAction *action = new QAction(engineAction);
             new QBinding(engine, "icon", action, "icon");
             new QBinding(engine, "name", action, "text");
@@ -176,7 +176,7 @@ InputMethodController::Private::Private(InputMethodController *parent)
     {
         userDictionaryAction = new QAction(QIcon(":/icons/dictionary.png"), tr("User Dictionary..."), this);
         connect(userDictionaryAction, SIGNAL(triggered()), exec, SLOT(map()));
-        exec->setMapping(userDictionaryAction, QimsysApplicationManager::ShowDictionary);
+        exec->setMapping(userDictionaryAction, CuteimeApplicationManager::ShowDictionary);
         actions.append(userDictionaryAction);
     }
 
@@ -186,18 +186,18 @@ InputMethodController::Private::Private(InputMethodController *parent)
     {
         QAction *action = new QAction(QIcon(":/icons/configure.png"), tr("Settings..."), this);
         connect(action, SIGNAL(triggered()), exec, SLOT(map()));
-        exec->setMapping(action, QimsysApplicationManager::ShowSettings);
+        exec->setMapping(action, CuteimeApplicationManager::ShowSettings);
         actions.append(action);
     }
 
     actions.append(new QAction(QLatin1String("-"), this));
 
-    // about qimsys
+    // about cuteime
     {
-        QAction *aboutQimsys = new QAction(qApp->windowIcon(), tr("About qimsys..."), this);
-        connect(aboutQimsys, SIGNAL(triggered()), exec, SLOT(map()));
-        exec->setMapping(aboutQimsys, QimsysApplicationManager::ShowAboutQimsys);
-        actions.append(aboutQimsys);
+        QAction *aboutCuteime = new QAction(qApp->windowIcon(), tr("About cuteime..."), this);
+        connect(aboutCuteime, SIGNAL(triggered()), exec, SLOT(map()));
+        exec->setMapping(aboutCuteime, CuteimeApplicationManager::ShowAboutCuteime);
+        actions.append(aboutCuteime);
     }
 
     inputMethodChanged(inputMethodManager->identifier());
@@ -205,13 +205,13 @@ InputMethodController::Private::Private(InputMethodController *parent)
     interpreterChanged(inputMethodManager->interpreter());
     engineChanged(inputMethodManager->engine());
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputMethodController::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void InputMethodController::Private::composingChanged(bool composing)
@@ -227,12 +227,12 @@ void InputMethodController::Private::composingChanged(bool composing)
 
 void InputMethodController::Private::exec(int action)
 {
-    applicationManager->exec((QimsysApplicationManager::ActionType)action);
+    applicationManager->exec((CuteimeApplicationManager::ActionType)action);
 }
 
 void InputMethodController::Private::inputMethodChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     foreach (QAction *action, inputMethodAction->findChildren<QAction*>()) {
         if (action->data().toString() == identifier) {
             action->setChecked(true);
@@ -240,7 +240,7 @@ void InputMethodController::Private::inputMethodChanged(const QString &identifie
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethodController::Private::setInputMethod(QAction* action)
@@ -250,7 +250,7 @@ void InputMethodController::Private::setInputMethod(QAction* action)
 
 void InputMethodController::Private::converterChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     foreach (QAction *action, converterAction->findChildren<QAction*>()) {
         if (action->data().toString() == identifier) {
             action->setChecked(true);
@@ -258,7 +258,7 @@ void InputMethodController::Private::converterChanged(const QString &identifier)
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethodController::Private::setConverter(QAction* action)
@@ -273,7 +273,7 @@ void InputMethodController::Private::setConverter(QAction* action)
 
 void InputMethodController::Private::interpreterChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     foreach (QAction *action, interpreterAction->findChildren<QAction*>()) {
         if (action->data().toString() == identifier) {
             action->setChecked(true);
@@ -281,7 +281,7 @@ void InputMethodController::Private::interpreterChanged(const QString &identifie
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethodController::Private::setInterpreter(QAction* action)
@@ -291,7 +291,7 @@ void InputMethodController::Private::setInterpreter(QAction* action)
 
 void InputMethodController::Private::engineChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
+    cuteimeDebugIn() << identifier;
     foreach (QAction *action, engineAction->findChildren<QAction*>()) {
         if (action->data().toString() == identifier) {
             action->setChecked(true);
@@ -300,7 +300,7 @@ void InputMethodController::Private::engineChanged(const QString &identifier)
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethodController::Private::setEngine(QAction* action)
@@ -311,9 +311,9 @@ void InputMethodController::Private::setEngine(QAction* action)
 InputMethodController::InputMethodController(QObject *parent)
     : QObject(parent)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QList<QAction*> InputMethodController::actions() const

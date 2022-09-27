@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,20 +22,20 @@
 #include "global.h"
 #include "keyactions.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyscandidatemanager.h>
-#include <qimsyspluginmanager.h>
-#include <qimsysconverter.h>
-#include <qimsysinterpreter.h>
-#include <qimsysengine.h>
-#include <qimsysdynamictranslator.h>
-#include <qimsyskeysequence.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimecandidatemanager.h>
+#include <cuteimepluginmanager.h>
+#include <cuteimeconverter.h>
+#include <cuteimeinterpreter.h>
+#include <cuteimeengine.h>
+#include <cuteimedynamictranslator.h>
+#include <cuteimekeysequence.h>
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
 #include <QPainter>
 #include <QPixmap>
 #include <QTimer>
@@ -65,7 +65,7 @@ private slots:
 
     void currentIndexChanged(int currentIndex);
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     void resetIcon();
 private:
     void updateIcon(const QIcon &overlay);
@@ -74,14 +74,14 @@ private:
 private:
     InputMethod *q;
 
-    QimsysApplicationManager *applicationManager;
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysKeyManager *keyManager;
-    QimsysPreeditManager *preeditManager;
-    QimsysCandidateManager *candidateManager;
+    CuteimeApplicationManager *applicationManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimeKeyManager *keyManager;
+    CuteimePreeditManager *preeditManager;
+    CuteimeCandidateManager *candidateManager;
     KeyActions *keyActions;
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     QTimer resetIconTimer;
 #endif
 
@@ -104,15 +104,15 @@ InputMethod::Private::Private(InputMethod *parent)
     , keyActions(0)
     , acceptedKeyCount(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     init();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputMethod::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::init()
@@ -122,7 +122,7 @@ void InputMethod::Private::init()
 
     q->setLocale("ja_JP");
     q->setLanguage("Japanese");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/japanese/standard/resources/japanese.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Japanese(Standard)"), q, "name");
@@ -136,7 +136,7 @@ void InputMethod::Private::init()
 
     connect(q, SIGNAL(activeChanged(bool)), this, SLOT(activeChanged(bool)));
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     resetIconTimer.setInterval(2000);
     resetIconTimer.setSingleShot(true);
     connect(&resetIconTimer, SIGNAL(timeout()), this, SLOT(resetIcon()));
@@ -145,15 +145,15 @@ void InputMethod::Private::init()
 
 void InputMethod::Private::activeChanged(bool active)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (active) {
         if (!applicationManager) {
-            applicationManager = new QimsysApplicationManager(this);
+            applicationManager = new CuteimeApplicationManager(this);
             applicationManager->init();
         }
 
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             inputMethodManager->setState(Direct);
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)), Qt::QueuedConnection);
@@ -161,24 +161,24 @@ void InputMethod::Private::activeChanged(bool active)
             connect(inputMethodManager, SIGNAL(interpreterChanged(QString)), this, SLOT(interpreterChanged(QString)), Qt::QueuedConnection);
             connect(inputMethodManager, SIGNAL(engineChanged(QString)), this, SLOT(engineChanged(QString)), Qt::QueuedConnection);
         }
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
         QMetaObject::invokeMethod(this, "resetIcon", Qt::QueuedConnection);
 #endif
 
         if (!keyManager) {
-            keyManager = new QimsysKeyManager(this);
+            keyManager = new CuteimeKeyManager(this);
             keyManager->init();
             connect(keyManager, SIGNAL(keyPressed(QString,int,int,bool)), this, SLOT(keyPressed(QString,int,int,bool)));
             connect(keyManager, SIGNAL(keyReleased(QString,int,int,bool)), this, SLOT(keyReleased(QString,int,int,bool)));
         }
 
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
         }
 
         if (!candidateManager) {
-            candidateManager = new QimsysCandidateManager(this);
+            candidateManager = new CuteimeCandidateManager(this);
             candidateManager->init();
             connect(candidateManager, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged(int)));
         }
@@ -224,13 +224,13 @@ void InputMethod::Private::activeChanged(bool active)
             keyActions = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
-#ifndef QIMSYS_NO_GUI
+    cuteimeDebugIn() << state;
+#ifndef CUTEIME_NO_GUI
     resetIcon();
 #endif
     switch (state) {
@@ -240,78 +240,78 @@ void InputMethod::Private::stateChanged(uint state)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::converterChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
-    QList<QimsysConverter *> converters = QimsysPluginManager::objects<QimsysConverter>();
-    foreach(QimsysConverter *converter, converters) {
+    cuteimeDebugIn() << identifier;
+    QList<CuteimeConverter *> converters = CuteimePluginManager::objects<CuteimeConverter>();
+    foreach(CuteimeConverter *converter, converters) {
         if (converter->identifier() == identifier) {
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
             updateIcon(converter->icon());
 #endif
             break;
         }
     }
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     if (resetIconTimer.isActive()) {
         resetIconTimer.stop();
     }
     resetIconTimer.start();
 #endif
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::interpreterChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
-    QList<QimsysInterpreter *> interpreters = QimsysPluginManager::objects<QimsysInterpreter>();
-    foreach(QimsysInterpreter *interpreter, interpreters) {
+    cuteimeDebugIn() << identifier;
+    QList<CuteimeInterpreter *> interpreters = CuteimePluginManager::objects<CuteimeInterpreter>();
+    foreach(CuteimeInterpreter *interpreter, interpreters) {
         if (interpreter->identifier() == identifier) {
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
             updateIcon(interpreter->icon());
 #endif
             break;
         }
     }
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     if (resetIconTimer.isActive()) {
         resetIconTimer.stop();
     }
     resetIconTimer.start();
 #endif
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::engineChanged(const QString &identifier)
 {
-    qimsysDebugIn() << identifier;
-    QList<QimsysEngine *> engines = QimsysPluginManager::objects<QimsysEngine>();
-    foreach(QimsysEngine *engine, engines) {
+    cuteimeDebugIn() << identifier;
+    QList<CuteimeEngine *> engines = CuteimePluginManager::objects<CuteimeEngine>();
+    foreach(CuteimeEngine *engine, engines) {
         if (engine->identifier() == identifier) {
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
             updateIcon(engine->icon());
 #endif
             break;
         }
     }
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     if (resetIconTimer.isActive()) {
         resetIconTimer.stop();
     }
     resetIconTimer.start();
 #endif
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
 void InputMethod::Private::updateIcon(const QIcon &overlay)
 {
     static qint64 cache = 0;
     if (cache == overlay.cacheKey()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     cache = overlay.cacheKey();
 
     QIcon::Mode mode = applicationManager->composing() ? QIcon::Active : QIcon::Disabled;
@@ -328,13 +328,13 @@ void InputMethod::Private::updateIcon(const QIcon &overlay)
     }
 
     applicationManager->setCurrentIcon(icon);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::resetIcon()
 {
-    qimsysDebugIn();
-    static QHash<QString, QimsysConverter *> converters;
+    cuteimeDebugIn();
+    static QHash<QString, CuteimeConverter *> converters;
     if (inputMethodManager) {
         switch (inputMethodManager->state()) {
         case Direct:
@@ -342,7 +342,7 @@ void InputMethod::Private::resetIcon()
             break;
         default:
             if (converters.isEmpty()) {
-                foreach(QimsysConverter *converter, QimsysPluginManager::objects<QimsysConverter>()) {
+                foreach(CuteimeConverter *converter, CuteimePluginManager::objects<CuteimeConverter>()) {
                     converters[converter->identifier()] = converter;
                 }
             }
@@ -353,15 +353,15 @@ void InputMethod::Private::resetIcon()
             break;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
-#endif // QIMSYS_NO_GUI
+#endif // CUTEIME_NO_GUI
 
 void InputMethod::Private::keyPressed(const QString &text, int keycode, int modifiers, bool autoRepeat)
 {
     if (keyManager->isAccepted()) return;
 
-    qimsysDebugIn() << text << keycode << modifiers << autoRepeat;
+    cuteimeDebugIn() << text << keycode << modifiers << autoRepeat;
 
     int key = keycode;
     acceptedKeyCount = 1;
@@ -378,7 +378,7 @@ void InputMethod::Private::keyPressed(const QString &text, int keycode, int modi
         acceptedKeyCount++;
     }
 
-    QimsysKeySequence seq(key);
+    CuteimeKeySequence seq(key);
     if (keyActions->contains(seq)) {
         keyActions->trigger(seq);
         keyManager->accept();
@@ -399,7 +399,7 @@ void InputMethod::Private::keyPressed(const QString &text, int keycode, int modi
         } else {
             ch = text.at(0);
         }
-        qimsysDebug() << ch << text << key << Qt::SHIFT;
+        cuteimeDebug() << ch << text << key << Qt::SHIFT;
         if (!ch.isNull()) {
             uint state = inputMethodManager->state();
             if (ch.isPrint()) {
@@ -436,29 +436,29 @@ void InputMethod::Private::keyPressed(const QString &text, int keycode, int modi
     if (!keyManager->isAccepted()) {
         acceptedKeyCount = 0;
     }
-    qimsysDebugOut() << keyManager->isAccepted();
+    cuteimeDebugOut() << keyManager->isAccepted();
 }
 
 void InputMethod::Private::keyReleased(const QString &text, int keycode, int modifiers, bool autoRepeat)
 {
     if (keyManager->isAccepted()) return;
 
-//    qimsysDebugOn();
-    qimsysDebugIn() << text << keycode << modifiers << autoRepeat;
+//    cuteimeDebugOn();
+    cuteimeDebugIn() << text << keycode << modifiers << autoRepeat;
 
     if (acceptedKeyCount > 0) {
         keyManager->accept();
         acceptedKeyCount--;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputMethod::Private::currentIndexChanged(int currentIndex)
 {
     if (currentIndex == -1) return;
-    qimsysDebugIn() << currentIndex;
+    cuteimeDebugIn() << currentIndex;
 
-    QimsysPreeditItem item = preeditManager->item();
+    CuteimePreeditItem item = preeditManager->item();
     int cursor = item.cursor;
     int index = 0;
     int pos = 0;
@@ -469,15 +469,15 @@ void InputMethod::Private::currentIndexChanged(int currentIndex)
         }
         pos += item.to.at(i).length();
     }
-    qimsysDebug() << index;
+    cuteimeDebug() << index;
 
-    qimsysDebug() << candidateManager;
-    qimsysDebug() << candidateManager->items();
+    cuteimeDebug() << candidateManager;
+    cuteimeDebug() << candidateManager->items();
 
     QString t = candidateManager->items().at(currentIndex).to;
     QString f = candidateManager->items().at(currentIndex).from;
 
-    qimsysDebug() << item.to;
+    cuteimeDebug() << item.to;
 
     if (item.to.isEmpty()) {
         item.to.append(t);
@@ -492,22 +492,22 @@ void InputMethod::Private::currentIndexChanged(int currentIndex)
     preeditManager->setItem(item);
     preeditManager->blockSignals(false);
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputMethod::InputMethod(QObject *parent)
-    : QimsysInputMethod(parent)
+    : CuteimeInputMethod(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputMethod::~InputMethod()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "inputmethod.moc"

@@ -1,5 +1,5 @@
 TARGET = tst_japanese_standard
-include(../../../../../qimsystest.pri)
+include(../../../../../cuteimetest.pri)
 
 QT += gui-private widgets
 

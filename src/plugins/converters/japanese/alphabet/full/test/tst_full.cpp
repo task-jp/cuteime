@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,17 +20,17 @@
 
 #include <QtTest>
 
-#include <qimsysdebug.h>
-#include <qimsystest.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimetest.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
 
 namespace Japanese {
     namespace Alphabet {
         namespace Full {
 
-class Test : public QimsysTest
+class Test : public CuteimeTest
 {
     Q_OBJECT
 public slots:
@@ -45,9 +45,9 @@ private slots:
     void test();
 
 private:
-    QimsysApplicationManager applicationManadatager;
-    QimsysInputMethodManager inputMethodManager;
-    QimsysPreeditManager preeditManager;
+    CuteimeApplicationManager applicationManadatager;
+    CuteimeInputMethodManager inputMethodManager;
+    CuteimePreeditManager preeditManager;
 };
 
         }
@@ -58,7 +58,7 @@ using namespace Japanese::Alphabet::Full;
 
 void Test::initTestCase()
 {
-    QimsysTest::initTestCase();
+    CuteimeTest::initTestCase();
 
     applicationManadatager.init();
     inputMethodManager.init();
@@ -69,7 +69,7 @@ void Test::initTestCase()
 
 void Test::cleanup()
 {
-    preeditManager.setItem(QimsysPreeditItem());
+    preeditManager.setItem(CuteimePreeditItem());
 }
 
 void Test::test_data()

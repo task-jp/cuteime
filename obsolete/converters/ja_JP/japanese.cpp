@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,21 +20,21 @@
 
 #include "japanese.h"
 #include "converter.h"
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include <QtPlugin>
 
 JapanesePlugin::JapanesePlugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
-QimsysAbstractPluginObject *JapanesePlugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *JapanesePlugin::createObject(QObject *parent)
 {
-    qimsysDebugIn() << parent;
-    QimsysAbstractPluginObject *ret = new ja_JP::Converter(parent);
-    qimsysDebugOut() << ret;
+    cuteimeDebugIn() << parent;
+    CuteimeAbstractPluginObject *ret = new ja_JP::Converter(parent);
+    cuteimeDebugOut() << ret;
     return ret;
 }
 

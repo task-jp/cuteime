@@ -1,5 +1,5 @@
-IPC_HEADERS +=  $$PWD/qimsysmarshalers.h $$PWD/qimsysabstractipcobject.h $$PWD/qimsysapplicationmanager.h $$PWD/qimsysinputmethodmanager.h $$PWD/qimsyskeymanager.h $$PWD/qimsyspreeditmanager.h $$PWD/qimsyspreedititem.h $$PWD/qimsyskeyboardmanager.h
-IPC_SOURCES += $$PWD/qimsysmarshalers.c $$PWD/qimsysabstractipcobject.c $$PWD/qimsysapplicationmanager.c $$PWD/qimsysinputmethodmanager.c $$PWD/qimsyskeymanager.c $$PWD/qimsyspreeditmanager.c $$PWD/qimsyspreedititem.c $$PWD/qimsyskeyboardmanager.c
+IPC_HEADERS +=  $$PWD/cuteimemarshalers.h $$PWD/cuteimeabstractipcobject.h $$PWD/cuteimeapplicationmanager.h $$PWD/cuteimeinputmethodmanager.h $$PWD/cuteimekeymanager.h $$PWD/cuteimepreeditmanager.h $$PWD/cuteimepreedititem.h $$PWD/cuteimekeyboardmanager.h
+IPC_SOURCES += $$PWD/cuteimemarshalers.c $$PWD/cuteimeabstractipcobject.c $$PWD/cuteimeapplicationmanager.c $$PWD/cuteimeinputmethodmanager.c $$PWD/cuteimekeymanager.c $$PWD/cuteimepreeditmanager.c $$PWD/cuteimepreedititem.c $$PWD/cuteimekeyboardmanager.c
 
 CONFIG += link_pkgconfig
 PKGCONFIG += dbus-glib-1 gdk-pixbuf-2.0
@@ -9,35 +9,35 @@ INCLUDEPATH += $$PWD
 HEADERS *= $$IPC_HEADERS $$PWD/dbus.h
 SOURCES *= $$IPC_SOURCES
 
-contains(QIMSYS_CONFIG, sdk) {
+contains(CUTEIME_CONFIG, sdk) {
     ipc_headers.files = $$IPC_HEADERS
-    ipc_headers.path = $$PREFIX/include/qimsys/gtk
+    ipc_headers.path = $$PREFIX/include/cuteime/gtk
     INSTALLS += ipc_headers
 }
 
 OTHER_FILES += \
-    ipc/qimsysmarshaler.list
+    ipc/cuteimemarshaler.list
 
-qimsysmarshalers_list.target = $$PWD/qimsysmarshalers.list
-QMAKE_EXTRA_TARGETS += qimsysmarshalers_list
+cuteimemarshalers_list.target = $$PWD/cuteimemarshalers.list
+QMAKE_EXTRA_TARGETS += cuteimemarshalers_list
 
-qimsysmarshalers_h.target = $$PWD/qimsysmarshalers.h
-qimsysmarshalers_h.path = $$PWD/qimsysmarshalers.h
-qimsysmarshalers_h.depends = $$PWD/qimsysmarshalers.list
-qimsysmarshalers_h.commands = \
-    glib-genmarshal --prefix=qimsys_marshal $$PWD/qimsysmarshaler.list --header | grep -v -e \"^/\\*.*\\*/\" > qimsysmarshalers.h.tmp \
-    && (cmp -s $$PWD/qimsysmarshalers.h qimsysmarshalers.h.tmp || cp qimsysmarshalers.h.tmp $$PWD/qimsysmarshalers.h);\
-    rm qimsysmarshalers.h.tmp
+cuteimemarshalers_h.target = $$PWD/cuteimemarshalers.h
+cuteimemarshalers_h.path = $$PWD/cuteimemarshalers.h
+cuteimemarshalers_h.depends = $$PWD/cuteimemarshalers.list
+cuteimemarshalers_h.commands = \
+    glib-genmarshal --prefix=cuteime_marshal $$PWD/cuteimemarshaler.list --header | grep -v -e \"^/\\*.*\\*/\" > cuteimemarshalers.h.tmp \
+    && (cmp -s $$PWD/cuteimemarshalers.h cuteimemarshalers.h.tmp || cp cuteimemarshalers.h.tmp $$PWD/cuteimemarshalers.h);\
+    rm cuteimemarshalers.h.tmp
 
-QMAKE_EXTRA_TARGETS += qimsysmarshalers_h
+QMAKE_EXTRA_TARGETS += cuteimemarshalers_h
 
-qimsysmarshalers_c.target = $$PWD/qimsysmarshalers.c
-qimsysmarshalers_c.path = $$PWD/qimsysmarshalers.c
-qimsysmarshalers_c.depends = $$PWD/qimsysmarshalers.list $$PWD/qimsysmarshalers.h
-qimsysmarshalers_c.commands = \
-    glib-genmarshal --prefix=qimsys_marshal $$PWD/qimsysmarshaler.list --body | grep -v -e \"^/\\*.*\\*/\" > qimsysmarshalers.c.tmp \
-    && (cmp -s $$PWD/qimsysmarshalers.c qimsysmarshalers.c.tmp || cp qimsysmarshalers.c.tmp $$PWD/qimsysmarshalers.c);\
-    rm qimsysmarshalers.c.tmp
+cuteimemarshalers_c.target = $$PWD/cuteimemarshalers.c
+cuteimemarshalers_c.path = $$PWD/cuteimemarshalers.c
+cuteimemarshalers_c.depends = $$PWD/cuteimemarshalers.list $$PWD/cuteimemarshalers.h
+cuteimemarshalers_c.commands = \
+    glib-genmarshal --prefix=cuteime_marshal $$PWD/cuteimemarshaler.list --body | grep -v -e \"^/\\*.*\\*/\" > cuteimemarshalers.c.tmp \
+    && (cmp -s $$PWD/cuteimemarshalers.c cuteimemarshalers.c.tmp || cp cuteimemarshalers.c.tmp $$PWD/cuteimemarshalers.c);\
+    rm cuteimemarshalers.c.tmp
 
-QMAKE_EXTRA_TARGETS += qimsysmarshalers_c
+QMAKE_EXTRA_TARGETS += cuteimemarshalers_c
 

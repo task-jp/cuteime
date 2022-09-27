@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,9 +22,9 @@
 #define QMOTION_H
 
 #include <QObject>
-#include "qimsysglobal.h"
+#include "cuteimeglobal.h"
 
-class QIMSYS_EXPORT QMotion : public QObject
+class CUTEIME_EXPORT QMotion : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int value READ value WRITE setValue NOTIFY valueChanged)

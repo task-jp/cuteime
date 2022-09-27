@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,7 +22,7 @@
 #include "ui_keyactionedit.h"
 #include "keyactionmanager.h"
 #include "translator.h"
-#include "qimsysdebug.h"
+#include "cuteimedebug.h"
 
 using namespace ja_JP;
 
@@ -40,7 +40,7 @@ private slots:
     void add();
     void remove();
     void currentItemChanged(QTreeWidgetItem *item);
-    void sequenceChanged(const QimsysKeySequence &key);
+    void sequenceChanged(const CuteimeKeySequence &key);
     void actionChanged(int index);
 
 private:
@@ -65,7 +65,7 @@ KeyActionEdit::Private::Private(KeyActionEdit *parent)
     connect(ui.add, SIGNAL(clicked()), this, SLOT(add()));
     connect(ui.remove, SIGNAL(clicked()), this, SLOT(remove()));
     connect(ui.list, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(currentItemChanged(QTreeWidgetItem*)));
-    connect(ui.key, SIGNAL(sequenceChanged(QimsysKeySequence)), this, SLOT(sequenceChanged(QimsysKeySequence)));
+    connect(ui.key, SIGNAL(sequenceChanged(CuteimeKeySequence)), this, SLOT(sequenceChanged(CuteimeKeySequence)));
     connect(ui.action, SIGNAL(currentIndexChanged(int)), this, SLOT(actionChanged(int)));
 }
 
@@ -127,7 +127,7 @@ void KeyActionEdit::Private::remove()
 {
     QTreeWidgetItem *item = ui.list->currentItem();
     if (!item) return;
-    QimsysKeySequence key(item->text(0));
+    CuteimeKeySequence key(item->text(0));
     KeyAction *action = KeyActionManager::instance()->action(item->text(1));
     for (int i = 0; i < list->count(); i++) {
         KeyActionData data = list->at(i);
@@ -149,13 +149,13 @@ void KeyActionEdit::Private::currentItemChanged(QTreeWidgetItem *item)
     ui.action->setEnabled(item);
     if (item) {
         QString key = item->text(0);
-        ui.key->setSequence(QimsysKeySequence(key));
+        ui.key->setSequence(CuteimeKeySequence(key));
         int index = ui.action->findData(item->data(1, Qt::UserRole).toString());
         ui.action->setCurrentIndex(qMax(0, index));
     }
 }
 
-void KeyActionEdit::Private::sequenceChanged(const QimsysKeySequence &key)
+void KeyActionEdit::Private::sequenceChanged(const CuteimeKeySequence &key)
 {
     QTreeWidgetItem *item = ui.list->currentItem();
     if (!item) return;
@@ -163,7 +163,7 @@ void KeyActionEdit::Private::sequenceChanged(const QimsysKeySequence &key)
     items.removeAll(item);
     if (items.isEmpty()) {
         if (item->text(0) != key.toString()) {
-            QimsysKeySequence oldKey(item->text(0));
+            CuteimeKeySequence oldKey(item->text(0));
             KeyAction *action = KeyActionManager::instance()->action(item->text(1));
             for (int i = 0; i < list->count(); i++) {
                 KeyActionData data = list->at(i);
@@ -189,7 +189,7 @@ void KeyActionEdit::Private::actionChanged(int index)
     QTreeWidgetItem *item = ui.list->currentItem();
     if (!item) return;
 
-    QimsysKeySequence key(item->text(0));
+    CuteimeKeySequence key(item->text(0));
     KeyAction *action = KeyActionManager::instance()->action(item->text(1));
     for (int i = 0; i < list->count(); i++) {
         KeyActionData data = list->at(i);

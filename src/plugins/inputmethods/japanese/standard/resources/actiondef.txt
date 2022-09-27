@@ -1,5 +1,5 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#   qimsys                                                                  #
+#   cuteime                                                                  #
 #   Copyright (C) 2010 by Tasuku Suzuki <stasuku@gmail.com>                 #
 #                                                                           #
 #   This program is free software; you can redistribute it and/or modify    #
@@ -19,8 +19,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #/
 
 #Action name	States available
-Turn on qimsys	Direct
-Turn off qimsys	Empty
+Turn on cuteime	Direct
+Turn off cuteime	Empty
 Hiragana mode	Empty
 Katakana mode	Empty
 Halfwidth Katakana mode	Empty

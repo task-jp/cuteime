@@ -1,0 +1,77 @@
+/*!
+    \class CuteimeEngine
+    \brief CuteimeEngine is an interface for conversion engine
+ */
+
+/*!
+    \fn CuteimeEngine::CuteimeEngine(QObject *parent = 0)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeEngine::~CuteimeEngine()
+    \brief Destructor
+ */
+
+/*!
+    \fn QString CuteimeEngine::identifier() const
+    \brief identifier for engine
+
+    \todo can be replaced with CuteimeAbstractPluginObject::name?
+ */
+
+/*!
+    \fn bool CuteimeEngine::isAvailable() const
+    \brief returns if the plugin is available
+ */
+
+/*!
+    \fn CuteimeEngineDictionary *CuteimeEngine::dictionary(QObject *parent = 0)
+    \brief return a subclss of CuteimeEngineDictionary if the engine supports dictionary
+ */
+
+/*!
+    \fn void CuteimeEngine::setRawString(const QString &rawString)
+    \brief set raw string
+ */
+
+/*!
+    \fn void CuteimeEngine::setInputString(const QString &inputString)
+    \brief set input string to be converted
+
+    predicted(const CuteimeConversionItemList &predictions) may be emitted
+ */
+
+/*!
+    \fn void CuteimeEngine::convert()
+    \brief start conversion
+
+    conversionsChanged(const CuteimeConversionItemList &conversions) may be emitted
+ */
+
+/*!
+    \fn void CuteimeEngine::resize(int index, int delta)
+    \brief resize segments
+
+    conversionsChanged(const CuteimeConversionItemList &conversions) may be emitted
+ */
+
+/*!
+    \fn void CuteimeEngine::commit(const CuteimeConversionItemList &conversions)
+    \brief notify final state for engine to learn
+ */
+
+/*!
+    \fn CuteimeConversionItemList CuteimeEngine::candidates(int index)
+    \brief get candidate list of \a index
+ */
+
+/*!
+    \fn void CuteimeEngine::conversionsChanged(const CuteimeConversionItemList &conversions)
+    \brief This signal is emitted when conversion is changed
+ */
+
+/*!
+    \fn void CuteimeEngine::predicted(const CuteimeConversionItemList &predictions)
+    \brief This signal is emitted when engine predicts next input
+ */

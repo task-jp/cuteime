@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "libanthydic.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QLibrary>
 
@@ -41,12 +41,12 @@ LibAnthyDic::Private::Private(LibAnthyDic *parent)
     : q(parent)
     , libanthy("libanthydic", 0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     if (!libanthy.load()) {
-        qimsysWarning() << libanthy.errorString();
+        cuteimeWarning() << libanthy.errorString();
         libanthy.unload();
     } else {
-        qimsysDebug() << "libanthy loaded.";
+        cuteimeDebug() << "libanthy loaded.";
 #define RESOLV( func, ... ) \
         q->func = (__VA_ARGS__)libanthy.resolve( #func );
         RESOLV(anthy_dic_util_init, void (*)(void));
@@ -64,14 +64,14 @@ LibAnthyDic::Private::Private(LibAnthyDic *parent)
         RESOLV(anthy_priv_dic_add_entry, int (*)(const char *yomi, const char *word, const char *wt, int freq));
 #undef RESOLV
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 LibAnthyDic::Private::~Private()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     libanthy.unload();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 LibAnthyDic::LibAnthyDic()

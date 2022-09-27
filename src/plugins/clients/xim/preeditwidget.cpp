@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "preeditwidget.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QPainter>
 #include <QTextLayout>
@@ -46,29 +46,29 @@ PreeditWidget::Private::Private(PreeditWidget *parent)
     : QObject(parent)
     , q(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     q->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 PreeditWidget::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 PreeditWidget::PreeditWidget()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 PreeditWidget::~PreeditWidget()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 const QString &PreeditWidget::preeditString() const
@@ -78,7 +78,7 @@ const QString &PreeditWidget::preeditString() const
 
 void PreeditWidget::sendPreeditString(const QString &preeditString, int cursorPosition, int selectionLength)
 {
-    qimsysDebugIn() << preeditString << cursorPosition << selectionLength;
+    cuteimeDebugIn() << preeditString << cursorPosition << selectionLength;
     setVisible(!preeditString.isEmpty());
     QFontMetrics met(font());
     d->layout.clearLayout();
@@ -94,12 +94,12 @@ void PreeditWidget::sendPreeditString(const QString &preeditString, int cursorPo
     d->selectionLength = selectionLength;
     setFixedSize(met.width(preeditString), met.height() + met.leading());
     update();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void PreeditWidget::paintEvent(QPaintEvent *e)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     Q_UNUSED(e)
     QPainter painter(this);
     QVector<QTextLayout::FormatRange> selections;
@@ -110,17 +110,17 @@ void PreeditWidget::paintEvent(QPaintEvent *e)
     d->layout.draw(&painter, QPointF(0, 0), selections);
     d->layout.drawCursor(&painter, QPointF(0, 0), d->cursorPosition);
     painter.drawText(rect(), Qt::AlignCenter, d->preeditString);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void PreeditWidget::reset()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d->preeditString.clear();
     d->cursorPosition = 0;
     d->selectionLength = 0;
     hide();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "preeditwidget.moc"

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,9 +21,9 @@
 #include "settingsobject.h"
 #include "settingsdialog.h"
 
-#include <qimsysapplicationmanager.h>
-#include <qimsysdebug.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimedynamictranslator.h>
 
 #include <QPointer>
 
@@ -42,7 +42,7 @@ private slots:
 private:
     SettingsObject *q;
     QPointer<SettingsDialog> dialog;
-    QimsysApplicationManager manager;
+    CuteimeApplicationManager manager;
 };
 
 SettingsObject::Private::Private(SettingsObject *parent)
@@ -77,7 +77,7 @@ void SettingsObject::Private::enabledChanged(bool enabled)
 
 void SettingsObject::Private::triggered(int type)
 {
-    if (type == QimsysApplicationManager::ShowSettings) {
+    if (type == CuteimeApplicationManager::ShowSettings) {
         if (!dialog) {
             languageChanged();
         } else {
@@ -88,17 +88,17 @@ void SettingsObject::Private::triggered(int type)
 
 void SettingsObject::Private::languageChanged()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete dialog;
     dialog = new SettingsDialog;
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     connect(dialog, SIGNAL(languageChanged()), this, SLOT(languageChanged()), Qt::QueuedConnection);
     dialog->open();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 SettingsObject::SettingsObject(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }

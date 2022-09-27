@@ -1,3 +1,3 @@
-include(../../qimsysplatform.pri)
+include(../../cuteimeplatform.pri)
 TEMPLATE = subdirs
-SUBDIRS = qimsys
+SUBDIRS = cuteime

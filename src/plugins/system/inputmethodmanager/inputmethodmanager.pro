@@ -1,4 +1,4 @@
-include(../../../../qimsysplugin.pri)
+include(../../../../cuteimeplugin.pri)
 
 HEADERS += object.h \
     plugin.h

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
-#include <qimsysinterpreter.h>
+#include <cuteimeinterpreter.h>
 
 namespace Japanese {
     namespace Romaji {
 
-class Interpreter : public QimsysInterpreter
+class Interpreter : public CuteimeInterpreter
 {
     Q_OBJECT
 public:

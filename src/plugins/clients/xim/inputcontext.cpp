@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,8 +21,8 @@
 #include "inputcontext.h"
 #include "preeditwidget.h"
 
-#include <qimsyspreeditmanager.h>
-#include <qimsysdebug.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimedebug.h>
 
 #include <QX11Info>
 
@@ -77,7 +77,7 @@ public:
 
     bool focus;
     Qt::KeyboardModifiers modifiers;
-    QimsysPreeditManager preeditManager;
+    CuteimePreeditManager preeditManager;
     QString preeditString;
 };
 
@@ -104,25 +104,25 @@ InputContext::Private::Private(InputContext *parent)
     , focus(false)
     , modifiers(Qt::NoModifier)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     static unsigned long counter = 0;
     id = ++counter;
     preeditManager.init();
     connect(&preeditManager, SIGNAL(rectChanged(QRect)), this, SLOT(rectChanged(QRect)));
     connect(&preeditManager, SIGNAL(fontChanged(QFont)), this, SLOT(fontChanged(QFont)));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::Private::~Private()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete preeditWidget;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::update()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QFont f;
     if (!fontSet.isEmpty()) {
 //   f.setRawMode( true );
@@ -138,7 +138,7 @@ void InputContext::Private::update()
         if (ret) {
             break;
         } else if (!child) {
-            qimsysWarning();
+            cuteimeWarning();
             break;
         } else {
             window = child;
@@ -164,47 +164,47 @@ void InputContext::Private::update()
         r.setHeight(met.height() + met.leading());
     }
     preeditManager.setRect(r);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::rectChanged(const QRect &rect)
 {
-    qimsysDebugIn() << rect;
-    qimsysDebug() << preeditWidget;
+    cuteimeDebugIn() << rect;
+    cuteimeDebug() << preeditWidget;
     if (preeditWidget) {
         preeditWidget->setGeometry(rect);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::fontChanged(const QFont &font)
 {
-    qimsysDebugIn() << font;
+    cuteimeDebugIn() << font;
     if (preeditWidget) {
         preeditWidget->setFont(font);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::InputContext(XIMS xims, QObject *parent)
     : QObject(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
     d->xims = xims;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::~InputContext()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::sendCommitString(const QString &commitString)
 {
-    qimsysDebugIn() << commitString;
+    cuteimeDebugIn() << commitString;
     IMCommitStruct opts;
     opts.major_code = XIM_COMMIT;
     opts.minor_code = 0;
@@ -218,12 +218,12 @@ void InputContext::sendCommitString(const QString &commitString)
     opts.commit_string = (char*)tp.value;
     IMCommitString(d->xims, (XPointer)&opts);
     XFree(tp.value);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::sendPreeditString(const QString &preeditString, int cursorPosition, int selectionLength)
 {
-    qimsysDebugIn() << preeditString << cursorPosition << selectionLength;
+    cuteimeDebugIn() << preeditString << cursorPosition << selectionLength;
     d->preeditString = preeditString;
     d->update();
     if (d->inputStyle & XIMPreeditCallbacks) {
@@ -241,12 +241,12 @@ void InputContext::sendPreeditString(const QString &preeditString, int cursorPos
         }
         d->preeditWidget->sendPreeditString(preeditString, cursorPosition, selectionLength);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::sendPreeditString(const QString &preeditString, int cursorPosition, int selectionLength)
 {
-    qimsysDebugIn() << preeditString << cursorPosition << selectionLength;
+    cuteimeDebugIn() << preeditString << cursorPosition << selectionLength;
     if (preeditStringVisible) {
         if (preeditString.isEmpty()) {
             drawPreeditString(preeditString, cursorPosition, selectionLength);
@@ -262,12 +262,12 @@ void InputContext::Private::sendPreeditString(const QString &preeditString, int 
             drawPreeditString(preeditString, cursorPosition, selectionLength);
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::setPreeditStringVisible(bool visible)
 {
-    qimsysDebugIn() << visible;
+    cuteimeDebugIn() << visible;
     IMPreeditCBStruct opts;
     if (visible) {
         opts.major_code = XIM_PREEDIT_START;
@@ -280,12 +280,12 @@ void InputContext::Private::setPreeditStringVisible(bool visible)
     opts.todo.return_value = 0;
     IMCallCallback(xims, (XPointer)&opts);
     preeditStringVisible = visible;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::drawPreeditString(const QString &preeditString, int cursorPosition, int selectionLength)
 {
-    qimsysDebugIn() << preeditString << cursorPosition << selectionLength;
+    cuteimeDebugIn() << preeditString << cursorPosition << selectionLength;
     static int changeLength = 0;
     int length = preeditString.length();
     IMPreeditCBStruct opts;
@@ -322,7 +322,7 @@ void InputContext::Private::drawPreeditString(const QString &preeditString, int 
     opts.todo.draw.text = &text;
     IMCallCallback(xims, (XPointer)&opts);
     XFree(tp.value);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 unsigned long InputContext::id() const
@@ -382,7 +382,7 @@ QRect InputContext::area() const
 void InputContext::setArea(const QRect &area)
 {
     if (d->area == area) return;
-    qimsysDebug() << area;
+    cuteimeDebug() << area;
     d->area = area;
 }
 
@@ -394,7 +394,7 @@ QRect InputContext::areaNeeded() const
 void InputContext::setAreaNeeded(const QRect &areaNeeded)
 {
     if (d->areaNeeded == areaNeeded) return;
-    qimsysDebug() << areaNeeded;
+    cuteimeDebug() << areaNeeded;
     d->areaNeeded = areaNeeded;
 }
 
@@ -418,7 +418,7 @@ unsigned long InputContext::colorMap() const
 void InputContext::setColorMap(unsigned long colorMap)
 {
     if (d->colorMap == colorMap) return;
-    qimsysDebug() << colorMap;
+    cuteimeDebug() << colorMap;
     d->colorMap = colorMap;
 }
 
@@ -430,7 +430,7 @@ unsigned long InputContext::stdColorMap() const
 void InputContext::setStdColorMap(unsigned long stdColorMap)
 {
     if (d->stdColorMap == stdColorMap) return;
-    qimsysDebug() << stdColorMap;
+    cuteimeDebug() << stdColorMap;
     d->stdColorMap = stdColorMap;
 }
 
@@ -453,7 +453,7 @@ unsigned long InputContext::background() const
 void InputContext::setBackground(unsigned long background)
 {
     if (d->background == background) return;
-    qimsysDebug() << background;
+    cuteimeDebug() << background;
     d->background = background;
 }
 
@@ -465,7 +465,7 @@ unsigned long InputContext::backgroundPixmap() const
 void InputContext::setBackgroundPixmap(unsigned long backgroundPixmap)
 {
     if (d->backgroundPixmap == backgroundPixmap) return;
-    qimsysDebug() << backgroundPixmap;
+    cuteimeDebug() << backgroundPixmap;
     d->backgroundPixmap = backgroundPixmap;
 }
 
@@ -494,7 +494,7 @@ unsigned long InputContext::lineSpace() const
 void InputContext::setLineSpace(unsigned long lineSpace)
 {
     if (d->lineSpace == lineSpace) return;
-    qimsysDebug() << lineSpace;
+    cuteimeDebug() << lineSpace;
     d->lineSpace = lineSpace;
 }
 
@@ -506,7 +506,7 @@ unsigned long InputContext::cursor() const
 void InputContext::setCursor(unsigned long cursor)
 {
     if (d->cursor == cursor) return;
-    qimsysDebug() << cursor;
+    cuteimeDebug() << cursor;
     d->cursor = cursor;
 }
 

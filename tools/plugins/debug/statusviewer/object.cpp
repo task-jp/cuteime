@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,9 +20,9 @@
 
 #include "object.h"
 
-#include <qimsysdeclarativeview.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedeclarativeview.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimedynamictranslator.h>
 
 #include <QPointer>
 
@@ -42,7 +42,7 @@ private slots:
 private:
     Object *q;
 
-    QPointer<QimsysDeclarativeView> statusViewer;
+    QPointer<CuteimeDeclarativeView> statusViewer;
 };
 
 Object::Private::Private(Object *parent)
@@ -52,7 +52,7 @@ Object::Private::Private(Object *parent)
     q->setCategoryType(CanBeNone);
     trConnect(this, QT_TR_NOOP("Debug tools"), q, "categoryName");
 
-    trConnect(this, QT_TR_NOOP("Status viewer for qimsys"), q, "name");
+    trConnect(this, QT_TR_NOOP("Status viewer for cuteime"), q, "name");
     trConnect(this, QT_TR_NOOP("Tasuku Suzuki"), q, "author");
     trConnect(this, QT_TR_NOOP(""), q, "translator");
 
@@ -68,12 +68,12 @@ Object::Private::~Private()
 void Object::Private::enabledChanged(bool enabled)
 {
     if (enabled) {
-        statusViewer = new QimsysDeclarativeView;
-        statusViewer->setWindowTitle(tr("Status viewer for qimsys"));
+        statusViewer = new CuteimeDeclarativeView;
+        statusViewer->setWindowTitle(tr("Status viewer for cuteime"));
         statusViewer->setSource(statusViewer->resolveUrl("Debug/StatusViewer/main.qml"));
         statusViewer->setAttribute(Qt::WA_DeleteOnClose);
 
-        QimsysApplicationManager *applicationManager = new QimsysApplicationManager(statusViewer);
+        CuteimeApplicationManager *applicationManager = new CuteimeApplicationManager(statusViewer);
         applicationManager->init();
         connect(applicationManager, SIGNAL(currentIconChanged(QIcon)), this, SLOT(setWindowIcon(QIcon)));
         setWindowIcon(applicationManager->currentIcon());
@@ -90,7 +90,7 @@ void Object::Private::setWindowIcon(const QIcon &icon)
 }
 
 Object::Object(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }

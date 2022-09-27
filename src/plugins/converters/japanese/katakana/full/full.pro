@@ -1,5 +1,5 @@
 TARGET = japanese_katakana_full
-include(../../../../../../qimsysplugin.pri)
+include(../../../../../../cuteimeplugin.pri)
 
 HEADERS += plugin.h converter.h
 SOURCES += plugin.cpp converter.cpp

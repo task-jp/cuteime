@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,7 +20,7 @@
 
 #include "libanthy.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 
 #include <QLibrary>
 
@@ -40,13 +40,13 @@ LibAnthy::Private::Private(LibAnthy *parent)
     : q(parent)
     , libanthy("libanthy", 0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
 //    libanthy.setLoadHints(QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint | QLibrary::LoadArchiveMemberHint);
     if (!libanthy.load()) {
-        qimsysWarning() << libanthy.errorString();
+        cuteimeWarning() << libanthy.errorString();
         libanthy.unload();
     } else {
-        qimsysDebug() << "libanthy loaded.";
+        cuteimeDebug() << "libanthy loaded.";
 #define RESOLVE( func, ... ) \
         q->func = (__VA_ARGS__)libanthy.resolve( #func );
         RESOLVE(anthy_init, int(*)(void));
@@ -66,14 +66,14 @@ LibAnthy::Private::Private(LibAnthy *parent)
         RESOLVE(anthy_commit_prediction, int (*)(anthy_context_t, int));
 #undef RESOLVE
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 LibAnthy::Private::~Private()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     libanthy.unload();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 LibAnthy::LibAnthy()

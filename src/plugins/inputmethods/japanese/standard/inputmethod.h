@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,12 +21,12 @@
 #ifndef INPUTMETHOD_H
 #define INPUTMETHOD_H
 
-#include <qimsysinputmethod.h>
+#include <cuteimeinputmethod.h>
 
 namespace Japanese {
     namespace Standard {
 
-class InputMethod : public QimsysInputMethod
+class InputMethod : public CuteimeInputMethod
 {
     Q_OBJECT
 public:

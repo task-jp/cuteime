@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,11 +21,11 @@
 #ifndef ZINNIA_OBJECT_H
 #define ZINNIA_OBJECT_H
 
-#include <qimsysconverter.h>
+#include <cuteimeconverter.h>
 
 namespace zinnia {
 
-class ZinniaObject : public QimsysConverter
+class ZinniaObject : public CuteimeConverter
 {
 	Q_OBJECT
     Q_DISABLE_COPY(ZinniaObject)
@@ -39,7 +39,7 @@ public:
     bool useEngine() const;
     QList<QAction*> actions();
 
-//    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
+//    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
 
 private:
     class Private;

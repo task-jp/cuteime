@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,11 +21,11 @@
 #ifndef LANGUAGE_H
 #define LANGUAGE_H
 
-#include <qimsyslanguage.h>
+#include <cuteimelanguage.h>
 
 namespace Japanese {
 
-class Language : public QimsysLanguage
+class Language : public CuteimeLanguage
 {
     Q_OBJECT
 public:

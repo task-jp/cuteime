@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -77,7 +77,7 @@ void SoftKeyboardObject::Private::enabledChanged(bool enabled)
 }
 
 SoftKeyboardObject::SoftKeyboardObject(QObject *parent)
-    : QimsysAbstractPluginObject(parent)
+    : CuteimeAbstractPluginObject(parent)
 {
     d = new Private(this);
 }
@@ -87,9 +87,9 @@ SoftKeyboardObject::~SoftKeyboardObject()
     delete d;
 }
 
-QimsysSettingsWidget *SoftKeyboardObject::settings(const QString &hint, QWidget *parent)
+CuteimeSettingsWidget *SoftKeyboardObject::settings(const QString &hint, QWidget *parent)
 {
-    return QimsysAbstractPluginObject::settings(hint, parent);
+    return CuteimeAbstractPluginObject::settings(hint, parent);
 // return new SoftKeyboardSettings( this, parent );
 }
 

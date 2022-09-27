@@ -1,0 +1,40 @@
+/*!
+    \class CuteimeKeyManager
+    \brief This class manages key input
+
+    Application must have a subclass for server to handle key input.
+
+    Platform backends use this client to process key input.
+ */
+
+/*!
+    \fn CuteimeKeyManager::CuteimeKeyManager(QObject *parent = 0, Type type = Client)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeKeyManager::~CuteimeKeyManager()
+    \brief Destructor
+ */
+
+/*!
+    \fn void CuteimeKeyManager::process(QString text, int keycode, int modifiers, bool isPress, bool autoRepeat)
+    \brief This method makes key event happen
+
+    Use this method to make key event happen for testing purpose.
+ */
+
+/*!
+    \fn void CuteimeKeyManager::keyPress(QString text, int keycode, int modifiers, bool autoRepeat)
+    \brief This method filters key input.
+
+    Platform backends like immodule should use this method to process key input.
+ */
+
+/*!
+    \fn void CuteimeKeyManager::keyRelease(QString text, int keycode, int modifiers, bool autoRepeat)
+    \brief This method filters key input.
+
+    Platform backends like immodule should use this method to process key input.
+ */
+

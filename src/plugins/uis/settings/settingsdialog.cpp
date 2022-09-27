@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,10 +21,10 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 
-#include "qimsysdebug.h"
-#include "qimsyspluginmanager.h"
+#include "cuteimedebug.h"
+#include "cuteimepluginmanager.h"
 
-#include "qimsyssettingswidget.h"
+#include "cuteimesettingswidget.h"
 #include <QMap>
 #include <QSettings>
 
@@ -48,7 +48,7 @@ private:
     SettingsDialog *q;
     Ui::SettingsDialog ui;
 
-    QMap<QTreeWidgetItem*, QimsysAbstractPluginObject*> objects;
+    QMap<QTreeWidgetItem*, CuteimeAbstractPluginObject*> objects;
 };
 
 SettingsDialog::Private::Private(SettingsDialog *parent)
@@ -75,8 +75,8 @@ SettingsDialog::Private::~Private()
 
 void SettingsDialog::Private::setup()
 {
-    foreach(QimsysAbstractPluginObject *object, QimsysPluginManager::objects<QimsysAbstractPluginObject>(this)) {
-        if (object->categoryType() == QimsysAbstractPluginObject::Hidden) continue;
+    foreach(CuteimeAbstractPluginObject *object, CuteimePluginManager::objects<CuteimeAbstractPluginObject>(this)) {
+        if (object->categoryType() == CuteimeAbstractPluginObject::Hidden) continue;
         QTreeWidgetItem *parentItem = findItem(object->categoryName());
         parentItem->setData(0, Qt::UserRole, object->categoryType());
         QTreeWidgetItem *item = new QTreeWidgetItem(parentItem);
@@ -89,22 +89,22 @@ void SettingsDialog::Private::setup()
     connect(ui.plugins, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(currentItemChanged(QTreeWidgetItem*)));
     connect(ui.plugins, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(itemChanged(QTreeWidgetItem*)));
     foreach(QTreeWidgetItem *item, objects.keys()) {
-        QimsysAbstractPluginObject *object = objects[item];
+        CuteimeAbstractPluginObject *object = objects[item];
         if (object->isEnabled()) {
             switch (object->categoryType()) {
-            case QimsysAbstractPluginObject::CanBeNone:
+            case CuteimeAbstractPluginObject::CanBeNone:
                 item->setCheckState(0, Qt::Checked);
                 break;
-            case QimsysAbstractPluginObject::AlwaysOne:
+            case CuteimeAbstractPluginObject::AlwaysOne:
                 item->setCheckState(0, Qt::PartiallyChecked);
                 break;
-            case QimsysAbstractPluginObject::MoreThanOne:
+            case CuteimeAbstractPluginObject::MoreThanOne:
                 item->setCheckState(0, Qt::PartiallyChecked);
                 break;
-            case QimsysAbstractPluginObject::OneOrNone:
+            case CuteimeAbstractPluginObject::OneOrNone:
                 item->setCheckState(0, Qt::Checked);
                 break;
-            case QimsysAbstractPluginObject::All:
+            case CuteimeAbstractPluginObject::All:
                 item->setCheckState(0, Qt::PartiallyChecked);
                 break;
             default:
@@ -160,7 +160,7 @@ void SettingsDialog::Private::currentItemChanged(QTreeWidgetItem *current)
         ui.stackedWidget->removeWidget(w);
         delete w;
     }
-    foreach(QimsysAbstractPluginObject *object, QimsysPluginManager::objects<QimsysAbstractPluginObject>(this)) {
+    foreach(CuteimeAbstractPluginObject *object, CuteimePluginManager::objects<CuteimeAbstractPluginObject>(this)) {
         if (object->name() == current->data(0, Qt::UserRole)) {
             QWidget *w = object->settings(QLatin1String("desktop"), ui.stackedWidget);
             if (w) {
@@ -174,7 +174,7 @@ void SettingsDialog::Private::currentItemChanged(QTreeWidgetItem *current)
 void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
 {
     QTreeWidgetItem *parentItem = item->parent();
-    QimsysAbstractPluginObject::CategoryType type = (QimsysAbstractPluginObject::CategoryType)parentItem->data(0, Qt::UserRole).toInt();
+    CuteimeAbstractPluginObject::CategoryType type = (CuteimeAbstractPluginObject::CategoryType)parentItem->data(0, Qt::UserRole).toInt();
     QList<QTreeWidgetItem*> checked;
     for (int i = 0; i < parentItem->childCount(); i++) {
         if (parentItem->child(i)->checkState(0) != Qt::Unchecked) {
@@ -182,9 +182,9 @@ void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
         }
     }
     switch (type) {
-    case QimsysAbstractPluginObject::CanBeNone:
+    case CuteimeAbstractPluginObject::CanBeNone:
         break;
-    case QimsysAbstractPluginObject::MoreThanOne: {
+    case CuteimeAbstractPluginObject::MoreThanOne: {
         switch (checked.count()) {
         case 0:
             item->setCheckState(0, Qt::PartiallyChecked);
@@ -202,7 +202,7 @@ void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
         }
         break;
     }
-    case QimsysAbstractPluginObject::AlwaysOne: {
+    case CuteimeAbstractPluginObject::AlwaysOne: {
         switch (checked.count()) {
         case 0:
             item->setCheckState(0, Qt::PartiallyChecked);
@@ -218,7 +218,7 @@ void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
         }
         break;
     }
-    case QimsysAbstractPluginObject::OneOrNone: {
+    case CuteimeAbstractPluginObject::OneOrNone: {
         switch (checked.count()) {
         case 0:
             break;
@@ -233,7 +233,7 @@ void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
         }
         break;
     }
-    case QimsysAbstractPluginObject::All: {
+    case CuteimeAbstractPluginObject::All: {
         item->setCheckState(0, Qt::PartiallyChecked);
         break;
     }
@@ -245,7 +245,7 @@ void SettingsDialog::Private::itemChanged(QTreeWidgetItem *item)
 void SettingsDialog::Private::clicked(QAbstractButton *button)
 {
     if (ui.buttonBox->buttonRole(button) != QDialogButtonBox::ApplyRole) return;
-    QimsysSettingsWidget *widget = qobject_cast<QimsysSettingsWidget*>(ui.stackedWidget->currentWidget());
+    CuteimeSettingsWidget *widget = qobject_cast<CuteimeSettingsWidget*>(ui.stackedWidget->currentWidget());
     if (widget) {
         widget->save();
     }

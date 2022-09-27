@@ -1,0 +1,15 @@
+/*!
+    \class CuteimePluginManager
+    \brief CuteimePluginManager loads plugins
+
+    CuteimePluginManager is used to load plugins
+ */
+
+/*!
+    \fn QList<T*> CuteimePluginManager::objects(QObject *parent = 0)
+    \brief returns list of CuteimeAbstractPluginObject
+
+<pre>foreach(CuteimeConverter *converter, CuteimePluginManager::objects<CuteimeConverter>(this)) {
+    qDebug() << converter->name();
+}</pre>
+ */

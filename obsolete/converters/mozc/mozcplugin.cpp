@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,21 +21,21 @@
 #include "mozcplugin.h"
 #include "mozcobject.h"
 
-#include <qimsysdebug.h>
+#include <cuteimedebug.h>
 #include <QtPlugin>
 
 MozcPlugin::MozcPlugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
-QimsysAbstractPluginObject *MozcPlugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *MozcPlugin::createObject(QObject *parent)
 {
-    qimsysDebugIn() << parent;
-    QimsysAbstractPluginObject *ret = new mozc::MozcObject(parent);
-    qimsysDebugOut() << ret;
+    cuteimeDebugIn() << parent;
+    CuteimeAbstractPluginObject *ret = new mozc::MozcObject(parent);
+    cuteimeDebugOut() << ret;
     return ret;
 }
 

@@ -1,0 +1,29 @@
+/*!
+    \class CuteimePreeditItem
+    \brief CuteimePreeditItem is data for each preedit items.
+ */
+
+/*!
+    \var CuteimePreeditItem::text
+    \brief preedit string
+ */
+
+/*!
+    \var CuteimePreeditItem::cursor
+    \brief cursor position of preedit string
+ */
+
+/*!
+    \var CuteimePreeditItem::selection
+    \brief selection length of preedit string
+ */
+
+/*!
+    \var CuteimePreeditItem::underline
+    \brief QTextCharFormat::UnderlineStyle
+ */
+
+/*!
+    \class CuteimePreeditItemList
+    \brief QList of CuteimePreeditItem
+ */

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,10 +22,10 @@
 #include <QtPlugin>
 #include <QWidget>
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyspreeditmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimepreeditmanager.h>
 
 using namespace Xim;
 
@@ -39,55 +39,55 @@ public:
     void setActive(bool active);
 
 private slots:
-    void sendPreeditString(const QimsysPreeditItem &item);
+    void sendPreeditString(const CuteimePreeditItem &item);
     void sendCommitString(const QString &commitString, qulonglong target);
 
 private:
     Client *q;
 public:
-    QimsysApplicationManager applicationManager;
-    QimsysKeyManager keyManager;
-    QimsysPreeditManager preeditManager;
+    CuteimeApplicationManager applicationManager;
+    CuteimeKeyManager keyManager;
+    CuteimePreeditManager preeditManager;
 };
 
 Client::Private::Private(Client *parent)
     : QObject(parent)
     , q(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     applicationManager.init();
     keyManager.init();
     preeditManager.init();
-    connect(&preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(sendPreeditString(QimsysPreeditItem)));
+    connect(&preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(sendPreeditString(CuteimePreeditItem)));
     connect(&preeditManager, SIGNAL(committed(QString, qulonglong)), this, SLOT(sendCommitString(QString, qulonglong)));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Client::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
-void Client::Private::sendPreeditString(const QimsysPreeditItem &item)
+void Client::Private::sendPreeditString(const CuteimePreeditItem &item)
 {
     if (!q->focusWindow() || (applicationManager.window() != q->focusWindow())) return;
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
     q->sendPreeditString(item.to.join(""), item.cursor, item.selection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Client::Private::sendCommitString(const QString &commitString, qulonglong target)
 {
     if (q->focusWindow() != target) return;
-    qimsysDebugIn() << commitString << target;
+    cuteimeDebugIn() << commitString << target;
     q->sendCommitString(commitString);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Client::Private::setActive(bool active)
 {
-    qimsysDebugIn() << active;
+    cuteimeDebugIn() << active;
     if (active) {
         applicationManager.setWindow(q->clientWindow());
         applicationManager.setWidget(q->focusWindow());
@@ -99,34 +99,34 @@ void Client::Private::setActive(bool active)
             applicationManager.setFocus(false);
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Client::Client(QObject *parent)
     : QXimInputMethod(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Client::~Client()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool Client::filter(int unicode, int keycode, int modifiers, bool isPress, bool autoRepeat)
 {
-    qimsysDebugIn() << unicode << keycode << modifiers << isPress << autoRepeat;
+    cuteimeDebugIn() << unicode << keycode << modifiers << isPress << autoRepeat;
     if (isPress)
         d->keyManager.keyPress(QChar(unicode), keycode, modifiers, autoRepeat);
     else
         d->keyManager.keyRelease(QChar(unicode), keycode, modifiers, autoRepeat);
 
     bool ret = d->keyManager.isAccepted();
-    qimsysDebugOut() << ret;
+    cuteimeDebugOut() << ret;
     return ret;
 }
 
@@ -140,7 +140,7 @@ qulonglong Client::winId()
 
 const char *Client::name() const
 {
-    return "qimsys";
+    return "cuteime";
 }
 
 const char *Client::locale() const
@@ -150,7 +150,7 @@ const char *Client::locale() const
 
 void Client::updateHandler(UpdateType type)
 {
-    qimsysDebugIn() << type;
+    cuteimeDebugIn() << type;
     switch (type) {
     case Update:
         break;
@@ -163,7 +163,7 @@ void Client::updateHandler(UpdateType type)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "client.moc"

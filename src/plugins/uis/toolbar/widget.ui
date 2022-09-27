@@ -32,7 +32,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="../../../../share/share.qrc">:/icons/22x22/qimsys.png</pixmap>
+    <pixmap resource="../../../../share/share.qrc">:/icons/22x22/cuteime.png</pixmap>
    </property>
   </widget>
   <widget class="QWidget" name="widget" native="true">

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2010 by Tasuku Suzuki <stasuku@gmail.com>                 *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -23,18 +23,18 @@
 #include <stdio.h>
 #include <errno.h>
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
 
 void clicked(gpointer data)
 {
-    QimsysApplicationManager *manager;
-    qimsys_debug_in();
-    manager = QIMSYSAPPLICATIONMANAGER(data);
+    CuteimeApplicationManager *manager;
+    cuteime_debug_in();
+    manager = CUTEIMEAPPLICATIONMANAGER(data);
     if (manager) {
-        qimsys_application_manager_exec(manager, QimsysApplicationManager_ShowSettings);
+        cuteime_application_manager_exec(manager, CuteimeApplicationManager_ShowSettings);
     }
-    qimsys_debug_out();
+    cuteime_debug_out();
 }
 
 void destroy()
@@ -46,13 +46,13 @@ int main(int argc, char *argv[])
 {
     GtkWidget *window;
     GtkWidget *button;
-    QimsysApplicationManager *manager;
+    CuteimeApplicationManager *manager;
 
-    qimsys_debug_on();
+    cuteime_debug_on();
 
     gtk_init (&argc, &argv);
 
-    manager = qimsys_application_manager_new();
+    manager = cuteime_application_manager_new();
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_signal_connect (GTK_OBJECT (window), "destroy",

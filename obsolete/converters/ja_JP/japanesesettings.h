@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,16 +22,16 @@
 #define JAPANESESETTINGS_H
 
 #include <QDialog>
-#include "qimsyssettingswidget.h"
+#include "cuteimesettingswidget.h"
 
 namespace ja_JP
 {
-class JapaneseSettings : public QimsysSettingsWidget
+class JapaneseSettings : public CuteimeSettingsWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(JapaneseSettings)
 public:
-    explicit JapaneseSettings(QimsysAbstractPluginObject *plugin, QWidget *parent = 0);
+    explicit JapaneseSettings(CuteimeAbstractPluginObject *plugin, QWidget *parent = 0);
     ~JapaneseSettings();
 
 public slots:

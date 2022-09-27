@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,12 +20,12 @@
 
 #include "inputcontext.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyskeyboardmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimekeyboardmanager.h>
 
 #include <QCursor>
 #include <QGuiApplication>
@@ -56,7 +56,7 @@ public slots:
 
 private slots:
     void init();
-    void itemChanged(const QimsysPreeditItem &item);
+    void itemChanged(const CuteimePreeditItem &item);
     void sendPreeditString();
     void sendCommitString(const QString &commitString, qulonglong target);
 
@@ -66,13 +66,13 @@ private:
     QTimer timer;
 
 public:
-    QimsysApplicationManager *applicationManager;
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
-    QimsysKeyManager *keyManager;
-    QimsysKeyboardManager *keyboardManager;
+    CuteimeApplicationManager *applicationManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
+    CuteimeKeyManager *keyManager;
+    CuteimeKeyboardManager *keyboardManager;
 
-    QimsysPreeditItem currentItem;
+    CuteimePreeditItem currentItem;
 };
 
 InputContext::Private::Private(InputContext *parent)
@@ -84,35 +84,35 @@ InputContext::Private::Private(InputContext *parent)
     , keyManager(0)
     , keyboardManager(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     init();
     QGuiApplication::restoreOverrideCursor();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::init()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     timer.setInterval(0);
     timer.setSingleShot(true);
     connect(&timer, SIGNAL(timeout()), this, SLOT(sendPreeditString()));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 static void widgetAndWindowFor(const QObject *object, qulonglong *widgetId, qulonglong *windowId)
 {
-    qimsysDebugIn() << object;
+    cuteimeDebugIn() << object;
 
     *widgetId = (qulonglong)object;
 
-    qimsysDebug();
+    cuteimeDebug();
     if (windowId) {
         QWindow *window = 0;
         const QWidget *widget = qobject_cast<const QWidget *>(object);
@@ -125,17 +125,17 @@ static void widgetAndWindowFor(const QObject *object, qulonglong *widgetId, qulo
 
         if (window) {
             *windowId = window->winId();
-            qimsysDebug() << *windowId;
+            cuteimeDebug() << *windowId;
         }
     }
 
-    qimsysDebugOut() << *widgetId;
+    cuteimeDebugOut() << *widgetId;
 }
 
 void InputContext::Private::setFocusObject(QObject *o)
 {
     if (focusObject == o) return;
-    qimsysDebugIn() << o;
+    cuteimeDebugIn() << o;
 
     qulonglong nextWindow = 0;
     qulonglong nextWidget = 0;
@@ -143,7 +143,7 @@ void InputContext::Private::setFocusObject(QObject *o)
 
     if (o) {
         if (!applicationManager) {
-            applicationManager = new QimsysApplicationManager(this);
+            applicationManager = new CuteimeApplicationManager(this);
             if (!applicationManager->init()) {
                 applicationManager->deleteLater();
                 applicationManager = 0;
@@ -151,7 +151,7 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
 
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             if (!inputMethodManager->init()) {
                 inputMethodManager->deleteLater();
                 inputMethodManager = 0;
@@ -159,9 +159,9 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
 
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             if (preeditManager->init()) {
-                connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+                connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
                 connect(preeditManager, SIGNAL(committed(QString, qulonglong)), this, SLOT(sendCommitString(QString, qulonglong)));
             } else {
                 preeditManager->deleteLater();
@@ -170,7 +170,7 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
 
         if (!keyManager) {
-            keyManager = new QimsysKeyManager(this);
+            keyManager = new CuteimeKeyManager(this);
             if (!keyManager->init()) {
                 keyManager->deleteLater();
                 keyManager = 0;
@@ -178,7 +178,7 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
 
         if (!keyboardManager) {
-            keyboardManager = new QimsysKeyboardManager(this);
+            keyboardManager = new CuteimeKeyboardManager(this);
             if (!keyboardManager->init()) {
                 keyboardManager->deleteLater();
                 keyboardManager = 0;
@@ -190,9 +190,9 @@ void InputContext::Private::setFocusObject(QObject *o)
             applicationManager->setWidget(nextWidget);
             applicationManager->setFocus(true);
         }
-        //qimsysDebugOn();
+        //cuteimeDebugOn();
         //update();
-        //qimsysDebugOff();
+        //cuteimeDebugOff();
     } else {
         if (applicationManager) {
             if (applicationManager->widget() == (qulonglong)focusObject.data()) {
@@ -210,7 +210,7 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
 
         if (preeditManager) {
-            disconnect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            disconnect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
             disconnect(preeditManager, SIGNAL(committed(QString, qulonglong)), this, SLOT(sendCommitString(QString, qulonglong)));
             preeditManager->deleteLater();
             preeditManager = 0;
@@ -228,23 +228,23 @@ void InputContext::Private::setFocusObject(QObject *o)
         }
     }
     focusObject = o;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void InputContext::Private::itemChanged(const QimsysPreeditItem &item)
+void InputContext::Private::itemChanged(const CuteimePreeditItem &item)
 {
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
     currentItem = item;
     if (!timer.isActive()) {
         timer.start();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::sendPreeditString()
 {
     if (!focusObject) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QList<QInputMethodEvent::Attribute> attrs;
 
     bool textFormatAdded = false;
@@ -272,13 +272,13 @@ void InputContext::Private::sendPreeditString()
     QInputMethodEvent e(currentItem.to.join(""), attrs);
     QCoreApplication::sendEvent(focusObject, &e);
     //update();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::sendCommitString(const QString &commitString, qulonglong target)
 {
     if (!focusObject || (qulonglong)focusObject.data() != target) return;
-    qimsysDebugIn() << commitString << target;
+    cuteimeDebugIn() << commitString << target;
 
     {
         QList<QInputMethodEvent::Attribute> attrs;
@@ -288,13 +288,13 @@ void InputContext::Private::sendCommitString(const QString &commitString, qulong
         QCoreApplication::sendEvent(focusObject, &e);
     }
     //metaObject()->invokeMethod(this, "update", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::update(Qt::InputMethodQueries queries)
 {
     if (!focusObject) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     QInputMethodQueryEvent query(queries);
     QCoreApplication::sendEvent(focusObject, &query);
     if (queries & Qt::ImEnabled) {
@@ -305,7 +305,7 @@ void InputContext::Private::update(Qt::InputMethodQueries queries)
 
     if (preeditManager && queries & Qt::ImCursorRectangle) {
         QRect r = query.value(Qt::ImCursorRectangle).toRect();
-        qimsysDebug() << r;
+        cuteimeDebug() << r;
         QPoint topLeft;
         if (QWidget *widget = qobject_cast<QWidget *>(focusObject)) {
             topLeft = widget->mapToGlobal(QPoint(0, 0));
@@ -330,126 +330,126 @@ void InputContext::Private::update(Qt::InputMethodQueries queries)
     if (preeditManager && queries & Qt::ImMaximumTextLength) {
         preeditManager->setMaximumTextLength(query.value(Qt::ImMaximumTextLength).toInt());
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::Private::commit()
 {
     if (currentItem.to.isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     sendCommitString(currentItem.to.join(""), (qulonglong)focusObject.data());
-    currentItem = QimsysPreeditItem();
+    currentItem = CuteimePreeditItem();
     if (preeditManager)
         preeditManager->setItem(currentItem);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::InputContext()
     : QPlatformInputContext()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 InputContext::~InputContext()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool InputContext::isValid() const
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
     return true;
 }
 
 void InputContext::reset()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     if (d->applicationManager) {
-        d->applicationManager->exec(QimsysApplicationManager::Reset);
+        d->applicationManager->exec(CuteimeApplicationManager::Reset);
     }
     update(Qt::ImQueryAll);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::commit()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d->commit();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void InputContext::update(Qt::InputMethodQueries queries)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     d->update(queries);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 bool InputContext::filterEvent(const QEvent *event)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     bool ret = false;
     switch (event->type()) {
     case QEvent::KeyPress:
         {
-            qimsysDebugIn() << event;
+            cuteimeDebugIn() << event;
             const QKeyEvent *e = static_cast<const QKeyEvent*>(event);
             if (d->keyManager) {
                 ret = d->keyManager->keyPress(e->text(), e->key(), e->modifiers(), e->isAutoRepeat());
-                qimsysDebug() << e->text() << e->key() << e->modifiers() << e->isAutoRepeat() << ret;
+                cuteimeDebug() << e->text() << e->key() << e->modifiers() << e->isAutoRepeat() << ret;
             }
-            qimsysDebugOut() << ret;
+            cuteimeDebugOut() << ret;
             break;
         }
     case QEvent::KeyRelease:
         {
-            qimsysDebugIn() << event;
+            cuteimeDebugIn() << event;
             const QKeyEvent *e = static_cast<const QKeyEvent*>(event);
             if (d->keyManager) {
                 ret = d->keyManager->keyRelease(e->text(), e->key(), e->modifiers(), e->isAutoRepeat());
-                qimsysDebug() << e->text() << e->key() << e->modifiers() << e->isAutoRepeat() << ret;
+                cuteimeDebug() << e->text() << e->key() << e->modifiers() << e->isAutoRepeat() << ret;
             }
-            qimsysDebugOut() << ret;
+            cuteimeDebugOut() << ret;
             break;
         }
     case QEvent::RequestSoftwareInputPanel:
         {
-            qimsysDebugIn() << event;
+            cuteimeDebugIn() << event;
             if (d->keyboardManager)
                 d->keyboardManager->setVisible(true);
             ret = true;
-            qimsysDebugOut() << ret;
+            cuteimeDebugOut() << ret;
             break;
         }
     case QEvent::CloseSoftwareInputPanel:
         {
-            qimsysDebugIn() << event;
+            cuteimeDebugIn() << event;
             if (d->keyboardManager)
                 d->keyboardManager->setVisible(false);
             ret = true;
-            qimsysDebugOut() << ret;
+            cuteimeDebugOut() << ret;
             break;
         }
     default:
         break;
     }
     d->update();
-    qimsysDebugOut();
+    cuteimeDebugOut();
     return ret;
 }
 
 void InputContext::setFocusObject(QObject *object)
 {
-    qimsysDebugIn() << object;
+    cuteimeDebugIn() << object;
     d->setFocusObject(object);
     QPlatformInputContext::setFocusObject(object);
     d->update();
-    qimsysDebugOut() << object;
+    cuteimeDebugOut() << object;
 }
 
 #include "inputcontext.moc"

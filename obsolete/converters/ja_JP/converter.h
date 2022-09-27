@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,11 +21,11 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
-#include "qimsysconverter.h"
+#include "cuteimeconverter.h"
 
 namespace ja_JP
 {
-class Converter : public QimsysConverter
+class Converter : public CuteimeConverter
 {
     Q_OBJECT
 public:
@@ -39,7 +39,7 @@ public:
     bool useEngine() const;
     QList<QAction*> actions();
 
-    QimsysSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
+    CuteimeSettingsWidget *settings(const QString &hint, QWidget *parent = 0);
 
 private:
     class Private;

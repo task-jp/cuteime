@@ -1,0 +1,34 @@
+/*!
+    \class CuteimeCandidates
+    \brief CuteimeCandidates represents candidate list and index
+
+    \todo merge with CuteimePredictions
+*/
+
+/*!
+    \property CuteimeCandidates::candidates
+    \brief candidates contains CuteimeConversionItemList
+
+    \li [read] CuteimeConversionItemList candidates() const
+    \li [write] void setCandidates(const CuteimeConversionItemList &candidates)
+    \li [notify] void candidatesChanged(const CuteimeConversionItemList &candidates)
+ */
+
+/*!
+    \property CuteimeCandidates::currentIndex
+    \brief geometry of preedit area
+
+    \li [read] int currentIndex() const
+    \li [write] void setCurrentIndex(int currentIndex)
+    \li [notify] void currentIndexChanged(int currentIndex)
+ */
+
+/*!
+    \fn CuteimeCandidates::CuteimeCandidates(QObject *parent = 0, Type type = Client)
+    \brief Constructor
+ */
+
+/*!
+    \fn CuteimeCandidates::~CuteimeCandidates()
+    \brief Destructor
+ */

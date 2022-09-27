@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -27,13 +27,13 @@
 using namespace SystemTray;
 
 Plugin::Plugin()
-    : QimsysPlugin()
+    : CuteimePlugin()
 {
 }
 
-QimsysAbstractPluginObject *Plugin::createObject(QObject *parent)
+CuteimeAbstractPluginObject *Plugin::createObject(QObject *parent)
 {
-    QimsysAbstractPluginObject *ret = 0;
+    CuteimeAbstractPluginObject *ret = 0;
     if (QSystemTrayIcon::isSystemTrayAvailable()) {
         ret = new Object(parent);
     }

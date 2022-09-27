@@ -1,4 +1,4 @@
-SOURCES += $$PWD/qimsysserver.cpp
-HEADERS += $$PWD/qimsysserver.h
+SOURCES += $$PWD/cuteimeserver.cpp
+HEADERS += $$PWD/cuteimeserver.h
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD

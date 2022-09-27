@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,13 +22,13 @@
 
 #include "japanese.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
-#include <qimsyscandidates.h>
-#include <qimsyspluginmanager.h>
-#include <qimsysengine.h>
-#include <qimsysenginedictionary.h>
-#include <qimsyskeymanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
+#include <cuteimecandidates.h>
+#include <cuteimepluginmanager.h>
+#include <cuteimeengine.h>
+#include <cuteimeenginedictionary.h>
+#include <cuteimekeymanager.h>
 
 #include "preedit.h"
 #include "japanesesettings.h"
@@ -88,7 +88,7 @@ private slots:
     void stateChanged(State state);
     void characterChanged(int character);
     void typingChanged(Typing typing);
-    void predictionsChanged(const QimsysConversionItemList &list);
+    void predictionsChanged(const CuteimeConversionItemList &list);
 
     void candidateIndexChanged(int index);
 
@@ -98,11 +98,11 @@ private slots:
 private:
     Converter *q;
     InputManager *inputManager;
-    QimsysApplicationManager manager;
+    CuteimeApplicationManager manager;
     Preedit *preedit;
-    QimsysKeyManager keyManager;
-    QimsysCandidates candidates;
-    QimsysEngine *currentEngine;
+    CuteimeKeyManager keyManager;
+    CuteimeCandidates candidates;
+    CuteimeEngine *currentEngine;
     Interpreter interpreter;
     KeyActionManager *keyActions;
     QList<QActionGroup*> characterActions;
@@ -125,7 +125,7 @@ Converter::Private::Private(Converter *parent)
     , currentEngine(0)
     , keyActions(KeyActionManager::instance())
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     inputManager->setParent(0);
     preedit->setParent(q);
     keyActions->setParent(0);
@@ -154,14 +154,14 @@ Converter::Private::Private(Converter *parent)
     connect(setEnabled, SIGNAL(mapped(int)), this, SLOT(setEnabled(int)));
 
     {
-        KeyAction *action = new KeyAction(Direct, QT_TR_NOOP("Turn on QIMSYS"), this);
+        KeyAction *action = new KeyAction(Direct, QT_TR_NOOP("Turn on CUTEIME"), this);
         connect(action, SIGNAL(triggered()), setEnabled, SLOT(map()));
         setEnabled->setMapping(action, true);
         keyActions->addAction(action);
     }
 
     {
-        KeyAction *action = new KeyAction(EmptyString, QT_TR_NOOP("Turn off QIMSYS"), this);
+        KeyAction *action = new KeyAction(EmptyString, QT_TR_NOOP("Turn off CUTEIME"), this);
         connect(action, SIGNAL(triggered()), setEnabled, SLOT(map()));
         setEnabled->setMapping(action, false);
         keyActions->addAction(action);
@@ -461,15 +461,15 @@ Converter::Private::Private(Converter *parent)
     setupActions();
     tempIcon.setSingleShot(true);
     connect(&tempIcon, SIGNAL(timeout()), this, SLOT(updateIcon()));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include <QApplication>
 
 Converter::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::reset()
@@ -481,34 +481,34 @@ void Converter::Private::reset()
 void Converter::Private::exec(int action)
 {
     if (!q->isActive()) return;
-    qimsysDebugIn() << action;
+    cuteimeDebugIn() << action;
     switch (action) {
-    case QimsysApplicationManager::Reset:
+    case CuteimeApplicationManager::Reset:
         commit();
         break;
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setEnabled(int enabled)
 {
-    qimsysDebugIn() << enabled;
+    cuteimeDebugIn() << enabled;
     manager.setComposing(enabled);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::moveCursor(int offset)
 {
-    qimsysDebugIn() << offset;
+    cuteimeDebugIn() << offset;
     switch (inputManager->state()) {
     case InputingString: {
-        QimsysPreeditItemList items = preedit->items();
+        CuteimePreeditItemList items = preedit->items();
         if (items.count() != 1) {
-            qimsysWarning() << items;
+            cuteimeWarning() << items;
         }
-        QimsysPreeditItem item = items.first();
+        CuteimePreeditItem item = items.first();
         switch (offset) {
         case -2: // first
             offset = -item.cursor;
@@ -535,23 +535,23 @@ void Converter::Private::moveCursor(int offset)
         break;
     }
     preedit->move(offset, false);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::changeSelectionLength(int diff)
 {
-    qimsysDebugIn() << diff;
+    cuteimeDebugIn() << diff;
     preedit->move(diff, true);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::convert()
 {
-    qimsysDebugIn() << currentEngine;
+    cuteimeDebugIn() << currentEngine;
     if (currentEngine) {
-        QimsysPreeditItemList items = preedit->items();
+        CuteimePreeditItemList items = preedit->items();
         if (items.count() != 1) {
-            qimsysWarning() << items;
+            cuteimeWarning() << items;
         }
         if (items.first().to == interpreter.inputString()) {
             interpreter.termiateInput();
@@ -561,24 +561,24 @@ void Converter::Private::convert()
     } else {
         accept = false;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::resizeSegment(int diff)
 {
-    qimsysDebugIn() << diff;
+    cuteimeDebugIn() << diff;
     if (currentEngine) {
         inputManager->setState(ConvertingString);
         currentEngine->resize(preedit->conversionIndex(), diff);
     } else {
         accept = false;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::selectCandidate(int offset)
 {
-    qimsysDebugIn() << offset;
+    cuteimeDebugIn() << offset;
     switch (inputManager->state()) {
     case EmptyString:
     case InputingString:
@@ -586,7 +586,7 @@ void Converter::Private::selectCandidate(int offset)
         if (currentEngine) {
             if (candidates.candidates().isEmpty()) {
                 accept = false;
-                qimsysDebugOut();
+                cuteimeDebugOut();
                 return;
             }
 
@@ -616,13 +616,13 @@ void Converter::Private::selectCandidate(int offset)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::candidateIndexChanged(int index)
 {
     if (index < 0) return;
-    qimsysDebugIn() << index;
+    cuteimeDebugIn() << index;
     switch (inputManager->state()) {
     case ConvertingString:
     case SelectingCandidate:
@@ -637,12 +637,12 @@ void Converter::Private::candidateIndexChanged(int index)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::cancel()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     switch (inputManager->state()) {
     case ConvertingString:
     case SelectingCandidate:
@@ -656,15 +656,15 @@ void Converter::Private::cancel()
         }
         break;
     default:
-        qimsysWarning() << inputManager->state() << "is not handled here.";
+        cuteimeWarning() << inputManager->state() << "is not handled here.";
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setCharacterMode(int character)
 {
-    qimsysDebugIn() << character;
+    cuteimeDebugIn() << character;
     switch (character) {
     case 1:
         switch (inputManager->character()) {
@@ -684,7 +684,7 @@ void Converter::Private::setCharacterMode(int character)
             character = Hiragana | FullWidth;
             break;
         default:
-            qimsysWarning() << character << "not found";
+            cuteimeWarning() << character << "not found";
             break;
         }
         break;
@@ -706,18 +706,18 @@ void Converter::Private::setCharacterMode(int character)
             character = Alphabet | FullWidth;
             break;
         default:
-            qimsysWarning() << character << "not found";
+            cuteimeWarning() << character << "not found";
             break;
         }
         break;
     }
     inputManager->setCharacter(character);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setTypingMode(int typingMode)
 {
-    qimsysDebugIn() << typingMode;
+    cuteimeDebugIn() << typingMode;
     if (inputManager->character() & (Hiragana | Katakana)) {
         switch (typingMode) {
         case 1:
@@ -732,7 +732,7 @@ void Converter::Private::setTypingMode(int typingMode)
                 typingMode = Kana;
                 break;
             default:
-                qimsysWarning() << typingMode << "not found";
+                cuteimeWarning() << typingMode << "not found";
                 break;
             }
             break;
@@ -748,19 +748,19 @@ void Converter::Private::setTypingMode(int typingMode)
                 typingMode = Roma;
                 break;
             default:
-                qimsysWarning() << typingMode << "not found";
+                cuteimeWarning() << typingMode << "not found";
                 break;
             }
             break;
         }
         inputManager->setTyping((Typing)typingMode);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::convertTo(int character)
 {
-    qimsysDebugIn() << character;
+    cuteimeDebugIn() << character;
     switch (character) {
     case 1:
         switch (inputManager->character()) {
@@ -780,7 +780,7 @@ void Converter::Private::convertTo(int character)
             character = Hiragana | FullWidth;
             break;
         default:
-            qimsysWarning() << character << "not found";
+            cuteimeWarning() << character << "not found";
             break;
         }
         break;
@@ -802,7 +802,7 @@ void Converter::Private::convertTo(int character)
             character = Alphabet | FullWidth;
             break;
         default:
-            qimsysWarning() << character << "not found";
+            cuteimeWarning() << character << "not found";
             break;
         }
         break;
@@ -810,16 +810,16 @@ void Converter::Private::convertTo(int character)
     switch (inputManager->state()) {
     case InputingString: {
         QString str = interpreter.inputString(character);
-        QimsysPreeditItem item;
+        CuteimePreeditItem item;
         item.to = str;
         item.cursor = str.length();
         item.selection = 0;
-#ifdef QIMSYS_PLATFORM_MAEMO
+#ifdef CUTEIME_PLATFORM_MAEMO
         item.underline = QTextCharFormat::SingleUnderline;
 #else
         item.underline = QTextCharFormat::WaveUnderline;
 #endif
-        preedit->setItems(QimsysPreeditItemList() << item);
+        preedit->setItems(CuteimePreeditItemList() << item);
         break;
     }
     case ConvertingString:
@@ -828,12 +828,12 @@ void Converter::Private::convertTo(int character)
     default:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::inputSpace(int width)
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     int current = inputManager->character();
     bool temp = inputManager->isTemp();
     int character = Alphabet;
@@ -869,16 +869,16 @@ void Converter::Private::inputSpace(int width)
     case SelectingPrediction:
         break;
     default:
-        qimsysWarning() << state << "is not handled here.";
+        cuteimeWarning() << state << "is not handled here.";
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void Converter::Private::predictionsChanged(const QimsysConversionItemList &list)
+void Converter::Private::predictionsChanged(const CuteimeConversionItemList &list)
 {
     if (!q->isActive()) return;
-    qimsysDebugIn() << list;
+    cuteimeDebugIn() << list;
     switch (inputManager->state()) {
     case EmptyString:
     case InputingString:
@@ -888,10 +888,10 @@ void Converter::Private::predictionsChanged(const QimsysConversionItemList &list
         // do nothing
         break;
     default:
-        qimsysWarning() << inputManager->state() << "not handled.";
+        cuteimeWarning() << inputManager->state() << "not handled.";
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::keyPressed(const QString &text, int keycode, int modifiers, bool autoRepeat)
@@ -911,16 +911,16 @@ void Converter::Private::keyPressed(const QString &text, int keycode, int modifi
     if (modifiers & Qt::ControlModifier) k1 += Qt::CTRL;
     if (modifiers & Qt::AltModifier) k1 += Qt::ALT;
     if (modifiers & Qt::ShiftModifier) k1 += Qt::SHIFT;
-    QimsysKeySequence seq(k1);
-    qimsysDebugIn() << seq.toString();
+    CuteimeKeySequence seq(k1);
+    cuteimeDebugIn() << seq.toString();
 
     const KeyActionDataList &list = keyActions->list();
     for (int i = 0; i < list.count(); i++) {
         const KeyActionData &data = list.at(i);
         if (data.state == inputManager->state() && data.key == seq) {
-            QimsysPreeditItemList items = preedit->items();
+            CuteimePreeditItemList items = preedit->items();
             QString preeditString;
-            foreach(const QimsysPreeditItem &item, items) {
+            foreach(const CuteimePreeditItem &item, items) {
                 preeditString.append(item.to);
             }
             switch (inputManager->state()) {
@@ -999,29 +999,29 @@ void Converter::Private::keyPressed(const QString &text, int keycode, int modifi
             break;
         }
     }
-    qimsysDebugOut() << keyManager.isAccepted();
+    cuteimeDebugOut() << keyManager.isAccepted();
 }
 
 void Converter::Private::focusChanged(bool focus)
 {
     if (!q->isActive()) return;
-    qimsysDebugIn() << focus;
+    cuteimeDebugIn() << focus;
     Q_UNUSED(focus)
     QTimer::singleShot(100, this, SLOT(focusChanged()));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::focusChanged()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     updateIcon();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::composingChanged(bool composing)
 {
     if (!q->isActive()) return;
-    qimsysDebugIn() << composing;
+    cuteimeDebugIn() << composing;
     if (composing) {
         inputManager->setState(EmptyString);
     } else {
@@ -1036,25 +1036,25 @@ void Converter::Private::composingChanged(bool composing)
         }
     }
     updateIcon();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::stateChanged(State state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     manager.setComposing(state != Direct);
     switch (state) {
     case Direct:
         candidates.clear();
-        preedit->setConversions(QimsysConversionItemList());
+        preedit->setConversions(CuteimeConversionItemList());
         break;
     case EmptyString:
         candidates.clear();
-        preedit->setConversions(QimsysConversionItemList());
+        preedit->setConversions(CuteimeConversionItemList());
         break;
     case InputingString:
         candidates.clear();
-        preedit->setConversions(QimsysConversionItemList());
+        preedit->setConversions(CuteimeConversionItemList());
         break;
     case ConvertingString:
         candidates.clear();
@@ -1066,20 +1066,20 @@ void Converter::Private::stateChanged(State state)
     case SelectingPrediction:
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::characterChanged(int character)
 {
-    qimsysDebugIn() << character;
+    cuteimeDebugIn() << character;
     Q_UNUSED(character);
     updateIcon();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::typingChanged(Typing typing)
 {
-    qimsysDebugIn() << typing;
+    cuteimeDebugIn() << typing;
     updateIcon(typing);
 
     // TODO use QTimer and reset it while running
@@ -1088,12 +1088,12 @@ void Converter::Private::typingChanged(Typing typing)
     } else {
         tempIcon.start(1000);
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::updateIcon(Typing typing)
 {
-    qimsysDebugIn() << typing;
+    cuteimeDebugIn() << typing;
     bool focus = manager.focus();
     bool composing = manager.composing();
 
@@ -1158,7 +1158,7 @@ void Converter::Private::updateIcon(Typing typing)
                 png = "katakana";
                 break;
             default:
-                qimsysWarning() << inputManager->character();
+                cuteimeWarning() << inputManager->character();
                 break;
             }
             switch (inputManager->character() & WidthMask) {
@@ -1169,7 +1169,7 @@ void Converter::Private::updateIcon(Typing typing)
                 png += "_full";
                 break;
             default:
-                qimsysWarning() << inputManager->character();
+                cuteimeWarning() << inputManager->character();
                 break;
             }
             break;
@@ -1184,18 +1184,18 @@ void Converter::Private::updateIcon(Typing typing)
     }
     p.end();
     manager.setCurrentIcon(QIcon(pix));
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::commit()
 {
     if (preedit->items().isEmpty()) return;
-    qimsysDebugIn();
+    cuteimeDebugIn();
     switch (inputManager->state()) {
     case InputingString: {
-        QimsysPreeditItemList items = preedit->items();
+        CuteimePreeditItemList items = preedit->items();
         if (items.count() != 1) {
-            qimsysWarning() << items;
+            cuteimeWarning() << items;
         }
         if (items.first().to == interpreter.inputString()) {
             interpreter.termiateInput();
@@ -1211,15 +1211,15 @@ void Converter::Private::commit()
         break;
 
     default:
-        qimsysWarning() << inputManager->state() << "is not handled here" << preedit->items();
+        cuteimeWarning() << inputManager->state() << "is not handled here" << preedit->items();
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::clear()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     switch (inputManager->state()) {
     case EmptyString:
         candidates.clear();
@@ -1230,15 +1230,15 @@ void Converter::Private::clear()
         inputManager->setState(EmptyString);
         break;
     default:
-//   qimsysWarning() << inputManager->state();
+//   cuteimeWarning() << inputManager->state();
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setupActions()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
 
     // Character types
     {
@@ -1303,12 +1303,12 @@ void Converter::Private::setupActions()
         actions.append(parent);
     }
 
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setCharacterMode(QAction *action)
 {
-    qimsysDebugIn() << action;
+    cuteimeDebugIn() << action;
     int character = action->data().toInt();
     if (character > 0) {
         if (inputManager->state() == Direct) {
@@ -1320,35 +1320,35 @@ void Converter::Private::setCharacterMode(QAction *action)
         inputManager->setState(Direct);
         updateIcon();
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::setTyping(QAction *action)
 {
-    qimsysDebugIn() << action;
+    cuteimeDebugIn() << action;
     inputManager->setTyping((Typing)action->data().toInt());
     updateIcon();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Converter::Private::currentEngineChanged(const QString &name)
 {
-    qimsysDebugIn() << name;
-    foreach(QimsysEngine *engine, QimsysPluginManager::objects<QimsysEngine>(this)) {
+    cuteimeDebugIn() << name;
+    foreach(CuteimeEngine *engine, CuteimePluginManager::objects<CuteimeEngine>(this)) {
         if (engine->identifier() == name) {
             if (currentEngine) {
                 disconnect(&interpreter, SIGNAL(rawStringChanged(QString)), currentEngine, SLOT(setRawString(QString)));
                 disconnect(&interpreter, SIGNAL(inputStringChanged(QString)), currentEngine, SLOT(setInputString(QString)));
-                disconnect(currentEngine, SIGNAL(predicted(QimsysConversionItemList)), this, SLOT(predictionsChanged(QimsysConversionItemList)));
-                disconnect(currentEngine, SIGNAL(conversionsChanged(QimsysConversionItemList)), preedit, SLOT(setConversions(QimsysConversionItemList)));
-                disconnect(preedit, SIGNAL(committed(QimsysConversionItemList)), currentEngine, SLOT(commit(QimsysConversionItemList)));
+                disconnect(currentEngine, SIGNAL(predicted(CuteimeConversionItemList)), this, SLOT(predictionsChanged(CuteimeConversionItemList)));
+                disconnect(currentEngine, SIGNAL(conversionsChanged(CuteimeConversionItemList)), preedit, SLOT(setConversions(CuteimeConversionItemList)));
+                disconnect(preedit, SIGNAL(committed(CuteimeConversionItemList)), currentEngine, SLOT(commit(CuteimeConversionItemList)));
             }
             currentEngine = engine;
             connect(&interpreter, SIGNAL(rawStringChanged(QString)), currentEngine, SLOT(setRawString(QString)));
             connect(&interpreter, SIGNAL(inputStringChanged(QString)), currentEngine, SLOT(setInputString(QString)));
-            connect(currentEngine, SIGNAL(predicted(QimsysConversionItemList)), this, SLOT(predictionsChanged(QimsysConversionItemList)), Qt::QueuedConnection);
-            connect(currentEngine, SIGNAL(conversionsChanged(QimsysConversionItemList)), preedit, SLOT(setConversions(QimsysConversionItemList)));
-            connect(preedit, SIGNAL(committed(QimsysConversionItemList)), currentEngine, SLOT(commit(QimsysConversionItemList)));
+            connect(currentEngine, SIGNAL(predicted(CuteimeConversionItemList)), this, SLOT(predictionsChanged(CuteimeConversionItemList)), Qt::QueuedConnection);
+            connect(currentEngine, SIGNAL(conversionsChanged(CuteimeConversionItemList)), preedit, SLOT(setConversions(CuteimeConversionItemList)));
+            connect(preedit, SIGNAL(committed(CuteimeConversionItemList)), currentEngine, SLOT(commit(CuteimeConversionItemList)));
             return;
         }
     }
@@ -1357,27 +1357,27 @@ void Converter::Private::currentEngineChanged(const QString &name)
     if (currentEngine) {
         disconnect(&interpreter, SIGNAL(rawStringChanged(QString)), currentEngine, SLOT(setRawString(QString)));
         disconnect(&interpreter, SIGNAL(inputStringChanged(QString)), currentEngine, SLOT(setInputString(QString)));
-        disconnect(currentEngine, SIGNAL(predicted(QimsysConversionItemList)), this, SLOT(predictionsChanged(QimsysConversionItemList)));
-        disconnect(currentEngine, SIGNAL(conversionsChanged(QimsysConversionItemList)), preedit, SLOT(setConversions(QimsysConversionItemList)));
-        disconnect(preedit, SIGNAL(committed(QimsysConversionItemList)), currentEngine, SLOT(commit(QimsysConversionItemList)));
+        disconnect(currentEngine, SIGNAL(predicted(CuteimeConversionItemList)), this, SLOT(predictionsChanged(CuteimeConversionItemList)));
+        disconnect(currentEngine, SIGNAL(conversionsChanged(CuteimeConversionItemList)), preedit, SLOT(setConversions(CuteimeConversionItemList)));
+        disconnect(preedit, SIGNAL(committed(CuteimeConversionItemList)), currentEngine, SLOT(commit(CuteimeConversionItemList)));
     }
     currentEngine = 0;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::Converter(QObject *parent)
-    : QimsysConverter(parent)
+    : CuteimeConverter(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Converter::~Converter()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 QString Converter::identifier() const
@@ -1400,7 +1400,7 @@ QList<QAction*> Converter::actions()
     return d->actions;
 }
 
-QimsysSettingsWidget *Converter::settings(const QString &hint, QWidget *parent)
+CuteimeSettingsWidget *Converter::settings(const QString &hint, QWidget *parent)
 {
     return new JapaneseSettings(this, parent);
 }

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -20,8 +20,8 @@
 
 #include "icon.h"
 
-#include <qimsysdebug.h>
-#include <qimsysapplicationmanager.h>
+#include <cuteimedebug.h>
+#include <cuteimeapplicationmanager.h>
 
 #include "inputmethodcontroller.h"
 
@@ -54,7 +54,7 @@ private slots:
 private:
     Icon *q;
 
-    QimsysApplicationManager applicationManager;
+    CuteimeApplicationManager applicationManager;
 
     QTimeLine timeLine;
     QIcon before;
@@ -65,11 +65,11 @@ Icon::Private::Private(Icon *parent)
     : QObject(parent)
     , q(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     connect(q, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(activated(QSystemTrayIcon::ActivationReason)));
 
     metaObject()->invokeMethod(this, "init", Qt::QueuedConnection);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Icon::Private::~Private()

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -22,11 +22,11 @@
 
 #include <plugins/inputmethods/japanese/standard/global.h>
 
-#include <qimsysdebug.h>
-#include <qimsysinputmethodmanager.h>
-#include <qimsyskeymanager.h>
-#include <qimsyspreeditmanager.h>
-#include <qimsysdynamictranslator.h>
+#include <cuteimedebug.h>
+#include <cuteimeinputmethodmanager.h>
+#include <cuteimekeymanager.h>
+#include <cuteimepreeditmanager.h>
+#include <cuteimedynamictranslator.h>
 
 #include <QFile>
 #include <QTextStream>
@@ -47,7 +47,7 @@ private slots:
     void activeChanged(bool active);
     void stateChanged(uint state);
 
-    void itemChanged(const QimsysPreeditItem &item);
+    void itemChanged(const CuteimePreeditItem &item);
 
 private:
     void readMap(const QString &fileName);
@@ -55,8 +55,8 @@ private:
 private:
     Interpreter *q;
 
-    QimsysInputMethodManager *inputMethodManager;
-    QimsysPreeditManager *preeditManager;
+    CuteimeInputMethodManager *inputMethodManager;
+    CuteimePreeditManager *preeditManager;
 
     QMap<QString, QString> convertMap;
     QMap<QString, QString> convertMapReversed;
@@ -77,15 +77,15 @@ Interpreter::Private::Private(Interpreter *parent)
     , preeditManager(0)
     , convertMaxLength(0)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     init();
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Interpreter::Private::~Private()
 {
-    qimsysDebugIn();
-    qimsysDebugOut();
+    cuteimeDebugIn();
+    cuteimeDebugOut();
 }
 
 void Interpreter::Private::init()
@@ -95,7 +95,7 @@ void Interpreter::Private::init()
 
     q->setLocale("ja_JP");
     q->setLanguage("Japanese(Standard)");
-#ifndef QIMSYS_NO_GUI
+#ifndef CUTEIME_NO_GUI
     q->setIcon(QIcon(":/japanese/romaji/resources/romaji.png"));
 #endif
     trConnect(this, QT_TR_NOOP("Romaji"), q, "name");
@@ -107,7 +107,7 @@ void Interpreter::Private::init()
     q->setCategoryType(MoreThanOne);
     trConnect(this, QT_TR_NOOP("Input/Interpreter"), q, "categoryName");
 
-    inputMethodManager = new QimsysInputMethodManager(this);
+    inputMethodManager = new CuteimeInputMethodManager(this);
     inputMethodManager->init();
     connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
 
@@ -118,7 +118,7 @@ void Interpreter::Private::init()
 
 void Interpreter::Private::readMap(const QString &fileName)
 {
-    qimsysDebugIn() << fileName;
+    cuteimeDebugIn() << fileName;
     QFile file(fileName);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         convertMap.clear();
@@ -129,7 +129,7 @@ void Interpreter::Private::readMap(const QString &fileName)
             if (line.contains('\t')) {
                 QStringList fields = line.split('\t');
                 if (fields.isEmpty() || fields.first().isEmpty() || fields.first().startsWith("#")) continue;
-                qimsysDebug() << fields.at(0) << fields.at(1);
+                cuteimeDebug() << fields.at(0) << fields.at(1);
                 convertMap[fields.at(0)] = fields.at(1);
                 if (fields.length() > 2) {
                     convertMap[fields.at(0)] += QString("\t%1").arg(fields.at(2));
@@ -140,17 +140,17 @@ void Interpreter::Private::readMap(const QString &fileName)
         }
         file.close();
     } else {
-        qimsysWarning() << file.error() << file.errorString() << fileName;
+        cuteimeWarning() << file.error() << file.errorString() << fileName;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Interpreter::Private::activeChanged(bool active)
 {
-    qimsysDebugIn() << active;
+    cuteimeDebugIn() << active;
     if (active) {
         if (!inputMethodManager) {
-            inputMethodManager = new QimsysInputMethodManager(this);
+            inputMethodManager = new CuteimeInputMethodManager(this);
             inputMethodManager->init();
             connect(inputMethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
         }
@@ -169,42 +169,42 @@ void Interpreter::Private::activeChanged(bool active)
             inputMethodManager = 0;
         }
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 void Interpreter::Private::stateChanged(uint state)
 {
-    qimsysDebugIn() << state;
+    cuteimeDebugIn() << state;
     switch (state) {
     case Empty:
     case Input:
     case Convert:
         if (!preeditManager) {
-            preeditManager = new QimsysPreeditManager(this);
+            preeditManager = new CuteimePreeditManager(this);
             preeditManager->init();
-            connect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         }
         previous.clear();
         itemChanged(preeditManager->item());
         break;
     default:
         if (preeditManager) {
-            disconnect(preeditManager, SIGNAL(itemChanged(QimsysPreeditItem)), this, SLOT(itemChanged(QimsysPreeditItem)));
+            disconnect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
             preeditManager->deleteLater();
             preeditManager = 0;
         }
         break;
     }
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
-void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
+void Interpreter::Private::itemChanged(const CuteimePreeditItem &item)
 {
     if (item.to.isEmpty()) return;
     if (item.rawString == previous) return;
     if (item.selection != 0) return;
 
-    qimsysDebugIn() << item;
+    cuteimeDebugIn() << item;
 
     QStringList to = item.to;
     QStringList from = item.from;
@@ -249,17 +249,17 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
         }
     }
 
-    qimsysDebug() << currentIndex << cursor << t << f << rS;
+    cuteimeDebug() << currentIndex << cursor << t << f << rS;
 
     if (currentIndex == -1) {
         // nothing to do
     } else {
         bool terminate = to.contains(QString());
-        qimsysDebug() << terminate;
+        cuteimeDebug() << terminate;
 
         // check from the longest string
         for (int i = rS.length(); i > 0; i--) {
-            qimsysDebug() << i << rS.right(i);
+            cuteimeDebug() << i << rS.right(i);
             QString target = rS.right(i);
             if (terminate) {
                 target.append(QLatin1String("\\0"));
@@ -269,8 +269,8 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
                 // remove the part replaced
                 int k = 0;
                 for (int j = 0; j < i;) {
-                    qimsysDebug() << currentIndex << currentIndex - k;
-                    qimsysDebug() << item.to.at(currentIndex - k);
+                    cuteimeDebug() << currentIndex << currentIndex - k;
+                    cuteimeDebug() << item.to.at(currentIndex - k);
                     int l = to.at(currentIndex - k).length();
                     to.removeAt(currentIndex - k);
                     from.removeAt(currentIndex - k);
@@ -279,16 +279,16 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
                     cursor--;
                     k++;
                 }
-                qimsysDebug() << rS << to << from << rawString;
+                cuteimeDebug() << rS << to << from << rawString;
                 rS = rS.right(i);
 
                 // insert the replacement
                 QString conv = convertMap[target.toLower()];
                 modified = conv.length();
-                qimsysDebug() << conv << cursor;
+                cuteimeDebug() << conv << cursor;
 
                 if (conv.length() == 2 && (conv.at(0) == rS.at(0) || conv.at(1) == rS.at(1) || conv.at(0) == QChar(0x3093))) {
-                    qimsysDebug() << conv << rS;
+                    cuteimeDebug() << conv << rS;
                     QString first = conv.left(1);
                     to.insert(cursor, first);
                     from.insert(cursor, first);
@@ -301,7 +301,7 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
                 bool found = false;
                 k = 0;
                 for (int j = 0; j < to.length(); j++) {
-                    qimsysDebug() << k << to.at(j) << j << cursor;
+                    cuteimeDebug() << k << to.at(j) << j << cursor;
                     if (k == cursor) {
                         to.insert(j, conv);
                         from.insert(j, conv);
@@ -317,7 +317,7 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
                     rawString.append(rS);
                 }
                 cursor = cursor + conv.length();
-                qimsysDebug() << to << from << rawString << cursor;
+                cuteimeDebug() << to << from << rawString << cursor;
                 break;
             }
         }
@@ -325,14 +325,14 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
     // determine rawString missing
     for (int i = 0; i < from.length(); i++) {
         if (rawString.at(i).isNull()) {
-//            qimsysWarning() << item.from.at(i);
+//            cuteimeWarning() << item.from.at(i);
             if (convertMapReversed.contains(from.at(i))) {
                 rawString.replace(i, convertMapReversed[from.at(i)]);
             }
         }
     }
 
-    QimsysPreeditItem newItem;
+    CuteimePreeditItem newItem;
     newItem.to = to;
     newItem.from = from;
     newItem.rawString = rawString;
@@ -344,22 +344,22 @@ void Interpreter::Private::itemChanged(const QimsysPreeditItem &item)
     preeditManager->blockSignals(false);
 
     previous = rawString;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Interpreter::Interpreter(QObject *parent)
-    : QimsysInterpreter(parent)
+    : CuteimeInterpreter(parent)
 {
-    qimsysDebugIn() << parent;
+    cuteimeDebugIn() << parent;
     d = new Private(this);
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 Interpreter::~Interpreter()
 {
-    qimsysDebugIn();
+    cuteimeDebugIn();
     delete d;
-    qimsysDebugOut();
+    cuteimeDebugOut();
 }
 
 #include "interpreter.moc"

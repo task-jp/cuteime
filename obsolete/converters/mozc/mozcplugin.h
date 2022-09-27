@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *   qimsys                                                                  *
+ *   cuteime                                                                  *
  *   Copyright (C) 2009-2015 by Tasuku Suzuki <stasuku@gmail.com>            *
  *                                                                           *
  *   This program is free software; you can redistribute it and/or modify    *
@@ -21,19 +21,19 @@
 #ifndef MOZCPLUGIN_H
 #define MOZCPLUGIN_H
 
-#include <qimsysplugin.h>
+#include <cuteimeplugin.h>
 
-class QimsysConverter;
+class CuteimeConverter;
 
-class MozcPlugin : public QimsysPlugin
+class MozcPlugin : public CuteimePlugin
 {
     Q_OBJECT
-    Q_INTERFACES(QimsysPlugin)
+    Q_INTERFACES(CuteimePlugin)
 public:
     MozcPlugin();
 
 protected:
-    QimsysAbstractPluginObject *createObject(QObject *parent);
+    CuteimeAbstractPluginObject *createObject(QObject *parent);
 };
 
 #endif//MOZCPLUGIN_H

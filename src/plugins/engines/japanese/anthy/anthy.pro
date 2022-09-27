@@ -1,4 +1,4 @@
-include(../../../../../qimsysplugin.pri)
+include(../../../../../cuteimeplugin.pri)
 
 HEADERS += plugin.h engine.h \
     libanthy.h \
@@ -12,7 +12,7 @@ SOURCES += plugin.cpp engine.cpp \
     dictionarymodel.cpp \
     dictionary.cpp
 
-!contains(QIMSYS_CONFIG, no-gui) {
+!contains(CUTEIME_CONFIG, no-gui) {
     QT += widgets
     HEADERS += wordeditor.h settings.h
     SOURCES += wordeditor.cpp settings.cpp
