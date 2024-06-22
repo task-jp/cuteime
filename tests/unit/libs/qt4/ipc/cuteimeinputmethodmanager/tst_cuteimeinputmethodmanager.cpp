@@ -123,7 +123,7 @@ private slots:
 
     void setLocale() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(localeChanged(QString)), this, SLOT(localeChanged(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -152,7 +152,7 @@ private slots:
 
     void setIdentifier() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(identifierChanged(QString)), this, SLOT(identifierChanged(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -181,7 +181,7 @@ private slots:
 
     void setConverter() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(converterChanged(QString)), this, SLOT(converterChanged(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -210,7 +210,7 @@ private slots:
 
     void setInterpreter() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(interpreterChanged(QString)), this, SLOT(interpreterChanged(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -239,7 +239,7 @@ private slots:
 
     void setEngine() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(engineChanged(QString)), this, SLOT(engineChanged(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -268,7 +268,7 @@ private slots:
 
     void setState() {
         QFETCH(uint, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(stateChanged(uint)), this, SLOT(stateChanged(uint)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:
@@ -297,7 +297,7 @@ private slots:
 
     void execute() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(inputmethodManager, SIGNAL(executed(QString)), this, SLOT(executed(QString)));
         switch (inputmethodManager->type()) {
         case CuteimeInputMethodManager::Server:

@@ -137,7 +137,7 @@ private slots:
 
     void setItem() {
         QFETCH(CuteimePreeditItem, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(itemChanged(CuteimePreeditItem)), this, SLOT(itemChanged(CuteimePreeditItem)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -176,7 +176,7 @@ private slots:
 
     void setRect() {
         QFETCH(QRect, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(rectChanged(QRect)), this, SLOT(rectChanged(QRect)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -205,7 +205,7 @@ private slots:
 
     void setFont() {
         QFETCH(QFont, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(fontChanged(QFont)), this, SLOT(fontChanged(QFont)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -235,7 +235,7 @@ private slots:
 
     void setCursorPosition() {
         QFETCH(int, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(cursorPositionChanged(int)), this, SLOT(cursorPositionChanged(int)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -264,7 +264,7 @@ private slots:
 
     void setSurroundingText() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(surroundingTextChanged(QString)), this, SLOT(surroundingTextChanged(QString)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -293,7 +293,7 @@ private slots:
 
     void setCurrentSelection() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(currentSelectionChanged(QString)), this, SLOT(currentSelectionChanged(QString)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:
@@ -322,7 +322,7 @@ private slots:
 
     void setMaximumTextLength() {
         QFETCH(int, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(preeditManager, SIGNAL(maximumTextLengthChanged(int)), this, SLOT(maximumTextLengthChanged(int)));
         switch (preeditManager->type()) {
         case CuteimePreeditManager::Server:

@@ -30,9 +30,8 @@
 #include <QDBusError>
 #include <QDBusMetaType>
 #include <QDBusReply>
-#else
-#include <QVariant>
 #endif // CUTEIME_NO_DBUS
+#include <QVariant>
 
 #include "cuteimeglobal.h"
 #include "dbus.h"
@@ -135,7 +134,7 @@ private:
             break; \
         case Client: \
             if (proxy()) \
-                proxy()->setProperty(#v, qVariantFromValue(v)); \
+                proxy()->setProperty(#v, QVariant::fromValue(v)); \
             else \
                 cuteimeWarning() << this << "is not initialized."; \
             break; \

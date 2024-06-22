@@ -341,9 +341,9 @@ bool QXimInputMethod::Private::storeIcValues(InputContext *ic, IMChangeICStruct 
         if (QLatin1String(XNInputStyle) == ic_attr->name) {
             ic->setProperty(ic_attr->name, X112Qt::convert((INT32*)ic_attr->value));
         } else if (QLatin1String(XNClientWindow) == ic_attr->name) {
-            ic->setProperty(ic_attr->name, qVariantFromValue(X112Qt::convert((Window*)ic_attr->value)));
+            ic->setProperty(ic_attr->name, QVariant::fromValue(X112Qt::convert((Window*)ic_attr->value)));
         } else if (QLatin1String(XNFocusWindow) == ic_attr->name) {
-            ic->setProperty(ic_attr->name, qVariantFromValue(X112Qt::convert((Window*)ic_attr->value)));
+            ic->setProperty(ic_attr->name, QVariant::fromValue(X112Qt::convert((Window*)ic_attr->value)));
         } else {
             cuteimeWarning() << ic_attr->name << "is not supported.";
         }
@@ -357,21 +357,21 @@ bool QXimInputMethod::Private::storeIcValues(InputContext *ic, IMChangeICStruct 
         } else if (QLatin1String(XNSpotLocation) == pre_attr->name) {
             ic->setProperty(pre_attr->name, X112Qt::convert((XPoint*)pre_attr->value));
         } else if (QLatin1String(XNColormap) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((Colormap*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((Colormap*)pre_attr->value)));
         } else if (QLatin1String(XNStdColormap) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((Colormap*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((Colormap*)pre_attr->value)));
         } else if (QLatin1String(XNForeground) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((CARD32*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((CARD32*)pre_attr->value)));
         } else if (QLatin1String(XNBackground) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((CARD32*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((CARD32*)pre_attr->value)));
         } else if (QLatin1String(XNBackgroundPixmap) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((Pixmap*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((Pixmap*)pre_attr->value)));
         } else if (QLatin1String(XNFontSet) == pre_attr->name) {
             ic->setProperty(pre_attr->name, X112Qt::convert((char*)pre_attr->value));
         } else if (QLatin1String(XNLineSpace) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((CARD32*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((CARD32*)pre_attr->value)));
         } else if (QLatin1String(XNCursor) == pre_attr->name) {
-            ic->setProperty(pre_attr->name, qVariantFromValue(X112Qt::convert((Cursor*)pre_attr->value)));
+            ic->setProperty(pre_attr->name, QVariant::fromValue(X112Qt::convert((Cursor*)pre_attr->value)));
         }
     }
     XICAttribute *sts_attr = opts->status_attr;

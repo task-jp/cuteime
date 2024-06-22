@@ -68,7 +68,7 @@ SetProperty::Private::~Private()
 
 void SetProperty::Private::setProperty(const QString &value)
 {
-    receiver->setProperty(name, qVariantFromValue(value));
+    receiver->setProperty(name, QVariant::fromValue(value));
 }
 
 void SetProperty::Private::setProperty()

@@ -312,7 +312,7 @@ void CuteimePreeditManager::commit(const QString &string, qulonglong target)
             d->server->commit(string, target);
 #ifndef CUTEIME_NO_DBUS
         } else {
-            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "commit", qVariantFromValue(string), qVariantFromValue(target));
+            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "commit", QVariant::fromValue(string), QVariant::fromValue(target));
             if (!reply.isValid()) {
                 cuteimeWarning() << reply.error();
             }
@@ -365,7 +365,7 @@ void CuteimePreeditManager::insert(const QString &str)
             d->server->insert(str);
 #ifndef CUTEIME_NO_DBUS
         } else {
-            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "insert", qVariantFromValue(str));
+            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "insert", QVariant::fromValue(str));
             if (!reply.isValid()) {
                 cuteimeWarning() << reply.error();
             }
@@ -390,7 +390,7 @@ void CuteimePreeditManager::replace(const QString &str)
             d->server->replace(str);
 #ifndef CUTEIME_NO_DBUS
         } else {
-            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "replace", qVariantFromValue(str));
+            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "replace", QVariant::fromValue(str));
             if (!reply.isValid()) {
                 cuteimeWarning() << reply.error();
             }
@@ -414,7 +414,7 @@ void CuteimePreeditManager::remove(int length)
             d->server->remove(length);
 #ifndef CUTEIME_NO_DBUS
         } else {
-            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "remove", qVariantFromValue(length));
+            QDBusReply<void> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "remove", QVariant::fromValue(length));
             if (!reply.isValid()) {
                 cuteimeWarning() << reply.error();
             }
@@ -438,7 +438,7 @@ QString CuteimePreeditManager::text(int length) const
             ret = d->server->text(length);
 #ifndef CUTEIME_NO_DBUS
         } else {
-            QDBusReply<QString> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "text", qVariantFromValue(length));
+            QDBusReply<QString> reply = qobject_cast<QDBusAbstractInterface*>(proxy())->call(QDBus::BlockWithGui, "text", QVariant::fromValue(length));
             if (!reply.isValid()) {
                 cuteimeWarning() << reply.error();
             } else {

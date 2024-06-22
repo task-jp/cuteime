@@ -93,7 +93,7 @@ private slots:
 
     void setVisible() {
         QFETCH(bool, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(keyboardManager, SIGNAL(visibleChanged(bool)), this, SLOT(visibleChanged(bool)));
         switch (keyboardManager->type()) {
         case CuteimeKeyboardManager::Server:

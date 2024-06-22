@@ -134,7 +134,7 @@ private slots:
 
     void setDisplayLanguage() {
         QFETCH(QString, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(displayLanguageChanged(QString)), this, SLOT(displayLanguageChanged(QString)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -162,7 +162,7 @@ private slots:
 
     void setFocus() {
         QFETCH(bool, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(focusChanged(bool)), this, SLOT(focusChanged(bool)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -191,7 +191,7 @@ private slots:
 
     void setWindow() {
         QFETCH(qulonglong, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(windowChanged(qulonglong)), this, SLOT(windowChanged(qulonglong)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -220,7 +220,7 @@ private slots:
 
     void setWidget() {
         QFETCH(qulonglong, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(widgetChanged(qulonglong)), this, SLOT(widgetChanged(qulonglong)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -248,7 +248,7 @@ private slots:
 
     void setComposing() {
         QFETCH(bool, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(composingChanged(bool)), this, SLOT(composingChanged(bool)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -283,7 +283,7 @@ private slots:
 
     void setCurrentIcon() {
         QFETCH(QIcon, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(currentIconChanged(QIcon)), this, SLOT(currentIconChanged(QIcon)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
@@ -311,7 +311,7 @@ private slots:
 
     void exec() {
         QFETCH(int, data);
-        expected = qVariantFromValue(data);
+        expected = QVariant::fromValue(data);
         connect(applicationManager, SIGNAL(triggered(int)), this, SLOT(triggered(int)));
         switch (applicationManager->type()) {
         case CuteimeApplicationManager::Server:
