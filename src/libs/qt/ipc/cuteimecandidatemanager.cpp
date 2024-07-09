@@ -50,9 +50,11 @@ CuteimeCandidateManager::Private::Private(CuteimeCandidateManager *parent)
 {
     cuteimeDebugIn() << parent;
     qRegisterMetaType<CuteimeConversionItem>("CuteimeConversionItem");
-    qRegisterMetaTypeStreamOperators<CuteimeConversionItem>("CuteimeConversionItem");
     qRegisterMetaType< CuteimeConversionItemList >("CuteimeConversionItemList");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    qRegisterMetaTypeStreamOperators<CuteimeConversionItem>("CuteimeConversionItem");
     qRegisterMetaTypeStreamOperators< CuteimeConversionItemList >("CuteimeConversionItemList");
+#endif
 #ifndef CUTEIME_NO_DBUS
     qDBusRegisterMetaType<CuteimeConversionItem>();
     qDBusRegisterMetaType< CuteimeConversionItemList >();

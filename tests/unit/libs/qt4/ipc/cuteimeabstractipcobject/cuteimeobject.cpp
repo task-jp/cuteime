@@ -81,9 +81,17 @@ AbstractIpcObject::Private::Private(AbstractIpcObject *parent)
         INIT(enum,)
 #undef INIT
 {
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#define QREGISTERMETATYPESTREAMOPERATORS( T )
+#else
+#define QREGISTERMETATYPESTREAMOPERATORS( T ) \
+    qRegisterMetaTypeStreamOperators<T>( #T );
+#endif
+
 #define REGISTERTYPE( T ) \
     qRegisterMetaType<T>( #T ); \
-    qRegisterMetaTypeStreamOperators<T>( #T ); \
+    QREGISTERMETATYPESTREAMOPERATORS( T ); \
     qDBusRegisterMetaType<T>();
 #ifdef QT_GUI_LIB
     REGISTERTYPE(QFont)

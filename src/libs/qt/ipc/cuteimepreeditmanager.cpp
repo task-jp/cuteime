@@ -65,7 +65,9 @@ CuteimePreeditManager::Private::Private(CuteimePreeditManager *parent)
 {
     cuteimeDebugIn() << parent;
     qRegisterMetaType<CuteimePreeditItem>("CuteimePreeditItem");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<CuteimePreeditItem>("CuteimePreeditItem");
+#endif
 #ifndef CUTEIME_NO_DBUS
     qDBusRegisterMetaType<CuteimePreeditItem>();
 #ifndef CUTEIME_NO_GUI
