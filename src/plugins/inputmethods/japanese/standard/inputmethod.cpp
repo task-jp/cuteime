@@ -409,7 +409,7 @@ void InputMethod::Private::keyPressed(const QString &text, int keycode, int modi
                 case Convert:
                 case Select:
                         inputMethodManager->execute(QLatin1String("Commit all"));
-                        Q_FALLTHROUGH;
+                        Q_FALLTHROUGH();
                 case Empty:
                     if (modifiers & Qt::ControlModifier || modifiers & Qt::AltModifier) break;
                 case Input:

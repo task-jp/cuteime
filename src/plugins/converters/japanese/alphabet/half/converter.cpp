@@ -148,7 +148,7 @@ void Converter::Private::stateChanged(uint state)
         CuteimePreeditItem item = preeditManager->item();
         item.to = item.rawString;
         preeditManager->setItem(item);
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     }
     default:
         if (preeditManager) {

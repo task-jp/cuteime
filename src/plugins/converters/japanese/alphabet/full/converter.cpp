@@ -194,7 +194,7 @@ void Converter::Private::stateChanged(uint state)
             item.to.append(to);
         }
         preeditManager->setItem(item);
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     }
     default:
         if (preeditManager) {

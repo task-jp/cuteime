@@ -205,7 +205,7 @@ void Engine::Private::stateChanged(uint state)
         break;
     case Empty:
         learn();
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     case Input:
         clearCandidates();
         predict();
@@ -238,7 +238,7 @@ void Engine::Private::itemChanged(const CuteimePreeditItem &item)
         if (!predictOnEmpty) {
             break;
         }
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     case Input:
         if (!prediction) {
             break;

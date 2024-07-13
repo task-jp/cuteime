@@ -212,7 +212,7 @@ void Converter::Private::stateChanged(uint state)
             cuteimeDebug() << item;
             preeditManager->setItem(item);
         }
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     }
     default:
         if (preeditManager) {

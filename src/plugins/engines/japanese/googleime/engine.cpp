@@ -197,7 +197,7 @@ void Engine::Private::stateChanged(uint state)
         clearCandidates();
         break;
     case Empty:
-        Q_FALLTHROUGH;
+        Q_FALLTHROUGH();
     case Input:
         clearCandidates();
         candidateList.clear();

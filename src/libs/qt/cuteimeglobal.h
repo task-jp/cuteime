@@ -37,7 +37,7 @@ static const char *const CUTEIME_DBUS_SERVICE = "me.qtquick.cuteime";
 
 
 #ifndef Q_FALLTHROUGH
-#define Q_FALLTHROUGH
+# define Q_FALLTHROUGH() (void)0
 #endif
 
 #define CUTEIME_MACRO_TO_STRING(x) x
