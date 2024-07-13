@@ -35,7 +35,10 @@ static const char *const CUTEIME_DBUS_SERVICE = "me.qtquick.cuteime";
 
 //#define CUTEIME_DEBUG_MODE
 
-#define fallthrough
+
+#ifndef Q_FALLTHROUGH
+#define Q_FALLTHROUGH
+#endif
 
 #define CUTEIME_MACRO_TO_STRING(x) x
 #define CUTEIME_MACRO_TO_STRING2(x) #x

@@ -543,7 +543,7 @@ void KeyActions::Private::moveCursor(int offset)
     }
     case Select:
         inputMethodManager.setState(Convert);
-        fallthrough;
+        Q_FALLTHROUGH;
     case Convert: {
         QStringList to = item.to;
         int cursor = item.cursor;
@@ -918,7 +918,7 @@ void KeyActions::Private::selectCandidate(int delta)
         if (candidateManager.currentIndex() == -1 && delta == 1) {
             delta = 2;
         }
-        fallthrough;
+        Q_FALLTHROUGH;
     case Select:
         if (!candidateManager.items().isEmpty()) {
             candidateManager.setCurrentIndex((candidateManager.currentIndex() + delta + candidateManager.items().count()) % candidateManager.items().count());
