@@ -22,13 +22,6 @@
 
 #include "cuteimedebug.h"
 
-#ifndef CUTEIME_NO_GUI
-inline bool operator==(const QIcon &icon1, const QIcon &icon2)
-{
-    return icon1.cacheKey() == icon2.cacheKey();
-}
-#endif
-
 class CuteimeApplicationManager::Private : private QObject
 {
     Q_OBJECT
@@ -161,7 +154,32 @@ setProp(CuteimeApplicationManager, bool, composing, setComposing)
 
 #ifndef CUTEIME_NO_GUI
 getProp(CuteimeApplicationManager, QIcon, currentIcon)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+void CuteimeApplicationManager::setCurrentIcon(const QIcon & currentIcon)
+{
+    cuteimeDebugIn() << currentIcon;
+    switch(type()) {
+    case Server:
+        if(d->currentIcon.cacheKey() == currentIcon.cacheKey()) break;
+        d->currentIcon = currentIcon;
+        emit currentIconChanged(d->currentIcon);
+        break;
+    case Client:
+        if (proxy())
+            proxy()->setProperty("currentIcon", QVariant::fromValue(currentIcon));
+        else
+            cuteimeWarning() << this << "is not initialized.";
+        break;
+    }
+    cuteimeDebugOut();
+}
+#else
+inline bool operator==(const QIcon &icon1, const QIcon &icon2)
+{
+    return icon1.cacheKey() == icon2.cacheKey();
+}
 setProp(CuteimeApplicationManager, const QIcon&, currentIcon, setCurrentIcon)
+#endif
 #endif
 
 void CuteimeApplicationManager::exec(int action)
