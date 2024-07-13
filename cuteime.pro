@@ -11,9 +11,7 @@ isEqual(QT_MAJOR_VERSION, 5) {
         test.commands = "for test in `find bin -name \"tst_cuteime*\" -executable -type f`; do \$\$test; done"
         QMAKE_EXTRA_TARGETS += test
     }
-}
-
-isEqual(QT_MAJOR_VERSION, 4) {
+} else {
     SUBDIRS += src
 }
 

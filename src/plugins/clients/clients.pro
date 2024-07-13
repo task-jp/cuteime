@@ -2,9 +2,9 @@ include(../../../cuteimeplatform.pri)
 TEMPLATE = subdirs
 
 cuteime_platform_linux {
-    isEqual(QT_MAJOR_VERSION, 5) {
+    isEqual(QT_MAJOR_VERSION, 6) {
         !contains(CUTEIME_CONFIG, no-dbus) {
-            !contains(CUTEIME_CONFIG, no-qt5immodule) SUBDIRS += qt5immodule
+            !contains(CUTEIME_CONFIG, no-qt6immodule) SUBDIRS += qt6immodule
             !contains(CUTEIME_CONFIG, no-gtk) SUBDIRS += gtkimmodule
         }
 
@@ -14,7 +14,15 @@ cuteime_platform_linux {
         }
     }
 
+    isEqual(QT_MAJOR_VERSION, 5) {
+        !contains(CUTEIME_CONFIG, no-dbus) {
+            !contains(CUTEIME_CONFIG, no-qt5immodule) SUBDIRS += qt5immodule
+        }
+    }
+
     isEqual(QT_MAJOR_VERSION, 4) {
-        !contains(CUTEIME_CONFIG, no-qt4immodule) SUBDIRS += qt4immodule
+        !contains(CUTEIME_CONFIG, no-dbus) {
+            !contains(CUTEIME_CONFIG, no-qt4immodule) SUBDIRS += qt4immodule
+        }
     }
 }

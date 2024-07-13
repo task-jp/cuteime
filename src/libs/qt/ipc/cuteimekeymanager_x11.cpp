@@ -23,7 +23,11 @@
 
 #include "cuteimeapplicationmanager.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QtGui/QGuiApplication>
+#else
 #include <QX11Info>
+#endif
 #define XK_MISCELLANY
 #define XK_LATIN1
 #define XK_KOREAN
@@ -233,6 +237,52 @@ static const unsigned int KeyTbl[] = {
     0,                          0
 };
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <xcb/xcb.h>
+#include <xcb/xcb_keysyms.h>
+void send_key_event(xcb_connection_t* connection, xcb_window_t window, xcb_keysym_t keysym, bool isPress, uint16_t modifiers) {
+    xcb_generic_error_t *error = nullptr;
+    xcb_screen_t *screen = xcb_setup_roots_iterator(xcb_get_setup(connection)).data;
+
+    xcb_key_symbols_t *keysyms = xcb_key_symbols_alloc(connection);
+    xcb_keycode_t *keycode = xcb_key_symbols_get_keycode(keysyms, keysym);
+    cuteimeDebug() << "Keycode: " << *keycode;
+
+    uint16_t state = 0;
+    if (modifiers & Qt::ShiftModifier) state |= XCB_MOD_MASK_SHIFT;
+    if (modifiers & Qt::ControlModifier) state |= XCB_MOD_MASK_CONTROL;
+    if (modifiers & Qt::AltModifier) state |= XCB_MOD_MASK_1;
+
+    xcb_key_press_event_t event;
+    event.response_type = isPress ? XCB_KEY_PRESS : XCB_KEY_RELEASE;
+    event.detail = *keycode;
+    event.sequence = 0;
+    event.time = XCB_CURRENT_TIME;
+    event.root = screen->root;
+    event.event = window;
+    event.child = XCB_WINDOW_NONE;
+    event.root_x = 1;
+    event.root_y = 1;
+    event.event_x = 1;
+    event.event_y = 1;
+    event.state = state;
+    event.same_screen = 1;
+
+    xcb_void_cookie_t cookie = xcb_send_event_checked(connection, true, window, isPress ? XCB_EVENT_MASK_KEY_PRESS : XCB_EVENT_MASK_KEY_RELEASE, reinterpret_cast<const char*>(&event));
+    error = xcb_request_check(connection, cookie);
+    if (error) {
+        cuteimeWarning() << "Error in xcb_send_event: " << error->error_code;
+        free(error);
+    } else {
+        cuteimeDebug() << "Event sent successfully";
+    }
+
+    xcb_flush(connection);
+    xcb_key_symbols_free(keysyms);
+}
+#else
+#endif
+
 void CuteimeKeyManager::processKey(QString text, int keycode, int modifiers, bool isPress, bool autoRepeat)
 {
     static CuteimeApplicationManager *manager = 0;
@@ -242,8 +292,36 @@ void CuteimeKeyManager::processKey(QString text, int keycode, int modifiers, boo
     }
 
     cuteimeDebugIn() << text << QString("%1").arg(keycode, 0, 16) << modifiers << isPress << autoRepeat;
-    Display *display = QX11Info::display();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    Display *display = nullptr;
+    Window window;
+    // https://doc.qt.io/qt-6/extras-changes-qt6.html#changes-to-qt-x11-extras
+    if (auto *x11Application = qGuiApp->nativeInterface<QNativeInterface::QX11Application>()) {
+        display = x11Application->display();
+        // https://xcb.freedesktop.org/xlibtoxcbtranslationguide/
+        // 18.2.3 RootWindow / RootWindowOfScreen
+        xcb_connection_t *connection = x11Application->connection();
 
+        auto screen_of_display = [] (xcb_connection_t *c,
+                                    int               screen) -> xcb_screen_t * {
+            xcb_screen_iterator_t iter;
+
+            iter = xcb_setup_roots_iterator (xcb_get_setup (c));
+            for (; iter.rem; --screen, xcb_screen_next (&iter))
+                if (screen == 0)
+                    return iter.data;
+
+            return nullptr;
+        };
+        int               screen_nbr = 0;
+        xcb_screen_t     *screen = screen_of_display (connection, screen_nbr);
+        if (screen)
+            window = screen->root;
+    }
+#else
+    Display *display = QX11Info::display();
+    Window window = QX11Info::appRootWindow();
+#endif
     KeySym keysym = 0;
     for (int i = 0; KeyTbl[i]; i += 2) {
         if (KeyTbl[i+1] == (unsigned int)keycode) {
@@ -259,7 +337,7 @@ void CuteimeKeyManager::processKey(QString text, int keycode, int modifiers, boo
 
     XKeyEvent ev;
     ev.display = display;
-    ev.root = QX11Info::appRootWindow();
+    ev.root = window;
     ev.window = (Window)manager->widget();
     ev.subwindow = None;
     ev.same_screen = True;

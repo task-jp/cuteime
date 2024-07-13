@@ -6,12 +6,16 @@ Version = "0.2.0"
 
 class Configure
     def initialize()
-        @qmake = `which qmake`.chomp
-        @qmake_version = `qmake -query QT_VERSION`[0]
+        ['', '5', '6'].each do |suffix|
+            @qmake = `which qmake#{suffix}`.strip
+            break unless @qmake.empty?
+        end
+        @qmake_version = `#{@qmake} -query QT_VERSION`[0]
         @qmake_default = @qmake.dup
         @debug = false
         @install_root = '/usr/local'
         case @qmake_version
+        when '6'
         when '5'
             @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/platforminputcontexts"
         when '4'
@@ -61,6 +65,7 @@ class Configure
         if @qmake != @qmake_default && @qt_im_module == @qt_im_module_default
             @qmake_version = `#{@qmake} -query QT_VERSION`[0]
             case @qmake_version
+            when '6'
             when '5'
                 @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/platforminputcontexts"
             when '4'

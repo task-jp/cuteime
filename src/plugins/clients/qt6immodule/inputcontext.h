@@ -18,21 +18,39 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "plugin.h"
-#include "object.h"
+#ifndef INPUTCONTEXT_H
+#define INPUTCONTEXT_H
 
-#include <QtX11Extras/QX11Info>
+#include <qpa/qplatforminputcontext.h>
 
-using namespace Xim;
-
-Plugin::Plugin()
-    : CuteimePlugin()
+class InputContext : public QPlatformInputContext
 {
-}
+    Q_OBJECT
+    Q_DISABLE_COPY(InputContext)
+public:
+    explicit InputContext();
+    ~InputContext();
 
-CuteimeAbstractPluginObject *Plugin::createObject(QObject *parent)
-{
-    if (!QX11Info::isPlatformX11())
-        return nullptr;
-    return new Object(parent);
-}
+    virtual bool isValid() const;
+
+    virtual void reset();
+    virtual void commit();
+    virtual void update(Qt::InputMethodQueries queries);
+//    virtual void invokeAction(QInputMethod::Action, int cursorPosition);
+    virtual bool filterEvent(const QEvent *event);
+//    virtual QRectF keyboardRect() const;
+//    virtual bool isAnimating() const;
+//    virtual void showInputPanel();
+//    virtual void hideInputPanel();
+//    virtual bool isInputPanelVisible() const;
+//    virtual QLocale locale() const;
+//    virtual Qt::LayoutDirection inputDirection() const;
+
+    virtual void setFocusObject(QObject *object);
+
+private:
+    class Private;
+    Private *d;
+};
+
+#endif//INPUTCONTEXT_H

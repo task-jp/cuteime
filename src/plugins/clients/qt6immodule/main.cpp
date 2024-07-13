@@ -18,21 +18,33 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.               *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "plugin.h"
-#include "object.h"
+#include <qpa/qplatforminputcontextplugin_p.h>
+#include <QtCore/QStringList>
+#include <cuteimedebug.h>
+#include "inputcontext.h"
 
-#include <QtX11Extras/QX11Info>
-
-using namespace Xim;
-
-Plugin::Plugin()
-    : CuteimePlugin()
+class InputContextPlugin : public QPlatformInputContextPlugin
 {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID QPlatformInputContextFactoryInterface_iid FILE "cuteime.json")
+
+public:
+    QPlatformInputContext *create(const QString&, const QStringList&);
+};
+
+QPlatformInputContext *InputContextPlugin::create(const QString& system, const QStringList& paramList)
+{
+    if (!qgetenv("CUTEIME_DEBUG").isEmpty()) {
+        cuteimeDebugOn();
+    }
+    cuteimeDebugIn() << system << paramList;
+    Q_UNUSED(paramList);
+    QPlatformInputContext *ret  = 0;
+
+    if (system.compare(system, QStringLiteral("cuteime"), Qt::CaseInsensitive) == 0)
+        ret = new InputContext;
+    cuteimeDebugOut() << ret;
+    return ret;
 }
 
-CuteimeAbstractPluginObject *Plugin::createObject(QObject *parent)
-{
-    if (!QX11Info::isPlatformX11())
-        return nullptr;
-    return new Object(parent);
-}
+#include "main.moc"
