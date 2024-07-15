@@ -3,7 +3,13 @@ TARGET = cuteime_qt$$QT_MAJOR_VERSION
 
 include(../../../cuteimelibrary.pri)
 
-isEqual(QT_MAJOR_VERSION, 5): cuteime_platform_x11: QT += x11extras
+cuteime_platform_x11 {
+    isEqual(QT_MAJOR_VERSION, 5): QT += x11extras
+    isEqual(QT_MAJOR_VERSION, 6) {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += xcb-keysyms
+    }
+}
 
 DEFINES += CUTEIME_LIBRARY
 RESOURCES += qt.qrc
