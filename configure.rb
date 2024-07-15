@@ -15,8 +15,7 @@ class Configure
         @debug = false
         @install_root = '/usr/local'
         case @qmake_version
-        when '6'
-        when '5'
+        when '6', '5'
             @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/platforminputcontexts"
         when '4'
             @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/inputmethods"
@@ -65,8 +64,7 @@ class Configure
         if @qmake != @qmake_default && @qt_im_module == @qt_im_module_default
             @qmake_version = `#{@qmake} -query QT_VERSION`[0]
             case @qmake_version
-            when '6'
-            when '5'
+            when '6', '5'
                 @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/platforminputcontexts"
             when '4'
                 @qt_im_module = `#{@qmake} -query QT_INSTALL_PLUGINS`.chomp + "/inputmethods"

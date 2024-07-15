@@ -283,7 +283,7 @@ void InputContext::Private::sendCommitString(const QString &commitString, qulong
     {
         QList<QInputMethodEvent::Attribute> attrs;
         attrs.append(QInputMethodEvent::Attribute(QInputMethodEvent::Cursor, 0, 1, QVariant()));
-        QInputMethodEvent e(QString::null, attrs);
+        QInputMethodEvent e(QString(), attrs);
         e.setCommitString(commitString);
         QCoreApplication::sendEvent(focusObject, &e);
     }

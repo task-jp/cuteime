@@ -10,8 +10,6 @@ isEqual(QT_MAJOR_VERSION, 5) {
     !contains(CUTEIME_CONFIG, no-gui) {
         SUBDIRS += clients uis
     }
-}
-
-isEqual(QT_MAJOR_VERSION, 4) {
+} else {
     SUBDIRS += clients
 }
